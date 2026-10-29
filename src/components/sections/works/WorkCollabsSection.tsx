@@ -29,6 +29,10 @@ export function WorkCollabsSection() {
               <span>Piaget</span>
               <span>(01)</span>
             </div>
+            <p className="wc-desc" data-reveal="">
+              An evening with the Swiss maison Piaget, celebrating its watchmaking and high jewellery.
+              Pictured with Quentin Hebert, Marketing &amp; Communication Director Europe, Piaget.
+            </p>
           </div>
 
           <div className="wc-side">
@@ -52,7 +56,10 @@ export function WorkCollabsSection() {
         <div className="wc-grid">
           <div className="wc-side wc-side-left">
             <h2 className="wc-name">Kaviar Gauche</h2>
-            <p className="wc-tagline" data-reveal="">Fine Art | Finance | Technology</p>
+            <p className="wc-tagline" data-reveal="">
+              A collaboration with the Berlin couture house Kaviar Gauche, known for its bridal gowns,
+              joining fine craftsmanship with a modern, romantic sense of design.
+            </p>
           </div>
 
           <div className="wc-item wc-item-kaviar">
