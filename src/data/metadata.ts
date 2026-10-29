@@ -253,6 +253,7 @@ export const PAGE_METADATA: Record<string, PageMetaEntry> = {
 export function buildPageMetadata(route: string): Metadata {
   const entry = PAGE_METADATA[route] || PAGE_METADATA['/'];
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://conax.studio'),
     title: entry.title,
     description: entry.description,
     openGraph: {

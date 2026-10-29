@@ -34,7 +34,10 @@ export function cleanHtmlFragment(rawHtml) {
     }
   }
 
-  // Fix template route typos
+  // Fix template route typos and strip any conax.webflow.io absolute URLs
+  html = html.replace(/https?:\/\/conax\.webflow\.io\/404/g, '/404');
+  html = html.replace(/https?:\/\/conax\.webflow\.io\/401/g, '/');
+  html = html.replace(/https?:\/\/conax\.webflow\.io/g, '');
   html = html.replace(/\/blog-categoties\/web-dessign/g, '/blog-categories/web-design');
   html = html.replace(/\/blog-categoties\//g, '/blog-categories/');
   html = html.replace(/\/utility-pages\/[a-z0-9-]+/g, '/');
@@ -269,7 +272,7 @@ function main() {
 
   fs.writeFileSync(
     path.resolve('src/data/metadata.ts'),
-    `import type { Metadata } from 'next';\n\nexport interface PageMetaEntry {\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n}\n\nexport const PAGE_METADATA: Record<string, PageMetaEntry> = ${JSON.stringify(metadataMap, null, 2)};\n\nexport function buildPageMetadata(route: string): Metadata {\n  const entry = PAGE_METADATA[route] || PAGE_METADATA['/'];\n  return {\n    title: entry.title,\n    description: entry.description,\n    openGraph: {\n      title: entry.title,\n      description: entry.description,\n      images: [entry.ogImage],\n      type: 'website',\n    },\n    twitter: {\n      card: 'summary_large_image',\n      title: entry.title,\n      description: entry.description,\n      images: [entry.ogImage],\n    },\n  };\n}\n`,
+    `import type { Metadata } from 'next';\n\nexport interface PageMetaEntry {\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n}\n\nexport const PAGE_METADATA: Record<string, PageMetaEntry> = ${JSON.stringify(metadataMap, null, 2)};\n\nexport function buildPageMetadata(route: string): Metadata {\n  const entry = PAGE_METADATA[route] || PAGE_METADATA['/'];\n  return {\n    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://conax.studio'),\n    title: entry.title,\n    description: entry.description,\n    openGraph: {\n      title: entry.title,\n      description: entry.description,\n      images: [entry.ogImage],\n      type: 'website',\n    },\n    twitter: {\n      card: 'summary_large_image',\n      title: entry.title,\n      description: entry.description,\n      images: [entry.ogImage],\n    },\n  };\n}\n`,
     'utf8'
   );
 
