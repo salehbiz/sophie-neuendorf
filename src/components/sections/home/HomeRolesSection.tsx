@@ -13,6 +13,9 @@ export function HomeRolesSection() {
   return (
     <section className="section roles-concept">
       <div className="ui-blockcontainer container ui-container">
+        <div className="roles-head">
+          <h2 className="sub-title">Current Professional Experience</h2>
+        </div>
         <div className="roles-grid">
           <div className="roles-left">
             <div className="roles-photo roles-photo-tall">
@@ -35,11 +38,7 @@ export function HomeRolesSection() {
           </div>
 
           <div className="roles-right">
-            <div className="roles-label">
-              <span tag-text="">Current Professional Experience</span>
-              <span>05</span>
-            </div>
-            <h2 className="sub-title roles-heading">Fine Art | Finance | Technology</h2>
+            <h3 className="sub-title roles-heading">Fine Art | Finance | Technology</h3>
             <div className="roles-photo roles-photo-wide">
               <img
                 src="/assets/sophie/img/roles/web/role-art.jpg"
