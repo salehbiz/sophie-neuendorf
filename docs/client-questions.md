@@ -26,4 +26,6 @@ Open items to ask before launch. Tick them off as answers come in.
 
 ## Launch
 
-- [ ] **Hosting and domain.** Access to the Vercel account (or whichever host) and to the DNS for neuendorfteba.com, to point the domain at the new site.
+- [ ] **Domain.** Who manages neuendorfteba.com (the registrar or Wix login)? We need to change its DNS records to point it at the new site, currently live at https://neuendorfteba.vercel.app.
+- [ ] **Hosting account.** The site runs on a free Vercel Hobby project (non-commercial use only). Should it move to Sophie's own Vercel account, or a Pro plan, before launch?
+- [ ] **Wix.** When the domain switches over, should the old Wix site and subscription be cancelled?
