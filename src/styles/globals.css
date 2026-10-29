@@ -7651,17 +7651,3 @@ h1, h2, h3, h4, h5, h6,
   user-select: none;
   will-change: transform, opacity;
 }
-
-/* First paint of a page reached through the transition: already covered, matching the end of "in". */
-.pt-cover .pt {
-  opacity: 1;
-  visibility: visible;
-}
-
-.pt-cover .pt-type {
-  transform: rotate(-90deg) scale(2.7);
-}
-
-.pt-cover .pt-line {
-  transform: translateX(-200%);
-}
