@@ -4,7 +4,7 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { WorkCollabsSection } from '@/components/sections/works/WorkCollabsSection';
 
-const meta = PAGE_METADATA['/works'];
+const meta = PAGE_METADATA['/work'];
 
 export const metadata: Metadata = {
   title: meta.title,

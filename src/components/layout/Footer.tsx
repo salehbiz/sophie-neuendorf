@@ -13,7 +13,7 @@ const LIT_CELL = '#d0b7a2';
 const LIT_GLYPH = '#2a221d';
 
 const LINKS = [
-  { numeral: 'I', label: 'Work', href: '/works' },
+  { numeral: 'I', label: 'Work', href: '/work' },
   { numeral: 'II', label: 'Press', href: '/blogs' },
   { numeral: 'III', label: 'About', href: '/about' },
   { numeral: 'IV', label: 'Contact', href: '/contact' },
