@@ -145,7 +145,9 @@ export function extractPageSections(fileName) {
   const bodyNoScripts = bodyMatch[1].replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').trim();
   const topChildren = splitDirectChildren(bodyNoScripts);
   let innerChildren = topChildren;
+  let wrapperClassName = 'page-wrapper';
   if (topChildren.length === 1 && topChildren[0].attrs.includes('page-wrapper')) {
+    wrapperClassName = (topChildren[0].attrs.match(/class="([^"]+)"/) || [null, 'page-wrapper'])[1];
     const innerHtml = topChildren[0].html
       .replace(/^<div[^>]*>/i, '')
       .replace(/<\/div>$/i, '')
@@ -177,6 +179,7 @@ export function extractPageSections(fileName) {
     description: cleanDesc,
     ogImage: localOg,
     navbarVariant,
+    wrapperClassName,
     sections,
   };
 }
@@ -248,25 +251,25 @@ function main() {
 
   fs.writeFileSync(
     path.resolve('src/data/services.ts'),
-    `export interface ServiceItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const SERVICES: ServiceItem[] = ${JSON.stringify(servicesList, null, 2)};\n\nexport function getServiceBySlug(slug: string): ServiceItem | undefined {\n  return SERVICES.find((s) => s.slug === slug);\n}\n`,
+    `export interface ServiceItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const SERVICES: ServiceItem[] = ${JSON.stringify(servicesList, null, 2)};\n\nexport function getServiceBySlug(slug: string): ServiceItem | undefined {\n  return SERVICES.find((s) => s.slug === slug);\n}\n`,
     'utf8'
   );
 
   fs.writeFileSync(
     path.resolve('src/data/works.ts'),
-    `export interface WorkItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const WORKS: WorkItem[] = ${JSON.stringify(worksList, null, 2)};\n\nexport function getWorkBySlug(slug: string): WorkItem | undefined {\n  return WORKS.find((w) => w.slug === slug);\n}\n`,
+    `export interface WorkItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const WORKS: WorkItem[] = ${JSON.stringify(worksList, null, 2)};\n\nexport function getWorkBySlug(slug: string): WorkItem | undefined {\n  return WORKS.find((w) => w.slug === slug);\n}\n`,
     'utf8'
   );
 
   fs.writeFileSync(
     path.resolve('src/data/blogs.ts'),
-    `export interface BlogPostItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport interface BlogCategoryItem {\n  category: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const BLOG_POSTS: BlogPostItem[] = ${JSON.stringify(blogsList, null, 2)};\n\nexport const BLOG_CATEGORIES: BlogCategoryItem[] = ${JSON.stringify(blogCategoriesList, null, 2)};\n\nexport function getBlogPostBySlug(slug: string): BlogPostItem | undefined {\n  return BLOG_POSTS.find((b) => b.slug === slug);\n}\n\nexport function getBlogCategoryBySlug(category: string): BlogCategoryItem | undefined {\n  return BLOG_CATEGORIES.find((c) => c.category === category);\n}\n`,
+    `export interface BlogPostItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport interface BlogCategoryItem {\n  category: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const BLOG_POSTS: BlogPostItem[] = ${JSON.stringify(blogsList, null, 2)};\n\nexport const BLOG_CATEGORIES: BlogCategoryItem[] = ${JSON.stringify(blogCategoriesList, null, 2)};\n\nexport function getBlogPostBySlug(slug: string): BlogPostItem | undefined {\n  return BLOG_POSTS.find((b) => b.slug === slug);\n}\n\nexport function getBlogCategoryBySlug(category: string): BlogCategoryItem | undefined {\n  return BLOG_CATEGORIES.find((c) => c.category === category);\n}\n`,
     'utf8'
   );
 
   fs.writeFileSync(
     path.resolve('src/data/members.ts'),
-    `export interface MemberItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const MEMBERS: MemberItem[] = ${JSON.stringify(membersList, null, 2)};\n\nexport function getMemberBySlug(slug: string): MemberItem | undefined {\n  return MEMBERS.find((m) => m.slug === slug);\n}\n`,
+    `export interface MemberItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const MEMBERS: MemberItem[] = ${JSON.stringify(membersList, null, 2)};\n\nexport function getMemberBySlug(slug: string): MemberItem | undefined {\n  return MEMBERS.find((m) => m.slug === slug);\n}\n`,
     'utf8'
   );
 

@@ -9,7 +9,7 @@ export const metadata: Metadata = buildPageMetadata('/404');
 
 export default function Page() {
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper section-404">
       <AnnouncementBar />
       <Navbar variant="black" />
       <NotFoundGridOverlaySection />

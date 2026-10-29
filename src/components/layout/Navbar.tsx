@@ -18,12 +18,7 @@ export function AnnouncementBar() {
 }
 
 export function PageTransitionOverlay() {
-  return (
-    <div
-      suppressHydrationWarning
-      dangerouslySetInnerHTML={{ __html: SHARED_LAYOUT_FRAGMENTS.pageTransitionOverlay }}
-    />
-  );
+  return null;
 }
 
 export function Navbar({ variant = 'black' }: NavbarProps) {

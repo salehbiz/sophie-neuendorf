@@ -5,6 +5,7 @@ export interface ServiceItem {
   description: string;
   ogImage: string;
   navbarVariant: 'white' | 'black';
+  wrapperClassName?: string;
   sections: { tag: string; className: string; html: string }[];
 }
 
@@ -16,6 +17,7 @@ export const SERVICES: ServiceItem[] = [
     "description": "We craft immersive digital interfaces that prioritize user clarity and seamless navigation across every touchpoint.",
     "ogImage": "/assets/images/6a5705e5136987eae9747ae3-f61a8ef-ed25f5.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -41,6 +43,7 @@ export const SERVICES: ServiceItem[] = [
     "description": "We build comprehensive visual systems that capture the core essence and unique personality of your business.",
     "ogImage": "/assets/images/6a5707eb3484344c65db03a2-7934dc6-1f5f3b.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -66,6 +69,7 @@ export const SERVICES: ServiceItem[] = [
     "description": "Our team translates high-end designs into high-performance digital products using clean, scalable code.",
     "ogImage": "/assets/images/6a57081913127724314f2b6f-d6073aa-235849.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -91,6 +95,7 @@ export const SERVICES: ServiceItem[] = [
     "description": "We provide the data-driven roadmap necessary to navigate the competitive landscape.",
     "ogImage": "/assets/images/6a57084305a7994eb59d5416-0d3e991-c32aba.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",

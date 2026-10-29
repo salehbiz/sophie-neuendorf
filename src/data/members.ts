@@ -5,6 +5,7 @@ export interface MemberItem {
   description: string;
   ogImage: string;
   navbarVariant: 'white' | 'black';
+  wrapperClassName?: string;
   sections: { tag: string; className: string; html: string }[];
 }
 
@@ -16,6 +17,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Alex Reed, Founder of Conax and a visionary technology leader, established the company to transform how businesses handle modern challenges.",
     "ogImage": "/assets/images/6a6bf787cd6667b66f2f8d1e-startup-ce3790.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -31,6 +33,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Aris Thorne, Creative Technologist at Conax, bridges the gap between imaginative design and advanced technical execution.",
     "ogImage": "/assets/images/6a6bfa4cdb787fcbfd5e849e-testimo-5522bc.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -46,6 +49,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Chloe Whitmore, Director of Client Success at Conax, leads client engagement with a focus on long-term partnership value.",
     "ogImage": "/assets/images/6a6bfa23eb520bb2d0cac4af-testimo-6e1dee.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -61,6 +65,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "David Jones, Lead Full-Stack Engineer at Conax, architects seamless end-to-end digital systems with a focus on reliability.",
     "ogImage": "/assets/images/6a6bf985924acce51702667d-testimo-a33081.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -76,6 +81,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Elena Moretti, Head of Motion Design at Conax, brings digital brand stories to life through dynamic visual experiences.",
     "ogImage": "/assets/images/6a6bf905378001ff53dd8050-testimo-043b92.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -91,6 +97,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Julian Frost, a seasoned technology engineer, founded Fizens with a vision to revolutionize the way people manage their money.",
     "ogImage": "/assets/images/6a680c9aa94b2be117745e77-creativ-a52635.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -106,6 +113,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Lily Vance, CEO of Conax and a dynamic executive leader, drives the company’s strategic vision with a focus on sustainable growth.",
     "ogImage": "/assets/images/6a6bf88617b4db6d9e0aff63-startup-af22da.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -121,6 +129,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Marcus Thorne, Senior Developer at Conax and a skilled software architect, leads the core engineering team with a focus on robust design.",
     "ogImage": "/assets/images/6a6bf8b166c5a0c20845b5d1-startup-28d812.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -136,6 +145,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Sarah Jenkins, Senior UX Researcher at Conax, bridges user behavior and product strategy through deep qualitative research.",
     "ogImage": "/assets/images/6a6bf9c0766a113835ca4300-testimo-1e2c6c.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -151,6 +161,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Sophia Chen, Lead UX Researcher at Conax, transforms complex user behaviors into actionable design strategies. Combining deep psychological insight with rigorous methodology.",
     "ogImage": "/assets/images/6a6bf8d069eb0588b568ac8f-creativ-e8b7ab.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -166,6 +177,7 @@ export const MEMBERS: MemberItem[] = [
     "description": "Viktor leads his team in unearthing critical user insights, guiding strategic design choices that elevate functional usability and foster meaningful customer connections across every touchpoint.",
     "ogImage": "/assets/images/6a6bf9d22e2ceb8c934a973b-testimo-19ca70.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",

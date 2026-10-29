@@ -204,7 +204,7 @@ export const metadata: Metadata = buildPageMetadata('${route}');
 
 export default function Page() {
   return (
-    <div className="page-wrapper">
+    <div className="${pageData.wrapperClassName || 'page-wrapper'}">
 ${transitionElement}      <AnnouncementBar />
       <Navbar variant="${pageData.navbarVariant}" />
 ${renderedSections}${footerElement}

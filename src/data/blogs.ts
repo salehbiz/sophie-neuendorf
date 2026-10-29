@@ -5,6 +5,7 @@ export interface BlogPostItem {
   description: string;
   ogImage: string;
   navbarVariant: 'white' | 'black';
+  wrapperClassName?: string;
   sections: { tag: string; className: string; html: string }[];
 }
 
@@ -15,6 +16,7 @@ export interface BlogCategoryItem {
   description: string;
   ogImage: string;
   navbarVariant: 'white' | 'black';
+  wrapperClassName?: string;
   sections: { tag: string; className: string; html: string }[];
 }
 
@@ -26,6 +28,7 @@ export const BLOG_POSTS: BlogPostItem[] = [
     "description": "How AI is Redefining the Next Generation of User Interfaces.. Discover fresh ideas, design insights, creative trends, and digital perspectives shaping modern brands and experiences.",
     "ogImage": "/assets/images/6a54be09ffd3e8237d3debcf-image-7-526ae9.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -51,6 +54,7 @@ export const BLOG_POSTS: BlogPostItem[] = [
     "description": "How Behavioral Psychology and Cognitive Load Theory Drive Digital Conversions.. Discover fresh ideas, design insights, creative trends, and digital perspectives shaping modern brands and experiences.",
     "ogImage": "/assets/images/6a559f1cdaadc331c12d33b8-613c54d-261f88.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -76,6 +80,7 @@ export const BLOG_POSTS: BlogPostItem[] = [
     "description": "Implementing Scalable UX Frameworks That Support Rapid User Acquisition and Retention. Discover fresh ideas, design insights, creative trends, and digital perspectives shaping modern brands and experiences.",
     "ogImage": "/assets/images/6a559e06a3cbdabd4b526142-7b168d3-d7408f.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -101,6 +106,7 @@ export const BLOG_POSTS: BlogPostItem[] = [
     "description": "Motion with Meaning: Exploring the Top 5 Web Animation Trends That Enhance Usability. Discover fresh ideas, design insights, creative trends, and digital perspectives shaping modern brands and experiences.",
     "ogImage": "/assets/images/6a559ea736585ccf6ea3f120-d38a3ec-193f20.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -126,6 +132,7 @@ export const BLOG_POSTS: BlogPostItem[] = [
     "description": "Why High-End Brands are Trading Polish for Structural Honesty and Bold Typography.. Discover fresh ideas, design insights, creative trends, and digital perspectives shaping modern brands and experiences.",
     "ogImage": "/assets/images/6a559fca2c850f73e623665e-dba6548-0bc509.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -151,6 +158,7 @@ export const BLOG_POSTS: BlogPostItem[] = [
     "description": "Why Minimalist Visual Identities Continue to Dominate the Modern Luxury and Tech. Discover fresh ideas, design insights, creative trends, and digital perspectives shaping modern brands and experiences.",
     "ogImage": "/assets/images/6a559bd8b39d6f792e49fb4c-frame-1-fbecc5.webp",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -179,6 +187,7 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
     "description": "Explore stories and insights from our Support category, covering creative ideas, industry perspectives, design thinking, and digital trends.",
     "ogImage": "/assets/images/og-image-58fc08.png",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -204,6 +213,7 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
     "description": "Explore stories and insights from our Development category, covering creative ideas, industry perspectives, design thinking, and digital trends.",
     "ogImage": "/assets/images/og-image-58fc08.png",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -229,6 +239,7 @@ export const BLOG_CATEGORIES: BlogCategoryItem[] = [
     "description": "Explore stories and insights from our Web dessign category, covering creative ideas, industry perspectives, design thinking, and digital trends.",
     "ogImage": "/assets/images/og-image-58fc08.png",
     "navbarVariant": "black",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",

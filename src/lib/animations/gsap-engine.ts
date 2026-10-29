@@ -117,9 +117,10 @@ export function initStandaloneInteractions(): () => void {
     for (const inter of INTERACTIONS_DATA.ix3Interactions) {
       if (inter.deleted) continue;
 
-      // Check breakpoint condition if present
-      if ((inter as any).conditions) {
-        const blocked = ((inter as any).conditions as any[]).some(
+      // Check breakpoint condition if present (supports both conditionalPlayback and conditions)
+      const conds = (inter as any).conditionalPlayback || (inter as any).conditions;
+      if (Array.isArray(conds)) {
+        const blocked = conds.some(
           (c) =>
             c.type === 'breakpoint' &&
             c.behavior === 'dont-animate' &&
@@ -137,7 +138,10 @@ export function initStandaloneInteractions(): () => void {
         let triggerEls: HTMLElement[] = [document.body];
         if (Array.isArray(selectorSpecs) && selectorSpecs.length > 0) {
           const found: HTMLElement[] = [];
-          for (const spec of selectorSpecs) {
+          const normalizedSpecs =
+            typeof selectorSpecs[0] === 'string' ? [selectorSpecs] : selectorSpecs;
+          for (const spec of normalizedSpecs) {
+            if (!Array.isArray(spec)) continue;
             const [kind, values] = spec;
             if (kind === 'ix:class' && Array.isArray(values)) {
               const sel = values.map((c: string) => `.${c}`).join('');
@@ -177,17 +181,20 @@ export function initStandaloneInteractions(): () => void {
                         trigger: trigEl,
                         start: stConfig.start || 'top 85%',
                         end: stConfig.end || 'bottom top',
-                        scrub: Boolean(stConfig.scrub),
+                        scrub: stConfig.scrub ?? false,
                         toggleActions: stConfig.toggleActions || 'play none none none',
                       },
                     }
                   : {}
               );
 
+              const seenTargets = new Set<HTMLElement>();
               for (const action of tlDef.actions || []) {
                 const targets = resolveActionTargets(action.targets, trigEl);
                 if (targets.length === 0) continue;
-                addActionToTimeline(masterTl, targets, action);
+                const isFirstForTargets = targets.every((el) => !seenTargets.has(el));
+                targets.forEach((el) => seenTargets.add(el));
+                addActionToTimeline(masterTl, targets, action, isFirstForTargets);
               }
             });
           }
@@ -270,19 +277,105 @@ export function initStandaloneInteractions(): () => void {
       cleanups.push(() => header.removeEventListener('click', onClick));
     });
 
-    // 3d. Tabs (.ui-tabs / .ui-tab-menu / .ui-tab-link / .ui-tab-pane)
+    // 3d. Tabs (.ui-tabs / .ui-tab-menu / .ui-tab-link / .ui-tab-pane) & FAQ / Process Accordion Tabs
     const tabContainers = document.querySelectorAll<HTMLElement>('.ui-tabs');
     tabContainers.forEach((tabs) => {
       const links = Array.from(tabs.querySelectorAll<HTMLElement>('.ui-tab-link'));
       const panes = Array.from(tabs.querySelectorAll<HTMLElement>('.ui-tab-pane'));
+      const isAccordionTab =
+        tabs.classList.contains('faq-tab') ||
+        Boolean(tabs.querySelector('.desc-faq-tab-wrap, .process-desc-wrap'));
+
+      // Apply initial accordion state for FAQ / Process tabs matching IX2 actionLists a-36 / a-41
+      if (isAccordionTab) {
+        links.forEach((link, i) => {
+          const descWrap = link.querySelector<HTMLElement>('.desc-faq-tab-wrap, .process-desc-wrap');
+          const plusIcon = link.querySelector<HTMLElement>('.plus-icon._02');
+          const isCurrent = link.classList.contains('ui--current') || i === 0;
+          if (descWrap) {
+            descWrap.style.overflow = 'hidden';
+            gsap.set(descWrap, { height: isCurrent ? 'auto' : 0 });
+          }
+          if (plusIcon) {
+            gsap.set(plusIcon, { rotationZ: isCurrent ? 0 : 90 });
+          }
+        });
+      }
+
       links.forEach((link, idx) => {
         const onClick = (e: Event) => {
           e.preventDefault();
-          links.forEach((l, i) => l.classList.toggle('ui--current', i === idx));
+          links.forEach((l, i) => {
+            const active = i === idx;
+            l.classList.toggle('ui--current', active);
+            if (isAccordionTab) {
+              const descWrap = l.querySelector<HTMLElement>('.desc-faq-tab-wrap, .process-desc-wrap');
+              const plusIcon = l.querySelector<HTMLElement>('.plus-icon._02');
+              if (descWrap) {
+                gsap.to(descWrap, {
+                  height: active ? 'auto' : 0,
+                  duration: active ? 0.5 : 0.35,
+                  ease: 'power1.inOut',
+                });
+              }
+              if (plusIcon) {
+                gsap.to(plusIcon, {
+                  rotationZ: active ? 0 : 90,
+                  duration: active ? 0.5 : 0.35,
+                  ease: 'power1.inOut',
+                });
+              }
+            }
+          });
           panes.forEach((p, i) => p.classList.toggle('ui--tab-active', i === idx));
         };
         link.addEventListener('click', onClick);
         cleanups.push(() => link.removeEventListener('click', onClick));
+      });
+    });
+
+    // 3d-2. Services Accordion Tabs (.services-tabs-collection) matching IX2 e-325 / a-46 (mediaQueries: ["medium", "small"])
+    const servicesTabItems = Array.from(
+      document.querySelectorAll<HTMLElement>('.services-tabs-collection')
+    );
+    if (servicesTabItems.length > 0 && (bp === 'medium' || bp === 'small')) {
+      servicesTabItems.forEach((item, i) => {
+        const isFirst = i === 0 || item.classList.contains('_01');
+        item.style.overflow = 'hidden';
+        gsap.set(item, { width: '100%', height: isFirst ? 522 : 145 });
+        const content = item.querySelector<HTMLElement>('.content-services-tabs');
+        if (content) {
+          content.style.overflow = 'hidden';
+          gsap.set(content, { width: '100%', height: isFirst ? 'auto' : 0 });
+        }
+        const plusVert = item.querySelector<HTMLElement>('.plus-icon-large.vertical');
+        if (plusVert) {
+          gsap.set(plusVert, { rotationZ: isFirst ? 0 : 90 });
+        }
+      });
+    }
+
+    // 3d-3. Icon Social Hover (.item-icon-social) matching IX2 actionLists a-62 / a-63
+    const socialItems = document.querySelectorAll<HTMLElement>('.item-icon-social');
+    socialItems.forEach((item) => {
+      const defIcon = item.querySelector<HTMLElement>('.icon-20x20:not(.absolute)');
+      const absIcon = item.querySelector<HTMLElement>('.icon-20x20.absolute');
+      if (absIcon) gsap.set(absIcon, { scale: 0 });
+      const onEnter = () => {
+        gsap.to(item, { backgroundColor: '#000000', duration: 0.3, ease: 'power2.out' });
+        if (defIcon) gsap.to(defIcon, { scale: 0, duration: 0.3, ease: 'power2.out' });
+        if (absIcon) gsap.to(absIcon, { scale: 1, duration: 0.3, ease: 'power2.out' });
+      };
+      const onLeave = () => {
+        gsap.to(item, { backgroundColor: 'rgb(242, 242, 242)', duration: 0.3, ease: 'power2.out' });
+        if (defIcon) gsap.to(defIcon, { scale: 1, duration: 0.3, ease: 'power2.out' });
+        if (absIcon) gsap.to(absIcon, { scale: 0, duration: 0.3, ease: 'power2.out' });
+      };
+      item.addEventListener('mouseenter', onEnter);
+      item.addEventListener('mouseleave', onLeave);
+      cleanups.push(() => {
+        item.removeEventListener('mouseenter', onEnter);
+        item.removeEventListener('mouseleave', onLeave);
       });
     });
 
@@ -320,7 +413,29 @@ export function initStandaloneInteractions(): () => void {
       }
     });
 
-    // 3f. Primary & Secondary Button Hover Layer Transitions (.primary-button, .secondar-button)
+    // 3f-2. Team Member Card Hover (.profile-hide-info-wrapper & .avatar-member-collection) matching IX2 a-52 / a-53
+    const memberCards = document.querySelectorAll<HTMLElement>('.item-team-member, .link-member, .team-member-item');
+    document.querySelectorAll<HTMLElement>('.profile-hide-info-wrapper').forEach((wrap) => {
+      wrap.style.overflow = 'hidden';
+      gsap.set(wrap, { height: 0 });
+      const card = wrap.parentElement?.parentElement || wrap.parentElement;
+      if (!card) return;
+      const avatar = card.querySelector<HTMLElement>('.avatar-member-collection');
+      const onEnter = () => {
+        gsap.to(wrap, { height: 'auto', duration: 0.5, ease: 'power3.out' });
+        if (avatar) gsap.to(avatar, { scale: 1.1, duration: 0.5, ease: 'power3.out' });
+      };
+      const onLeave = () => {
+        gsap.to(wrap, { height: 0, duration: 0.5, ease: 'power3.out' });
+        if (avatar) gsap.to(avatar, { scale: 1, duration: 0.5, ease: 'power3.out' });
+      };
+      card.addEventListener('mouseenter', onEnter);
+      card.addEventListener('mouseleave', onLeave);
+      cleanups.push(() => {
+        card.removeEventListener('mouseenter', onEnter);
+        card.removeEventListener('mouseleave', onLeave);
+      });
+    });
     const buttons = document.querySelectorAll<HTMLElement>('.primary-button, .secondar-button');
     buttons.forEach((btn) => {
       const defText = btn.querySelector<HTMLElement>('.layer-default .text-button');
@@ -409,9 +524,12 @@ export function initStandaloneInteractions(): () => void {
 
 function resolveActionTargets(targetSpecs: any[], trigEl: HTMLElement): HTMLElement[] {
   const results: HTMLElement[] = [];
-  if (!Array.isArray(targetSpecs)) return results;
+  if (!Array.isArray(targetSpecs) || targetSpecs.length === 0) return results;
+  const normalizedSpecs =
+    typeof targetSpecs[0] === 'string' ? [targetSpecs] : targetSpecs;
 
-  for (const spec of targetSpecs) {
+  for (const spec of normalizedSpecs) {
+    if (!Array.isArray(spec)) continue;
     const [kind, values, opts] = spec;
     if (kind === 'ix:trigger') {
       results.push(trigEl);
@@ -465,16 +583,29 @@ function extractFromToVars(properties: any) {
 function applySplitIfRequested(targets: HTMLElement[], splitSpec: any): HTMLElement[] {
   if (!splitSpec || !splitSpec.type) return targets;
   const splitTargets: HTMLElement[] = [];
+  const targetSelector =
+    splitSpec.type === 'chars'
+      ? '.gsap_split_char'
+      : splitSpec.type === 'lines'
+      ? '.gsap_split_line'
+      : '.gsap_split_word';
   for (const el of targets) {
     if (el.dataset.splitApplied === 'true') {
-      const existing = el.querySelectorAll<HTMLElement>('.word, .char, .line');
+      const existing = el.querySelectorAll<HTMLElement>(targetSelector);
       if (existing.length > 0) {
         existing.forEach((item) => splitTargets.push(item));
         continue;
       }
     }
     try {
-      const split = new SplitType(el, { types: splitSpec.type });
+      const splitTypes = splitSpec.type === 'chars' ? 'words,chars' : splitSpec.type;
+      const split = new SplitType(el, {
+        types: splitTypes,
+        tagName: 'span',
+        lineClass: 'gsap_split_line',
+        wordClass: 'gsap_split_word',
+        charClass: 'gsap_split_char',
+      });
       el.dataset.splitApplied = 'true';
       const items =
         splitSpec.type === 'chars'
@@ -521,7 +652,12 @@ function runTweenAction(targets: HTMLElement[], action: any) {
   }
 }
 
-function addActionToTimeline(tl: gsap.core.Timeline, targets: HTMLElement[], action: any) {
+function addActionToTimeline(
+  tl: gsap.core.Timeline,
+  targets: HTMLElement[],
+  action: any,
+  isFirstForTargets = true
+) {
   const animTargets = applySplitIfRequested(targets, action.splitText);
   const { fromVars, toVars } = extractFromToVars(action.properties);
   const timing = action.timing || {};
@@ -550,6 +686,7 @@ function addActionToTimeline(tl: gsap.core.Timeline, targets: HTMLElement[], act
         duration,
         ease,
         stagger,
+        immediateRender: isFirstForTargets,
       },
       pos
     );

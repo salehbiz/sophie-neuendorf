@@ -5,6 +5,7 @@ export interface WorkItem {
   description: string;
   ogImage: string;
   navbarVariant: 'white' | 'black';
+  wrapperClassName?: string;
   sections: { tag: string; className: string; html: string }[];
 }
 
@@ -16,6 +17,7 @@ export const WORKS: WorkItem[] = [
     "description": "Northland Studio is an award-winning architectural collective defined by its commitment to brutalist minimalism and structural honesty.",
     "ogImage": "/assets/images/6a62d4e9d53e9282cd816e27-frame-1-ad11ff.webp",
     "navbarVariant": "white",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -56,6 +58,7 @@ export const WORKS: WorkItem[] = [
     "description": "Northland Studio is an award-winning architectural collective defined by its commitment to brutalist minimalism and structural honesty.",
     "ogImage": "/assets/images/6a62d3cfcc96bb9812a88d65-4cc3925-73d324.webp",
     "navbarVariant": "white",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -96,6 +99,7 @@ export const WORKS: WorkItem[] = [
     "description": "Northland Studio is an award-winning architectural collective defined by its commitment to brutalist minimalism and structural honesty.",
     "ogImage": "/assets/images/6a62d31b234c5d26d37a2739-frame-1-ad9765.webp",
     "navbarVariant": "white",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -136,6 +140,7 @@ export const WORKS: WorkItem[] = [
     "description": "Northland Studio is an award-winning architectural collective defined by its commitment to brutalist minimalism and structural honesty.",
     "ogImage": "/assets/images/6a5ef44a31795eb4b080b183-frame-1-39b97b.webp",
     "navbarVariant": "white",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -176,6 +181,7 @@ export const WORKS: WorkItem[] = [
     "description": "Northland Studio is an award-winning architectural collective defined by its commitment to brutalist minimalism and structural honesty.",
     "ogImage": "/assets/images/6a57081913127724314f2b6f-d6073aa-235849.webp",
     "navbarVariant": "white",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",
@@ -216,6 +222,7 @@ export const WORKS: WorkItem[] = [
     "description": "Northland Studio is an award-winning architectural collective defined by its commitment to brutalist minimalism and structural honesty.",
     "ogImage": "/assets/images/6a6005d775e0849fde0997a9-1e6be83-1-4fa17a.webp",
     "navbarVariant": "white",
+    "wrapperClassName": "page-wrapper",
     "sections": [
       {
         "tag": "section",

@@ -10,7 +10,7 @@ export const metadata: Metadata = buildPageMetadata('/privacy-policy');
 
 export default function Page() {
   return (
-    <div className="page-wrapper">
+    <div className="page-wrapper pages-bg-black">
       <AnnouncementBar />
       <Navbar variant="white" />
       <PrivacyPolicyHeroSection />
