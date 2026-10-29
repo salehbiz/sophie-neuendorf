@@ -7174,9 +7174,9 @@ h1, h2, h3, h4, h5, h6,
 .ps-title {
   color: var(--_color-pallet---dark-shade--black, #141414);
   font-family: var(--heading-font);
-  font-size: clamp(24px, 2.2vw, 34px);
-  line-height: 1.1;
-  max-width: 20vw;
+  font-size: clamp(36px, 3.6vw, 60px);
+  line-height: 1.04;
+  max-width: 26vw;
   pointer-events: auto;
   text-decoration: none;
   flex-direction: column;
@@ -7188,11 +7188,16 @@ h1, h2, h3, h4, h5, h6,
 .ps-count {
   color: var(--_color-pallet---dark-shade--grey);
   font-family: var(--body-font);
-  font-size: 13px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.ps-meta {
+  margin-top: 6px;
 }
 
 .ps-count {
-  padding-top: 8px;
+  padding-top: 14px;
 }
 
 .ps-label {
@@ -7201,7 +7206,7 @@ h1, h2, h3, h4, h5, h6,
   bottom: 32px;
   margin: 0;
   font-family: var(--body-font);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.4;
 }
@@ -7285,5 +7290,12 @@ h1, h2, h3, h4, h5, h6,
 
   .ps-title {
     max-width: 70vw;
+    font-size: 34px;
+  }
+
+  .ps-meta,
+  .ps-count,
+  .ps-label {
+    font-size: 14px;
   }
 }
