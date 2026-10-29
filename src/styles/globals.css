@@ -6195,17 +6195,11 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .roles-label {
-  color: var(--_color-pallet---dark-shade--grey);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-size: 12px;
-  justify-content: space-between;
-  gap: 24px;
-  display: flex;
+  margin: 0;
 }
 
 .roles-heading {
-  margin-top: clamp(24px, 4vh, 40px);
+  margin-top: var(--_spacing---gap--gap-7x);
   margin-bottom: 0;
 }
 
@@ -6354,11 +6348,6 @@ h1, h2, h3, h4, h5, h6,
   line-height: 1.2;
 }
 
-.roles-label {
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: 15px;
-}
 
 .roles-index {
   font-size: 14px;
@@ -6377,26 +6366,6 @@ h1, h2, h3, h4, h5, h6,
   font-size: 16px;
 }
 
-/* Roles section heading, matching "Press & Features" */
-.roles-head {
-  text-align: center;
-  max-width: 920px;
-  margin: 0 auto clamp(64px, 10vh, 120px);
-}
-
-.roles-head .sub-title {
-  margin: 0;
-}
-
-.roles-right .roles-heading {
-  margin-top: 0;
-}
-
-@media screen and (max-width: 767px) {
-  .roles-head {
-    margin-bottom: 48px;
-  }
-}
 
 /* Client refinement: no golden accent labels */
 .tag-text {
@@ -6409,8 +6378,19 @@ h1, h2, h3, h4, h5, h6,
   text-transform: none;
 }
 
-.work-sub-wrap .press-all-link {
-  align-self: center;
+.press-head {
+  margin-bottom: clamp(56px, 9vh, 104px);
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+  display: flex;
+}
+
+.press-head .tag-text {
+  margin: 0;
+}
+
+.press-head .press-all-link {
   margin-top: 0;
 }
 
