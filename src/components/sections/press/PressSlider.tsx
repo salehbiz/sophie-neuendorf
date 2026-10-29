@@ -116,7 +116,7 @@ export function PressSlider() {
       camera.aspect = w / h;
       // Pull the camera back on narrow screens so the widest plane still fits.
       const fitZ = (MAX_HEIGHT * config.aspectRatio) / 0.8 / (2 * Math.tan(THREE.MathUtils.degToRad(22.5)) * camera.aspect);
-      camera.position.z = Math.max(5, fitZ);
+      camera.position.z = Math.max(4.3, fitZ);
       camera.updateProjectionMatrix();
     };
     resize();
@@ -242,6 +242,7 @@ export function PressSlider() {
   if (reduced) {
     return (
       <section className="section ps-still">
+        <h1 className="wc-title ps-still-title">Press &amp; Features</h1>
         <ol className="ps-list">
           {PRESS.map((item) => (
             <li key={item.url}>
@@ -264,6 +265,7 @@ export function PressSlider() {
     <section ref={sectionRef} className="ps" style={{ height: `calc(100svh + ${PRESS.length * 45}svh)` }}>
       <div ref={stageRef} className="ps-stage">
         <canvas ref={canvasRef} className="ps-canvas" aria-hidden="true" />
+        <h1 className="ps-label">Press &amp; Features</h1>
         <div className="ps-info">
           <a className="ps-title" href={item.url} target="_blank" rel="noopener noreferrer">
             {item.title}
