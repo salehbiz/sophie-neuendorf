@@ -2,42 +2,37 @@
 
 import { useEffect } from 'react';
 
-const DRIFT = 0.1; // photo travel inside its frame, as a share of the frame height
+const DRIFT = 0.2; // photo travel inside its frame, as a share of the frame height (heavy)
+const REVEAL_AT = 0.88; // a row fades in once its top passes this share of the viewport height
 
 /**
- * Motion for the roles section: photos drift slowly inside their frames while scrolling,
- * and each role row fades up in turn when the list comes into view.
+ * Motion for the roles section: photos drift strongly inside their frames while scrolling,
+ * and each role row fades up in turn as it comes into view. Everything is checked on scroll
+ * (no IntersectionObserver), and rows are only hidden once this script is running, so the
+ * content can never get stuck invisible.
  */
 export function RolesMotion({ selector }: { selector: string }) {
   useEffect(() => {
     const section = document.querySelector<HTMLElement>(selector);
-    if (!section) return;
+    if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const rows = Array.from(section.querySelectorAll<HTMLElement>('[data-reveal]'));
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      rows.forEach((row) => row.classList.add('is-in'));
-      return;
-    }
-
-    const rowObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-in');
-          rowObserver.unobserve(entry.target);
-        });
-      },
-      { rootMargin: '0px 0px -12% 0px' },
-    );
-    rows.forEach((row) => rowObserver.observe(row));
-
     const frames = Array.from(section.querySelectorAll<HTMLElement>('[data-drift]'));
+    section.classList.add('is-motion-ready');
     let raf = 0;
-    let visible = false;
 
     const update = () => {
       raf = 0;
       const vh = window.innerHeight;
+      const box = section.getBoundingClientRect();
+      if (box.bottom < -vh || box.top > vh * 2) return;
+
+      rows.forEach((row) => {
+        if (!row.classList.contains('is-in') && row.getBoundingClientRect().top < vh * REVEAL_AT) {
+          row.classList.add('is-in');
+        }
+      });
+
       const mid = vh / 2;
       frames.forEach((frame) => {
         const r = frame.getBoundingClientRect();
@@ -49,22 +44,17 @@ export function RolesMotion({ selector }: { selector: string }) {
     };
 
     const onScroll = () => {
-      if (visible && !raf) raf = requestAnimationFrame(update);
+      if (!raf) raf = requestAnimationFrame(update);
     };
 
-    const sectionObserver = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
-      if (visible) onScroll();
-    });
-    sectionObserver.observe(section);
+    update();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => {
-      rowObserver.disconnect();
-      sectionObserver.disconnect();
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       cancelAnimationFrame(raf);
+      section.classList.remove('is-motion-ready');
     };
   }, [selector]);
 

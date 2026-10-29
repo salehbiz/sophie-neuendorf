@@ -6674,7 +6674,7 @@ h1, h2, h3, h4, h5, h6,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  scale: 1.18;
+  scale: 1.45;
   display: block;
 }
 
@@ -6727,7 +6727,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .kz-middle {
-  margin-top: clamp(80px, 12vh, 140px);
+  margin-top: clamp(56px, 8vh, 96px);
 }
 
 .kz-list-wrap {
@@ -6749,14 +6749,13 @@ h1, h2, h3, h4, h5, h6,
   margin-bottom: 14px;
   font-size: 16px;
   line-height: 1.5;
-  opacity: 0;
-  translate: 0 14px;
   transition: opacity .8s ease, translate .8s cubic-bezier(.2, .7, .2, 1);
 }
 
-.kz-list li.is-in {
-  opacity: 1;
-  translate: 0 0;
+/* Rows only start hidden once the motion script is running. */
+.is-motion-ready .kz-list li:not(.is-in) {
+  opacity: 0;
+  translate: 0 14px;
 }
 
 .kz-list li span {
@@ -6770,7 +6769,7 @@ h1, h2, h3, h4, h5, h6,
 
 .kz-photo-wide {
   aspect-ratio: 2 / 1;
-  margin: clamp(120px, 18vh, 220px) 0 0 23.5vw;
+  margin: clamp(88px, 13vh, 160px) 0 0 23.5vw;
 }
 
 .kz-photo-wide img {
@@ -6843,4 +6842,48 @@ h1, h2, h3, h4, h5, h6,
     translate: none;
     transition: none;
   }
+}
+
+/* Press list: wider, larger cards, more air between rows (desktop) */
+@media screen and (min-width: 992px) {
+  .press-list > .ui-blockcontainer {
+    max-width: min(1680px, 90vw);
+  }
+
+  .press-head {
+    margin-bottom: clamp(96px, 14vh, 160px);
+  }
+
+  .press-list .work-block {
+    grid-row-gap: clamp(120px, 16vh, 200px);
+  }
+
+  .press-list .work-card-wrap._01,
+  .press-list .work-card-wrap._02 {
+    max-width: 510px;
+  }
+
+  .press-list .work-card-wrap._02 {
+    margin-top: 73px;
+    margin-right: 130px;
+  }
+
+  .press-list .work-card-wrap._03 {
+    max-width: 630px;
+    margin-left: 104px;
+  }
+
+  .press-list .work-card-wrap._04 {
+    max-width: 489px;
+    margin-top: 182px;
+  }
+
+  .press-list .work-card-wrap._05 {
+    max-width: 500px;
+  }
+
+  .press-list .work-card-img._01 { height: 489px; }
+  .press-list .work-card-img._02 { height: 580px; }
+  .press-list .work-card-img._04 { height: 488px; }
+  .press-list .work-card-img._05 { height: 491px; }
 }
