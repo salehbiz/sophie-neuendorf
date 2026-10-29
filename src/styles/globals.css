@@ -2086,7 +2086,7 @@ textarea.ui-input, textarea.ui-select {
   --_spacing---container-spacing--max-width: 1140px;
   --_spacing---gap--gap-8x: 20px;
   --_color-pallet---dark-shade--grey: #6b655d;
-  --_color-pallet---theme-color--primary-color: #8a7a66;
+  --_color-pallet---theme-color--primary-color: #141414;
   --_color-pallet---border-color--border-100: #0003;
   --_color-pallet---dark-shade--grey-200: #6b655d99;
   --_color-pallet---dark-shade--black-200: #141414;
@@ -2105,7 +2105,7 @@ textarea.ui-input, textarea.ui-select {
   --_spacing---gap--gap-4x: 8px;
   --_color-pallet---white-shade--white-200: #ebe6de;
   --_spacing---radius--button: 30px;
-  --_color-pallet---theme-color--theme-color: #a39580;
+  --_color-pallet---theme-color--theme-color: #6b655d;
   --_spacing---gap--gap-2x: 4px;
   --_spacing---gap--gap-10x: 30px;
   --_spacing---gap--gap-6x: 12px;
@@ -2195,14 +2195,14 @@ body {
   --_color-pallet---white-shade--white: white;
   --_color-pallet---white-shade--transparent: transparent;
   --_color-pallet---dark-shade--grey: #6b655d;
-  --_color-pallet---theme-color--primary-color: #8a7a66;
+  --_color-pallet---theme-color--primary-color: #141414;
   --_color-pallet---border-color--border-100: #0003;
   --_color-pallet---dark-shade--grey-200: #6b655d99;
   --_color-pallet---dark-shade--black-200: #141414;
   --_color-pallet---dark-shade--black-400: #0000004d;
   --_color-pallet---white-shade--white-100: #fff9;
   --_color-pallet---white-shade--white-200: #ebe6de;
-  --_color-pallet---theme-color--theme-color: #a39580;
+  --_color-pallet---theme-color--theme-color: #6b655d;
   --_color-pallet---border-color--border-200: #0000000a;
   --_color-pallet---border-color--border-300: #ffffff1f;
   --_color-pallet---border-color--border-400: #0000000f;
@@ -6412,4 +6412,9 @@ h1, h2, h3, h4, h5, h6,
 .work-sub-wrap .press-all-link {
   align-self: center;
   margin-top: 0;
+}
+
+/* No accent colour: role numbers sit in the quiet grey */
+.roles-index {
+  color: var(--_color-pallet---dark-shade--grey);
 }
