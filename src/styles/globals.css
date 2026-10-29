@@ -7305,6 +7305,11 @@ h1, h2, h3, h4, h5, h6,
   padding-top: clamp(120px, 18vh, 200px);
 }
 
+/* Heavy overscan to match the home page parallax (RolesMotion's default drift). */
+.ac .wc-photo img {
+  scale: 1.45;
+}
+
 .ac-photo-left {
   grid-column: 1 / 8;
 }

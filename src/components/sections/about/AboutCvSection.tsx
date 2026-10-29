@@ -112,7 +112,8 @@ export function AboutCvSection() {
         </div>
       </article>
 
-      <RolesMotion selector=".ac" drift={0.05} />
+      {/* Same heavy drift as the home page's roles section. */}
+      <RolesMotion selector=".ac" />
     </section>
   );
 }
