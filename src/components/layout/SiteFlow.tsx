@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
 const VIEW_W = 696;
 const VIEW_H = 316;
 const TINT = '107, 88, 72';
-const STRENGTH = 0.22;
+const STRENGTH = 0.1;
 const FRAME_MS = 1000 / 30;
 
 type FlowPath = { path: Path2D; length: number; width: number; alpha: number; duration: number; phase: number };
@@ -44,7 +44,7 @@ export function SiteFlow() {
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const paths = [...buildPaths(1), ...buildPaths(-1)];
-    const strength = () => (window.innerWidth < 768 ? 0.18 : STRENGTH);
+    const strength = () => (window.innerWidth < 768 ? 0.08 : STRENGTH);
     let raf = 0;
     let last = 0;
 

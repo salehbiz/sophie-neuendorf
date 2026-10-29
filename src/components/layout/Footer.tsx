@@ -8,7 +8,7 @@ import gsap from 'gsap';
 // centre-out character reveal. Hand artwork is bundled locally in /assets/sophie/footer.
 const ARTWORK = ['/assets/sophie/footer/hand-left.jpg', '/assets/sophie/footer/hand-right.jpg'];
 const RAMP = '....::=+xX#0369';
-const GLYPH = '#a28c79';
+const GLYPH = '#8a725f';
 const LIT_CELL = '#2a221d';
 const LIT_GLYPH = '#ebe6de';
 

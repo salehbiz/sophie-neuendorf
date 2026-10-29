@@ -6432,9 +6432,9 @@ h1, h2, h3, h4, h5, h6,
 
 /* Footer: ported from the Fat Bear animated footer, in the hero's palette */
 .animated-footer {
-  --af-bg: #d3c2ae;
+  --af-bg: #bfa792;
   --af-ink: #2a221d;
-  --af-muted: #5f4e42;
+  --af-muted: #45382f;
   --af-light: #ebe6de;
   position: relative;
   isolation: isolate;
