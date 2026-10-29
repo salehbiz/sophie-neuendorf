@@ -5,7 +5,7 @@ import vm from 'node:vm';
 const JS_DIR = path.resolve('.cache/snapshot/js');
 const PAGES_DIR = path.resolve('.cache/snapshot/pages');
 
-const jsFiles = fs.readdirSync(JS_DIR).filter(f => f.startsWith('webflow.') && !f.includes('schunk') && f.endsWith('.js'));
+const jsFiles = fs.readdirSync(JS_DIR).filter(f => f.startsWith('webflow.') && f.endsWith('.js'));
 
 const ix3Interactions = new Map();
 const ix3Timelines = new Map();
@@ -48,11 +48,12 @@ for (const pageFile of fs.readdirSync(PAGES_DIR).filter(f => f.endsWith('.html')
 for (const file of jsFiles) {
   const code = fs.readFileSync(path.join(JS_DIR, file), 'utf8');
 
-  // Extract t.register(...) call arguments
-  const regIdx = code.indexOf('t.register(');
+  // Extract .register([{id: call arguments
+  const regMatch = code.match(/[a-zA-Z_$][0-9a-zA-Z_$]*\.register\(\s*\[\s*\{\s*id:/);
+  const regIdx = regMatch ? regMatch.index : -1;
   if (regIdx !== -1) {
     let depth = 0;
-    let start = regIdx + 't.register('.length;
+    let start = code.indexOf('(', regIdx) + 1;
     let i = start;
     for (; i < code.length; i++) {
       if (code[i] === '(') depth++;
@@ -126,9 +127,9 @@ fs.writeFileSync(
 );
 
 // Build markdown documentation in interactions.md
-let md = `# Conax — Complete Interactions & Animation Audit (\`interactions.md\`)
+let md = `# Voyra — Complete Interactions & Animation Audit (\`interactions.md\`)
 
-This document records **every** interaction, trigger, target selector, keyframe, duration, easing curve, stagger, and ScrollTrigger configuration extracted directly from the published bundles of \`https://conax.webflow.io/\` prior to stripping \`data-w-id\` and \`data-wf-*\` attributes.
+This document records **every** interaction, trigger, target selector, keyframe, duration, easing curve, stagger, and ScrollTrigger configuration extracted directly from the published bundles of \`https://voyra.webflow.io/\` prior to stripping \`data-w-id\` and \`data-wf-*\` attributes.
 
 - **GSAP Engine Version in Original Site:** GSAP \`3.15.0\` (\`gsap.min.js\`, \`ScrollTrigger.min.js\`, \`SplitText.min.js\`, \`CustomEase.min.js\`, \`CustomWiggle.min.js\`)
 - **Breakpoints:**

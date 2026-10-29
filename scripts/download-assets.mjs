@@ -10,7 +10,7 @@ const ICONS_DIR = path.join(PUBLIC_ASSETS_DIR, 'icons');
 fs.mkdirSync(IMAGES_DIR, { recursive: true });
 fs.mkdirSync(ICONS_DIR, { recursive: true });
 
-// Extract all cdn.prod.website-files.com URLs from all 40 pages
+// Extract all cdn.prod.website-files.com URLs from all pages and CSS
 const urls = new Set();
 
 for (const file of fs.readdirSync(PAGES_DIR).filter(f => f.endsWith('.html'))) {
@@ -22,7 +22,17 @@ for (const file of fs.readdirSync(PAGES_DIR).filter(f => f.endsWith('.html'))) {
   }
 }
 
-console.log(`Found ${urls.size} unique media asset URLs across all 40 pages.`);
+const CSS_DIR = path.resolve('.cache/snapshot/css');
+for (const file of fs.readdirSync(CSS_DIR).filter(f => f.endsWith('.css'))) {
+  const css = fs.readFileSync(path.join(CSS_DIR, file), 'utf8');
+  for (const m of css.matchAll(/https:\/\/cdn\.prod\.website-files\.com\/[^\s"'<>)]+/g)) {
+    const u = m[0].replace(/&amp;/g, '&').replace(/,+$/, '');
+    if (u.endsWith('.css') || u.endsWith('.js')) continue;
+    urls.add(u);
+  }
+}
+
+console.log(`Found ${urls.size} unique media asset URLs across all pages and CSS.`);
 
 function toCleanLocalPath(remoteUrl) {
   const u = new URL(remoteUrl);

@@ -1,51 +1,40 @@
-import React from 'react';
 import type { Metadata } from 'next';
-import { buildPageMetadata } from '@/data/metadata';
-import { AnnouncementBar, Navbar, PageTransitionOverlay } from '@/components/layout/Navbar';
+import { PAGE_METADATA } from '@/data/metadata';
+import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { HomeHeroSection } from '@/components/sections/home/HomeHeroSection';
-import { HomeAboutIntroSection } from '@/components/sections/home/HomeAboutIntroSection';
-import { HomeOurApproachSection } from '@/components/sections/home/HomeOurApproachSection';
-import { HomeWhyChooseUsSection } from '@/components/sections/home/HomeWhyChooseUsSection';
-import { HomeIndicatorSection } from '@/components/sections/home/HomeIndicatorSection';
-import { HomeServicesSection } from '@/components/sections/home/HomeServicesSection';
-import { HomeShowreelVideoSection } from '@/components/sections/home/HomeShowreelVideoSection';
-import { HomeShowreelCaptionSection } from '@/components/sections/home/HomeShowreelCaptionSection';
-import { HomeFeaturedProjectsSection } from '@/components/sections/home/HomeFeaturedProjectsSection';
-import { HomePartnerLogosSection } from '@/components/sections/home/HomePartnerLogosSection';
-import { HomeAchievementsSection } from '@/components/sections/home/HomeAchievementsSection';
-import { HomeTestimonialsSection } from '@/components/sections/home/HomeTestimonialsSection';
-import { HomeTeamSection } from '@/components/sections/home/HomeTeamSection';
-import { HomePricingSection } from '@/components/sections/home/HomePricingSection';
-import { HomeNewsletterSection } from '@/components/sections/home/HomeNewsletterSection';
-import { HomeBlogSection } from '@/components/sections/home/HomeBlogSection';
+import { HomeAboutUsSection } from '@/components/sections/home/HomeAboutUsSection';
+import { HomeWorkSection } from '@/components/sections/home/HomeWorkSection';
+import { HomeServiceSection } from '@/components/sections/home/HomeServiceSection';
+import { HomeChooseSection } from '@/components/sections/home/HomeChooseSection';
 import { HomeFaqSection } from '@/components/sections/home/HomeFaqSection';
+import { HomeTestimonialSection } from '@/components/sections/home/HomeTestimonialSection';
+import { HomeTickerSection } from '@/components/sections/home/HomeTickerSection';
 
-export const metadata: Metadata = buildPageMetadata('/');
+const meta = PAGE_METADATA['/'];
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: {
+    title: meta.title,
+    description: meta.description,
+    images: [meta.ogImage],
+  },
+};
+
+export default function HomePage() {
   return (
-    <div className="page-wrapper">
-      <PageTransitionOverlay />
-      <AnnouncementBar />
-      <Navbar variant="white" />
+    <div className="main">
+      <Navbar variant="default" />
       <HomeHeroSection />
-      <HomeAboutIntroSection />
-      <HomeOurApproachSection />
-      <HomeWhyChooseUsSection />
-      <HomeIndicatorSection />
-      <HomeServicesSection />
-      <HomeShowreelVideoSection />
-      <HomeShowreelCaptionSection />
-      <HomeFeaturedProjectsSection />
-      <HomePartnerLogosSection />
-      <HomeAchievementsSection />
-      <HomeTestimonialsSection />
-      <HomeTeamSection />
-      <HomePricingSection />
-      <HomeNewsletterSection />
-      <HomeBlogSection />
+      <HomeAboutUsSection />
+      <HomeWorkSection />
+      <HomeServiceSection />
+      <HomeChooseSection />
       <HomeFaqSection />
+      <HomeTestimonialSection />
+      <HomeTickerSection />
       <Footer />
     </div>
   );

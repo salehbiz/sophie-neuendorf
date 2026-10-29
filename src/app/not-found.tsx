@@ -1,19 +1,22 @@
-import React from 'react';
 import type { Metadata } from 'next';
-import { buildPageMetadata } from '@/data/metadata';
-import { AnnouncementBar, Navbar } from '@/components/layout/Navbar';
-import { NotFoundGridOverlaySection } from '@/components/sections/legal/NotFoundGridOverlaySection';
-import { NotFoundContentSection } from '@/components/sections/legal/NotFoundContentSection';
+import { PAGE_METADATA } from '@/data/metadata';
+import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
+import { NotFoundSection } from '@/components/sections/utility/NotFoundSection';
 
-export const metadata: Metadata = buildPageMetadata('/404');
+const meta = PAGE_METADATA['/404'];
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+};
+
+export default function NotFound() {
   return (
-    <div className="page-wrapper section-404">
-      <AnnouncementBar />
-      <Navbar variant="black" />
-      <NotFoundGridOverlaySection />
-      <NotFoundContentSection />
-    </div>
+    <>
+      <Navbar variant="v2" />
+      <NotFoundSection />
+      <Footer />
+    </>
   );
 }

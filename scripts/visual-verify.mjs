@@ -5,23 +5,28 @@ import { PNG } from 'pngjs';
 import pixelmatch from 'pixelmatch';
 import { ROUTES } from './fetch-snapshot.mjs';
 
-const LIVE_BASE = 'https://conax.webflow.io';
+const LIVE_BASE = 'https://voyra.webflow.io';
 const LOCAL_BASE = process.env.LOCAL_BASE_URL || 'http://localhost:3000';
 const BREAKPOINTS = [1440, 991, 767, 390];
 const OUT_DIR = path.resolve('verification');
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 
-// Normalize animation/marquee state and hide the Webflow badge on the live site before screenshot
-// so that layout, typography, colors, spacing, and images are compared deterministically.
 async function stabilizePage(page) {
   await page.evaluate(async () => {
-    // Wait for fonts
+    window.__PAUSE_SLIDERS = true;
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
     }
 
-    // Force eager loading on all lazy images and wait for them to decode
+    // Reset all sliders to slide 1 so autoplay timing differences don't cause false diffs
+    document.querySelectorAll('.w-slider-nav, .ui-slider-nav').forEach((nav) => {
+      const firstDot = nav.querySelector('.w-slider-dot, .ui-slider-dot');
+      if (firstDot && !firstDot.classList.contains('w-active') && !firstDot.classList.contains('ui-active')) {
+        firstDot.click();
+      }
+    });
+
     const imgs = Array.from(document.querySelectorAll('img'));
     for (const img of imgs) {
       img.loading = 'eager';
@@ -34,40 +39,25 @@ async function stabilizePage(page) {
       }
     }
 
-    // Remove the fixed Webflow badge on the live site if present, and settle all scroll reveals / marquees
     const style = document.createElement('style');
     style.textContent = `
       .w-webflow-badge { display: none !important; }
-      .page-transition-overlay, .overlay-column { display: none !important; opacity: 0 !important; }
       * {
         animation-play-state: paused !important;
         transition: none !important;
       }
-      .image-gallery-marqee-track, .marquee-track {
+      .hero-bottom-loop,
+      .photo-loop._01,
+      .photo-loop._02,
+      .text-ticker,
+      .about-img-loop {
         transform: translate3d(0px, 0px, 0px) !important;
       }
-      [style*="opacity: 0"], [style*="opacity:0"] {
-        opacity: 1 !important;
-        transform: none !important;
+      .hero-slider-img {
+        transform: scale(1.1) !important;
       }
-      .image-item-blog.ghost {
-        height: 100% !important;
-        width: 100% !important;
-        transform: none !important;
-      }
-      .image-work-collection-item.absolute {
-        height: auto !important;
-        width: 100% !important;
-        transform: none !important;
-      }
-      .blog-list-wrap .text-body-5,
-      .blog-list-wrap .author-blog,
-      .work-collection-item-wrap .text-body-4.semibold,
-      .gsap_split_line,
-      .gsap_split_word,
-      .gsap_split_char {
-        opacity: 1 !important;
-        transform: none !important;
+      .circle-img {
+        transform: rotate(0deg) !important;
       }
     `;
     document.head.appendChild(style);
@@ -98,7 +88,6 @@ function createSideBySideAndDiff(liveBuf, localBuf) {
     threshold: 0.15,
   });
 
-  // Create side-by-side image: [Live | Local | Diff]
   const sbs = new PNG({ width: w * 3, height: h });
   PNG.bitblt(pLive, sbs, 0, 0, w, h, 0, 0);
   PNG.bitblt(pLocal, sbs, 0, 0, w, h, w, 0);
@@ -153,7 +142,6 @@ async function runVerification() {
           localPage.goto(`${LOCAL_BASE}${item.route}`, { waitUntil: 'load', timeout: 60000 }),
         ]);
 
-        // Re-trigger resize on local page so breakpoint-conditional interactions evaluate at the new viewport width
         await localPage.evaluate(() => {
           window.dispatchEvent(new Event('resize'));
         });

@@ -1,57 +1,73 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { SHARED_LAYOUT_FRAGMENTS } from '@/data/layout-fragments';
+import { NAVBAR_DEFAULT_HTML, NAVBAR_V2_HTML } from '@/data/layout-fragments';
 
-interface NavbarProps {
-  variant?: 'white' | 'black';
+export interface NavbarProps {
+  variant?: 'default' | 'v2';
 }
 
-export function AnnouncementBar() {
-  return (
-    <div
-      suppressHydrationWarning
-      dangerouslySetInnerHTML={{ __html: SHARED_LAYOUT_FRAGMENTS.announcementBar }}
-    />
+function unwrapNavbarInner(outerHtml: string): string {
+  const openEnd = outerHtml.indexOf('>');
+  const closeIdx = outerHtml.lastIndexOf('</div>');
+  return openEnd !== -1 && closeIdx !== -1 ? outerHtml.slice(openEnd + 1, closeIdx) : outerHtml;
+}
+
+function applyActiveLinksToHtml(innerHtml: string, pathname: string): string {
+  return innerHtml.replace(/<a\s+([^>]*?)href="([^"]+)"([^>]*?)>/gi, (full, before, href, after) => {
+    const isCurrent = href === pathname;
+    if (!isCurrent) return full;
+    const combined = before + 'href="' + href + '"' + after;
+    const withAria = combined.includes('aria-current=')
+      ? combined
+      : combined.replace('href="' + href + '"', 'href="' + href + '" aria-current="page"');
+    const withClass = withAria.replace(/class="([^"]+)"/, (_, cls) => {
+      const tokens = cls.split(/\s+/).filter(Boolean);
+      if (!tokens.includes('ui--current')) tokens.push('ui--current');
+      return 'class="' + tokens.join(' ') + '"';
+    });
+    return '<a ' + withClass + '>';
+  });
+}
+
+export function Navbar({ variant = 'default' }: NavbarProps) {
+  const pathname = usePathname() || '/';
+  const navRef = useRef<HTMLDivElement>(null);
+
+  const rawOuter = variant === 'v2' ? NAVBAR_V2_HTML : NAVBAR_DEFAULT_HTML;
+  const innerHtml = useMemo(
+    () => applyActiveLinksToHtml(unwrapNavbarInner(rawOuter), pathname),
+    [rawOuter, pathname]
   );
-}
-
-export function PageTransitionOverlay() {
-  return null;
-}
-
-export function Navbar({ variant = 'black' }: NavbarProps) {
-  const pathname = usePathname();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const html =
-    variant === 'white'
-      ? SHARED_LAYOUT_FRAGMENTS.navbarWhite
-      : SHARED_LAYOUT_FRAGMENTS.navbarBlack;
 
   useEffect(() => {
-    const root = containerRef.current;
+    const root = navRef.current;
     if (!root) return;
-
-    // Update active link state (ui--current) based on current pathname
     const links = root.querySelectorAll<HTMLAnchorElement>('a[href]');
-    links.forEach((a) => {
-      const href = a.getAttribute('href');
+    links.forEach(link => {
+      const href = link.getAttribute('href');
       if (href === pathname) {
-        a.classList.add('ui--current');
-        a.setAttribute('aria-current', 'page');
+        link.classList.add('ui--current');
+        link.setAttribute('aria-current', 'page');
       } else {
-        a.classList.remove('ui--current');
-        a.removeAttribute('aria-current');
+        link.classList.remove('ui--current');
+        link.removeAttribute('aria-current');
       }
     });
-  }, [pathname, variant]);
+  }, [pathname]);
 
   return (
     <div
-      ref={containerRef}
-      suppressHydrationWarning
-      dangerouslySetInnerHTML={{ __html: html }}
+      ref={navRef}
+      data-animation="default"
+      data-collapse="medium"
+      data-duration="400"
+      data-easing="ease"
+      data-easing2="ease"
+      role="banner"
+      className={variant === 'v2' ? 'navbar v2 ui-nav' : 'navbar ui-nav'}
+      dangerouslySetInnerHTML={{ __html: innerHtml }}
     />
   );
 }

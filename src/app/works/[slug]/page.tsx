@@ -1,19 +1,14 @@
-import React from 'react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { WORKS, getWorkBySlug } from '@/data/works';
-import { buildPageMetadata } from '@/data/metadata';
-import { AnnouncementBar, Navbar } from '@/components/layout/Navbar';
+import { WORKS, WORKS_BY_SLUG } from '@/data/works';
+import { PAGE_METADATA } from '@/data/metadata';
+import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { WorkDetailHeroSection } from '@/components/sections/work/WorkDetailHeroSection';
-import { WorkDetailOverviewSection } from '@/components/sections/work/WorkDetailOverviewSection';
-import { WorkDetailChallengeSection } from '@/components/sections/work/WorkDetailChallengeSection';
-import { WorkDetailGallerySection } from '@/components/sections/work/WorkDetailGallerySection';
-import { WorkDetailRelatedSection } from '@/components/sections/work/WorkDetailRelatedSection';
-import { WorkDetailFaqSection } from '@/components/sections/work/WorkDetailFaqSection';
+import { WorkDetailHeroSection } from '@/components/sections/works/WorkDetailHeroSection';
+import { WorkDetailContentSection } from '@/components/sections/works/WorkDetailContentSection';
 
 export function generateStaticParams() {
-  return WORKS.map((w) => ({ slug: w.slug }));
+  return WORKS.map(item => ({ slug: item.slug }));
 }
 
 export async function generateMetadata({
@@ -22,7 +17,16 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  return buildPageMetadata(`/works/${slug}`);
+  const meta = PAGE_METADATA[`/works/${slug}`] || PAGE_METADATA['/works'];
+  return {
+    title: meta.title,
+    description: meta.description,
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      images: [meta.ogImage],
+    },
+  };
 }
 
 export default async function WorkDetailPage({
@@ -31,19 +35,14 @@ export default async function WorkDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const item = getWorkBySlug(slug);
+  const item = WORKS_BY_SLUG[slug];
   if (!item) notFound();
 
   return (
-    <div className="page-wrapper">
-      <AnnouncementBar />
-      <Navbar variant={item.navbarVariant} />
-      <WorkDetailHeroSection item={item} />
-      <WorkDetailOverviewSection item={item} />
-      <WorkDetailChallengeSection item={item} />
-      <WorkDetailGallerySection item={item} />
-      <WorkDetailRelatedSection item={item} />
-      <WorkDetailFaqSection item={item} />
+    <div className="main">
+      <Navbar variant="default" />
+      <WorkDetailHeroSection html={item.heroHtml} />
+      <WorkDetailContentSection html={item.detailHtml} />
       <Footer />
     </div>
   );

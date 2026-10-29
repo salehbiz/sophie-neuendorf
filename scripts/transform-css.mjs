@@ -9,6 +9,14 @@ fs.mkdirSync(path.dirname(OUT_CSS), { recursive: true });
 const cssFiles = fs.readdirSync(CSS_DIR).filter(f => f.endsWith('.css'));
 let css = fs.readFileSync(path.join(CSS_DIR, cssFiles[0]), 'utf8');
 
+const assetMapPath = path.resolve('public/assets/asset-map.json');
+if (fs.existsSync(assetMapPath)) {
+  const assetMap = JSON.parse(fs.readFileSync(assetMapPath, 'utf8'));
+  for (const [remoteUrl, localUrl] of Object.entries(assetMap)) {
+    css = css.split(remoteUrl).join(localUrl);
+  }
+}
+
 // 1. Remove .w-webflow-badge rules completely
 css = css.replace(/\.w-webflow-badge\s*,\s*\.w-webflow-badge\s*>\s*img\s*\{[^}]*\}/g, '');
 css = css.replace(/\.w-webflow-badge\s*\{[^}]*\}/g, '');

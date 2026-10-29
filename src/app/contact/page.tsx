@@ -1,24 +1,28 @@
-import React from 'react';
 import type { Metadata } from 'next';
-import { buildPageMetadata } from '@/data/metadata';
-import { AnnouncementBar, Navbar } from '@/components/layout/Navbar';
+import { PAGE_METADATA } from '@/data/metadata';
+import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { ContactHeroSection } from '@/components/sections/contact/ContactHeroSection';
-import { ContactFormAndInfoSection } from '@/components/sections/contact/ContactFormAndInfoSection';
-import { ContactNewsletterSection } from '@/components/sections/contact/ContactNewsletterSection';
-import { ContactFaqSection } from '@/components/sections/contact/ContactFaqSection';
+import { ContactFormSection } from '@/components/sections/contact/ContactFormSection';
+import { ContactTickerSection } from '@/components/sections/contact/ContactTickerSection';
 
-export const metadata: Metadata = buildPageMetadata('/contact');
+const meta = PAGE_METADATA['/contact'];
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: meta.title,
+  description: meta.description,
+  openGraph: {
+    title: meta.title,
+    description: meta.description,
+    images: [meta.ogImage],
+  },
+};
+
+export default function ContactPage() {
   return (
-    <div className="page-wrapper">
-      <AnnouncementBar />
-      <Navbar variant="black" />
-      <ContactHeroSection />
-      <ContactFormAndInfoSection />
-      <ContactNewsletterSection />
-      <ContactFaqSection />
+    <div className="main">
+      <Navbar variant="v2" />
+      <ContactFormSection />
+      <ContactTickerSection />
       <Footer />
     </div>
   );

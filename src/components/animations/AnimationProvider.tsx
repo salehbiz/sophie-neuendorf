@@ -9,11 +9,11 @@ export function AnimationProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cleanup = initStandaloneInteractions();
-    let lastBp = window.innerWidth >= 992 ? 'main' : window.innerWidth >= 768 ? 'medium' : window.innerWidth >= 480 ? 'small' : 'tiny';
+    let lastWidth = window.innerWidth;
+
     const onResize = () => {
-      const nextBp = window.innerWidth >= 992 ? 'main' : window.innerWidth >= 768 ? 'medium' : window.innerWidth >= 480 ? 'small' : 'tiny';
-      if (nextBp !== lastBp) {
-        lastBp = nextBp;
+      if (window.innerWidth !== lastWidth) {
+        lastWidth = window.innerWidth;
         cleanup();
         cleanup = initStandaloneInteractions();
       }

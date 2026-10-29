@@ -1,305 +1,359 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
-import { ROUTES } from './fetch-snapshot.mjs';
 
 const PAGES_DIR = path.resolve('.cache/snapshot/pages');
-const assetMap = JSON.parse(fs.readFileSync(path.resolve('public/assets/asset-map.json'), 'utf8'));
+const ASSET_MAP_PATH = path.resolve('public/assets/asset-map.json');
+const DATA_DIR = path.resolve('src/data');
 
-// Build deterministic neutral data-anim-id map from original data-w-id
-const animIdMap = new Map();
-function getAnimId(wid) {
-  if (!animIdMap.has(wid)) {
-    const short = crypto.createHash('md5').update(wid).digest('hex').slice(0, 8);
-    animIdMap.set(wid, `anim-${short}`);
+fs.mkdirSync(DATA_DIR, { recursive: true });
+
+const assetMap = JSON.parse(fs.readFileSync(ASSET_MAP_PATH, 'utf8'));
+// Sort asset URLs longest-first so longer query/filename URLs replace before substrings
+const sortedAssets = Object.entries(assetMap).sort((a, b) => b[0].length - a[0].length);
+
+// Build a deterministic map of data-w-id -> anim-N across all snapshot pages
+const wIdToAnimId = new Map();
+let animCounter = 1;
+
+function registerWIds(html) {
+  for (const m of html.matchAll(/data-w-id="([^"]+)"/g)) {
+    const wid = m[1];
+    if (!wIdToAnimId.has(wid)) {
+      wIdToAnimId.set(wid, `anim-${animCounter++}`);
+    }
   }
-  return animIdMap.get(wid);
 }
 
-// Clean HTML string:
-// 1. Replace all remote asset URLs with local /assets/... paths
-// 2. Fix route typos (/blog-categoties -> /blog-categories, web-dessign -> web-design)
-// 3. Replace data-w-id="..." with data-anim-id="anim-..."
-// 4. Strip all data-wf-* attributes and data-turnstile-sitekey
-// 5. Rename w-* classes and w-node-* IDs to ui-*
-export function cleanHtmlFragment(rawHtml) {
-  let html = rawHtml;
+const allHtmlFiles = fs.readdirSync(PAGES_DIR).filter(f => f.endsWith('.html')).sort();
+for (const f of allHtmlFiles) {
+  registerWIds(fs.readFileSync(path.join(PAGES_DIR, f), 'utf8'));
+}
 
-  // Replace HTML-escaped &amp; inside URLs first so assetMap matches
-  for (const [remoteUrl, localUrl] of Object.entries(assetMap)) {
-    html = html.split(remoteUrl).join(localUrl);
+export function cleanHtmlFragment(raw) {
+  let out = raw;
+
+  // 1. Replace all remote CDN URLs with local paths (both raw and HTML-entity escaped)
+  for (const [remoteUrl, localPath] of sortedAssets) {
+    out = out.split(remoteUrl).join(localPath);
     const escapedRemote = remoteUrl.replace(/&/g, '&amp;');
     if (escapedRemote !== remoteUrl) {
-      html = html.split(escapedRemote).join(localUrl);
+      out = out.split(escapedRemote).join(localPath);
     }
   }
 
-  // Fix template route typos and strip any conax.webflow.io absolute URLs
-  html = html.replace(/https?:\/\/conax\.webflow\.io\/404/g, '/404');
-  html = html.replace(/https?:\/\/conax\.webflow\.io\/401/g, '/');
-  html = html.replace(/https?:\/\/conax\.webflow\.io/g, '');
-  html = html.replace(/\/blog-categoties\/web-dessign/g, '/blog-categories/web-design');
-  html = html.replace(/\/blog-categoties\//g, '/blog-categories/');
-  html = html.replace(/\/utility-pages\/[a-z0-9-]+/g, '/');
+  // 2. Replace any https://voyra.webflow.io internal links with relative paths
+  out = out.replace(/https?:\/\/voyra\.webflow\.io(\/[^"'\s)]*)?/gi, (_, p1) => p1 || '/');
 
-  // Map data-w-id to data-anim-id
-  html = html.replace(/\sdata-w-id="([^"]+)"/g, (_, wid) => ` data-anim-id="${getAnimId(wid)}"`);
+  // 3. Replace data-w-id="..." with data-anim-id="anim-N"
+  out = out.replace(/data-w-id="([^"]+)"/g, (_, wid) => {
+    if (!wIdToAnimId.has(wid)) {
+      wIdToAnimId.set(wid, `anim-${animCounter++}`);
+    }
+    return `data-anim-id="${wIdToAnimId.get(wid)}"`;
+  });
 
-  // Strip data-wf-* and data-turnstile-sitekey and HTML comments
-  html = html.replace(/\sdata-wf-[a-z0-9-]+="[^"]*"/gi, '');
-  html = html.replace(/\sdata-turnstile-sitekey="[^"]*"/gi, '');
-  html = html.replace(/<!--[\s\S]*?-->/g, '');
+  // 4. Strip all data-wf-* attributes and turnstile sitekey
+  out = out.replace(/\s*data-wf-[a-zA-Z0-9_-]+="[^"]*"/g, '');
+  out = out.replace(/\s*data-turnstile-sitekey="[^"]*"/g, '');
 
-  // Rename w-node-* IDs
-  html = html.replace(/id="w-node-([^"]+)"/g, 'id="ui-node-$1"');
+  // 5. Rename id="w-node-..." -> id="ui-node-..." and wf-form IDs/names
+  out = out.replace(/id="w-node-([^"]+)"/g, 'id="ui-node-$1"');
+  out = out.replace(/id="wf-form-([^"]+)"/g, 'id="form-$1"');
+  out = out.replace(/name="wf-form-([^"]+)"/g, 'name="form-$1"');
 
-  // Rename w-* classes inside class="..."
-  html = html.replace(/class="([^"]+)"/g, (_, clsStr) => {
-    const updated = clsStr
+  // 6. Rename w-layout-blockcontainer -> ui-blockcontainer, w-layout-grid -> ui-grid, w--* -> ui--*, w-* -> ui-* inside class="..."
+  out = out.replace(/class="([^"]+)"/g, (_, cls) => {
+    const updated = cls
       .split(/\s+/)
-      .map((c) => {
-        if (c === 'w-layout-blockcontainer') return 'ui-blockcontainer';
-        if (c === 'w-layout-grid') return 'ui-grid';
-        if (c.startsWith('w--')) return 'ui--' + c.slice(3);
-        if (c.startsWith('w-')) return 'ui-' + c.slice(2);
-        return c;
+      .map(token => {
+        if (token === 'w-layout-blockcontainer') return 'ui-blockcontainer';
+        if (token === 'w-layout-grid') return 'ui-grid';
+        if (token.startsWith('w--')) return 'ui--' + token.slice(3);
+        if (token.startsWith('w-')) return 'ui-' + token.slice(2);
+        return token;
       })
       .join(' ');
     return `class="${updated}"`;
   });
 
-  return html.trim();
+  // 7. Strip HTML comments
+  out = out.replace(/<!--[\s\S]*?-->/g, '');
+
+  // 8. Replace any remaining case-insensitive "webflow" references in body markup with "Voyra" / "voyra"
+  out = out.replace(/webflow/gi, match => (match[0] === 'W' ? 'Voyra' : 'voyra'));
+
+  return out.trim();
 }
 
-const VOID_TAGS = new Set([
-  'img', 'br', 'hr', 'input', 'meta', 'link', 'area', 'base',
-  'col', 'embed', 'param', 'source', 'track', 'wbr',
-]);
-
-export function splitDirectChildren(htmlStr) {
-  let pos = 0;
-  const n = htmlStr.length;
-  const children = [];
-
-  while (pos < n) {
-    while (pos < n && /\s/.test(htmlStr[pos])) pos++;
-    if (pos >= n) break;
-    if (htmlStr[pos] !== '<') {
-      const next = htmlStr.indexOf('<', pos);
-      if (next === -1) break;
-      pos = next;
+function findTagEnd(html, start) {
+  let inQuote = null;
+  for (let i = start + 1; i < html.length; i++) {
+    const ch = html[i];
+    if (inQuote) {
+      if (ch === inQuote) inQuote = null;
+    } else {
+      if (ch === '"' || ch === "'") inQuote = ch;
+      else if (ch === '>') return i;
     }
-    const openMatch = htmlStr.slice(pos).match(/^<([a-zA-Z0-9-]+)([^>]*?)(\/?)>/);
-    if (!openMatch) break;
-    const tag = openMatch[1].toLowerCase();
-    const attrs = openMatch[2];
-    const selfClose = Boolean(openMatch[3]) || VOID_TAGS.has(tag);
-    const start = pos;
-    pos += openMatch[0].length;
-    if (selfClose) {
-      children.push({ tag, attrs, html: htmlStr.slice(start, pos) });
+  }
+  return -1;
+}
+
+export function parseDirectChildren(html) {
+  const children = [];
+  const voidTags = new Set([
+    'img', 'br', 'hr', 'input', 'meta', 'link', 'source',
+    'track', 'wbr', 'area', 'base', 'col', 'embed', 'param',
+  ]);
+  let i = 0;
+  while (i < html.length) {
+    const lt = html.indexOf('<', i);
+    if (lt === -1) break;
+    if (html.startsWith('<!--', lt)) {
+      const end = html.indexOf('-->', lt + 4);
+      i = end === -1 ? html.length : end + 3;
+      continue;
+    }
+    const gt = findTagEnd(html, lt);
+    if (gt === -1) break;
+    const openTag = html.slice(lt, gt + 1);
+    const m = openTag.match(/^<([a-zA-Z0-9-]+)(?:\s|>|\/)/);
+    if (!m) {
+      i = gt + 1;
+      continue;
+    }
+    const tag = m[1].toLowerCase();
+    if (voidTags.has(tag) || openTag.endsWith('/>')) {
+      children.push({ tag, openTag, outerHTML: openTag, innerHTML: '' });
+      i = gt + 1;
       continue;
     }
     let depth = 1;
-    const tagRe = new RegExp(`<(/?)(${tag})\\b([^>]*?)(/?)>`, 'gi');
-    tagRe.lastIndex = pos;
-    while (depth > 0 && pos < n) {
-      const tm = tagRe.exec(htmlStr);
-      if (!tm) {
-        pos = n;
-        break;
+    let pos = gt + 1;
+    while (pos < html.length && depth > 0) {
+      const nextLt = html.indexOf('<', pos);
+      if (nextLt === -1) break;
+      if (html.startsWith('<!--', nextLt)) {
+        const end = html.indexOf('-->', nextLt + 4);
+        pos = end === -1 ? html.length : end + 3;
+        continue;
       }
-      const isClose = Boolean(tm[1]);
-      const isSelf = Boolean(tm[4]) || VOID_TAGS.has(tag);
-      pos = tagRe.lastIndex;
-      if (isClose) depth--;
-      else if (!isSelf) depth++;
+      const nextGt = findTagEnd(html, nextLt);
+      if (nextGt === -1) break;
+      const tok = html.slice(nextLt, nextGt + 1);
+      const tm = tok.match(/^<(\/?)([a-zA-Z0-9-]+)(?:\s|>|\/)/);
+      if (tm && tm[2].toLowerCase() === tag) {
+        if (tm[1] === '/') {
+          depth--;
+          if (depth === 0) {
+            children.push({
+              tag,
+              openTag,
+              outerHTML: html.slice(lt, nextGt + 1),
+              innerHTML: html.slice(gt + 1, nextLt),
+            });
+            i = nextGt + 1;
+            break;
+          }
+        } else if (!tok.endsWith('/>') && !voidTags.has(tag)) {
+          depth++;
+        }
+      }
+      pos = nextGt + 1;
     }
-    children.push({ tag, attrs, html: htmlStr.slice(start, pos) });
+    if (depth > 0) break;
   }
   return children;
 }
 
-export function extractPageSections(fileName) {
-  const raw = fs.readFileSync(path.join(PAGES_DIR, fileName), 'utf8');
-  const titleMatch = raw.match(/<title>(.*?)<\/title>/s);
-  const descMatch = raw.match(/<meta\s+content="([^"]*)"\s+name="description"/i) ||
-                    raw.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
-  const ogImgMatch = raw.match(/<meta\s+content="([^"]*)"\s+property="og:image"/i);
-
-  const cleanTitle = (titleMatch ? titleMatch[1] : 'Conax')
-    .replace(/\s*-\s*Webflow HTML Website Template/gi, '')
-    .replace(/Webflow HTML Website Template/gi, 'Creative Design & Digital Agency')
-    .replace(/Webflow/gi, 'Digital')
-    .trim();
-
-  const cleanDesc = (descMatch ? descMatch[1] : '')
-    .replace(/Webflow HTML template/gi, 'digital agency studio')
-    .replace(/Webflow/gi, 'modern')
-    .trim();
-
-  const rawOg = ogImgMatch ? ogImgMatch[1] : '';
-  const localOg = assetMap[rawOg] || '/assets/images/og-image-58fc08.png';
-
-  const bodyMatch = raw.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-  const bodyNoScripts = bodyMatch[1].replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').trim();
-  const topChildren = splitDirectChildren(bodyNoScripts);
-  let innerChildren = topChildren;
-  let wrapperClassName = 'page-wrapper';
-  if (topChildren.length === 1 && topChildren[0].attrs.includes('page-wrapper')) {
-    wrapperClassName = (topChildren[0].attrs.match(/class="([^"]+)"/) || [null, 'page-wrapper'])[1];
-    const innerHtml = topChildren[0].html
-      .replace(/^<div[^>]*>/i, '')
-      .replace(/<\/div>$/i, '')
-      .trim();
-    innerChildren = splitDirectChildren(innerHtml);
+function getPageElements(html) {
+  const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  if (!bodyMatch) return [];
+  const body = bodyMatch[1];
+  const topChildren = parseDirectChildren(body).filter(c => c.tag !== 'script');
+  if (topChildren.length === 1 && topChildren[0].openTag.includes('class="main"')) {
+    return parseDirectChildren(topChildren[0].innerHTML);
   }
+  return topChildren;
+}
 
-  let navbarVariant = 'black';
-  const sections = [];
+function cleanMetadataText(str) {
+  if (!str) return '';
+  return str
+    .replace(/\s*[-–—|]?\s*Voyra\s+Webflow\s+HTML\s+website\s+template/gi, ' — Voyra Photography Studio')
+    .replace(/\s*[-–—|]?\s*Webflow\s+HTML\s+website\s+template/gi, ' — Photography Studio')
+    .replace(/Voyra\s+Webflow\s+template/gi, 'Voyra studio template')
+    .replace(/Webflow\s+template/gi, 'studio template')
+    .replace(/Webflow\s+website/gi, 'studio website')
+    .replace(/Webflow/gi, 'Voyra')
+    .replace(/&#x27;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .trim();
+}
 
-  for (const child of innerChildren) {
-    const cls = (child.attrs.match(/class="([^"]+)"/) || [null, ''])[1];
-    if (cls.includes('page-transition-overlay')) continue;
-    if (cls.includes('annoucement-bar')) continue;
-    if (cls.includes('navbar')) {
-      navbarVariant = cls.includes('white') ? 'white' : 'black';
-      continue;
-    }
-    if (cls.includes('footer')) continue;
-    sections.push({
-      tag: child.tag,
-      className: cls,
-      html: cleanHtmlFragment(child.html),
-    });
-  }
+function extractPageMeta(html) {
+  const titleMatch = html.match(/<title>([\s\S]*?)<\/title>/i);
+  const descMatch =
+    html.match(/<meta\s+content="([^"]*)"\s+name="description"/i) ||
+    html.match(/<meta\s+name="description"\s+content="([^"]*)"/i);
+  const ogImgMatch =
+    html.match(/<meta\s+content="([^"]*)"\s+property="og:image"/i) ||
+    html.match(/<meta\s+property="og:image"\s+content="([^"]*)"/i);
+
+  const rawTitle = titleMatch ? titleMatch[1].trim() : 'Voyra';
+  const rawDesc = descMatch ? descMatch[1].trim() : '';
+  const rawOgImg = ogImgMatch ? ogImgMatch[1].trim() : '';
+  const localOgImg = assetMap[rawOgImg] || '/assets/images/317995e6281f706bfde0e5122c75b7de-frame-2147239763-3-1-969ca4.webp';
 
   return {
-    title: cleanTitle,
-    description: cleanDesc,
-    ogImage: localOg,
-    navbarVariant,
-    wrapperClassName,
-    sections,
+    title: cleanMetadataText(rawTitle),
+    description: cleanMetadataText(rawDesc),
+    ogImage: localOgImg,
   };
 }
 
-// Extract shared layout fragments (AnnouncementBar, Navbar white/black, Footer)
-const homeRaw = fs.readFileSync(path.join(PAGES_DIR, 'index.html'), 'utf8');
-const aboutRaw = fs.readFileSync(path.join(PAGES_DIR, 'about-us.html'), 'utf8');
-
-function extractSharedFragments() {
-  const homeBody = homeRaw.match(/<body[^>]*>([\s\S]*?)<\/body>/i)[1].replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').trim();
-  const homeInner = splitDirectChildren(
-    splitDirectChildren(homeBody)[0].html.replace(/^<div[^>]*>/i, '').replace(/<\/div>$/i, '').trim()
-  );
-  const aboutBody = aboutRaw.match(/<body[^>]*>([\s\S]*?)<\/body>/i)[1].replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '').trim();
-  const aboutInner = splitDirectChildren(
-    splitDirectChildren(aboutBody)[0].html.replace(/^<div[^>]*>/i, '').replace(/<\/div>$/i, '').trim()
-  );
-
-  const pageTransitionOverlay = cleanHtmlFragment(homeInner.find(c => c.attrs.includes('page-transition-overlay')).html);
-  const announcementBar = cleanHtmlFragment(homeInner.find(c => c.attrs.includes('annoucement-bar')).html);
-  const navbarWhite = cleanHtmlFragment(homeInner.find(c => c.attrs.includes('navbar')).html);
-  const navbarBlack = cleanHtmlFragment(aboutInner.find(c => c.attrs.includes('navbar')).html);
-  const footer = cleanHtmlFragment(homeInner.find(c => c.attrs.includes('footer')).html);
-
-  return { pageTransitionOverlay, announcementBar, navbarWhite, navbarBlack, footer };
+function stripActiveLinkState(html) {
+  return html
+    .replace(/\s+aria-current="page"/g, '')
+    .replace(/class="([^"]+)"/g, (_, cls) => {
+      const filtered = cls
+        .split(/\s+/)
+        .filter(c => c !== 'ui--current' && c !== 'w--current')
+        .join(' ');
+      return `class="${filtered}"`;
+    });
 }
 
-function main() {
-  fs.mkdirSync(path.resolve('src/data'), { recursive: true });
+// 1. Extract metadata and cleaned elements for all pages
+const pageMetadata = {};
+const cleanedPages = {};
 
-  const servicesList = [];
-  const worksList = [];
-  const blogsList = [];
-  const blogCategoriesList = [];
-  const membersList = [];
-  const staticPages = {};
-  const metadataMap = {};
-
-  for (const r of ROUTES) {
-    const parsed = extractPageSections(r.file);
-    metadataMap[r.route] = {
-      title: parsed.title,
-      description: parsed.description,
-      ogImage: parsed.ogImage,
-      navbarVariant: parsed.navbarVariant,
-    };
-
-    if (r.route.startsWith('/services/')) {
-      const slug = r.route.slice('/services/'.length);
-      servicesList.push({ slug, route: r.route, ...parsed });
-    } else if (r.route.startsWith('/works/')) {
-      const slug = r.route.slice('/works/'.length);
-      worksList.push({ slug, route: r.route, ...parsed });
-    } else if (r.route.startsWith('/blog/')) {
-      const slug = r.route.slice('/blog/'.length);
-      blogsList.push({ slug, route: r.route, ...parsed });
-    } else if (r.route.startsWith('/blog-categories/')) {
-      const category = r.route.slice('/blog-categories/'.length);
-      blogCategoriesList.push({ category, route: r.route, ...parsed });
-    } else if (r.route.startsWith('/member/')) {
-      const slug = r.route.slice('/member/'.length);
-      membersList.push({ slug, route: r.route, ...parsed });
-    } else {
-      staticPages[r.route] = parsed;
-    }
+for (const file of allHtmlFiles) {
+  const key = file.replace(/\.html$/, '');
+  const html = fs.readFileSync(path.join(PAGES_DIR, file), 'utf8');
+  if (key !== 'works_page2') {
+    const routePath =
+      key === 'index'
+        ? '/'
+        : '/' + key.replace(/__/g, '/');
+    pageMetadata[routePath] = extractPageMeta(html);
   }
-
-  const shared = extractSharedFragments();
-
-  fs.writeFileSync(
-    path.resolve('src/data/services.ts'),
-    `export interface ServiceItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const SERVICES: ServiceItem[] = ${JSON.stringify(servicesList, null, 2)};\n\nexport function getServiceBySlug(slug: string): ServiceItem | undefined {\n  return SERVICES.find((s) => s.slug === slug);\n}\n`,
-    'utf8'
-  );
-
-  fs.writeFileSync(
-    path.resolve('src/data/works.ts'),
-    `export interface WorkItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const WORKS: WorkItem[] = ${JSON.stringify(worksList, null, 2)};\n\nexport function getWorkBySlug(slug: string): WorkItem | undefined {\n  return WORKS.find((w) => w.slug === slug);\n}\n`,
-    'utf8'
-  );
-
-  fs.writeFileSync(
-    path.resolve('src/data/blogs.ts'),
-    `export interface BlogPostItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport interface BlogCategoryItem {\n  category: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const BLOG_POSTS: BlogPostItem[] = ${JSON.stringify(blogsList, null, 2)};\n\nexport const BLOG_CATEGORIES: BlogCategoryItem[] = ${JSON.stringify(blogCategoriesList, null, 2)};\n\nexport function getBlogPostBySlug(slug: string): BlogPostItem | undefined {\n  return BLOG_POSTS.find((b) => b.slug === slug);\n}\n\nexport function getBlogCategoryBySlug(category: string): BlogCategoryItem | undefined {\n  return BLOG_CATEGORIES.find((c) => c.category === category);\n}\n`,
-    'utf8'
-  );
-
-  fs.writeFileSync(
-    path.resolve('src/data/members.ts'),
-    `export interface MemberItem {\n  slug: string;\n  route: string;\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n  wrapperClassName?: string;\n  sections: { tag: string; className: string; html: string }[];\n}\n\nexport const MEMBERS: MemberItem[] = ${JSON.stringify(membersList, null, 2)};\n\nexport function getMemberBySlug(slug: string): MemberItem | undefined {\n  return MEMBERS.find((m) => m.slug === slug);\n}\n`,
-    'utf8'
-  );
-
-  fs.writeFileSync(
-    path.resolve('src/data/metadata.ts'),
-    `import type { Metadata } from 'next';\n\nexport interface PageMetaEntry {\n  title: string;\n  description: string;\n  ogImage: string;\n  navbarVariant: 'white' | 'black';\n}\n\nexport const PAGE_METADATA: Record<string, PageMetaEntry> = ${JSON.stringify(metadataMap, null, 2)};\n\nexport function buildPageMetadata(route: string): Metadata {\n  const entry = PAGE_METADATA[route] || PAGE_METADATA['/'];\n  return {\n    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://conax.studio'),\n    title: entry.title,\n    description: entry.description,\n    openGraph: {\n      title: entry.title,\n      description: entry.description,\n      images: [entry.ogImage],\n      type: 'website',\n    },\n    twitter: {\n      card: 'summary_large_image',\n      title: entry.title,\n      description: entry.description,\n      images: [entry.ogImage],\n    },\n  };\n}\n`,
-    'utf8'
-  );
-
-  fs.writeFileSync(
-    path.resolve('src/data/layout-fragments.ts'),
-    `export const SHARED_LAYOUT_FRAGMENTS = ${JSON.stringify(shared, null, 2)};\n`,
-    'utf8'
-  );
-
-  // Also save animIdMap so our GSAP engine can resolve original data-w-id -> data-anim-id
-  fs.writeFileSync(
-    path.resolve('src/data/anim-id-map.ts'),
-    `export const ANIM_ID_MAP: Record<string, string> = ${JSON.stringify(Object.fromEntries(animIdMap.entries()), null, 2)};\n`,
-    'utf8'
-  );
-
-  // Save static pages sections JSON for section component generation
-  fs.writeFileSync(
-    path.resolve('.cache/snapshot/static-pages-parsed.json'),
-    JSON.stringify(staticPages, null, 2),
-    'utf8'
-  );
-
-  console.log('Generated src/data/{services,works,blogs,members,metadata,layout-fragments,anim-id-map}.ts');
+  const elements = getPageElements(html).map(el => ({
+    tag: el.tag,
+    openTag: cleanHtmlFragment(el.openTag),
+    outerHTML: cleanHtmlFragment(el.outerHTML),
+  }));
+  cleanedPages[key] = elements;
 }
 
-main();
+// 2. Write src/data/anim-id-map.ts
+fs.writeFileSync(
+  path.join(DATA_DIR, 'anim-id-map.ts'),
+  `export const ANIM_ID_MAP: Record<string, string> = ${JSON.stringify(
+    Object.fromEntries(wIdToAnimId.entries()),
+    null,
+    2
+  )};\n`,
+  'utf8'
+);
+
+// 3. Write src/data/metadata.ts
+fs.writeFileSync(
+  path.join(DATA_DIR, 'metadata.ts'),
+  `export interface RouteMetadata {\n  title: string;\n  description: string;\n  ogImage: string;\n}\n\nexport const PAGE_METADATA: Record<string, RouteMetadata> = ${JSON.stringify(
+    pageMetadata,
+    null,
+    2
+  )};\n`,
+  'utf8'
+);
+
+// 4. Write src/data/layout-fragments.ts (Navbar default from index, Navbar v2 from about, Footer from index)
+const navbarDefaultEl = cleanedPages['index'].find(el => el.openTag.includes('navbar'));
+const navbarV2El = cleanedPages['about'].find(el => el.openTag.includes('navbar'));
+const footerEl = cleanedPages['index'].find(el => el.openTag.includes('footer'));
+
+const navbarDefaultHtml = stripActiveLinkState(navbarDefaultEl.outerHTML);
+const navbarV2Html = stripActiveLinkState(navbarV2El.outerHTML);
+const footerHtml = stripActiveLinkState(footerEl.outerHTML);
+
+fs.writeFileSync(
+  path.join(DATA_DIR, 'layout-fragments.ts'),
+  `export const NAVBAR_DEFAULT_HTML = ${JSON.stringify(navbarDefaultHtml)};\n\nexport const NAVBAR_V2_HTML = ${JSON.stringify(navbarV2Html)};\n\nexport const FOOTER_HTML = ${JSON.stringify(footerHtml)};\n`,
+  'utf8'
+);
+
+// 5. Write src/data/works.ts
+const workFiles = allHtmlFiles.filter(f => f.startsWith('works__')).sort();
+const worksData = workFiles.map(file => {
+  const key = file.replace(/\.html$/, '');
+  const slug = key.replace(/^works__/, '');
+  const els = cleanedPages[key];
+  const heroEl = els.find(el => el.openTag.includes('work-detail-hero'));
+  const detailEl = els.find(el => el.openTag.includes('project-detail'));
+  const h1Match = heroEl?.outerHTML.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  const title = h1Match ? h1Match[1].trim() : slug;
+  return {
+    slug,
+    title,
+    heroHtml: heroEl ? heroEl.outerHTML : '',
+    detailHtml: detailEl ? detailEl.outerHTML : '',
+  };
+});
+
+const worksListPage1El = cleanedPages['works'].find(el => el.openTag.includes('all-project'));
+const worksListPage2El = cleanedPages['works_page2'].find(el => el.openTag.includes('all-project'));
+
+fs.writeFileSync(
+  path.join(DATA_DIR, 'works.ts'),
+  `export interface WorkItem {\n  slug: string;\n  title: string;\n  heroHtml: string;\n  detailHtml: string;\n}\n\nexport const WORKS: WorkItem[] = ${JSON.stringify(
+    worksData,
+    null,
+    2
+  )};\n\nexport const WORKS_BY_SLUG: Record<string, WorkItem> = Object.fromEntries(\n  WORKS.map(item => [item.slug, item])\n);\n\nexport const WORKS_LIST_PAGE_1_HTML = ${JSON.stringify(
+    worksListPage1El ? worksListPage1El.outerHTML : ''
+  )};\n\nexport const WORKS_LIST_PAGE_2_HTML = ${JSON.stringify(
+    worksListPage2El ? worksListPage2El.outerHTML : ''
+  )};\n`,
+  'utf8'
+);
+
+// 6. Write src/data/blogs.ts
+const blogFiles = allHtmlFiles.filter(f => f.startsWith('blogs__')).sort();
+const blogsData = blogFiles.map(file => {
+  const key = file.replace(/\.html$/, '');
+  const slug = key.replace(/^blogs__/, '');
+  const els = cleanedPages[key];
+  const heroEl = els.find(el => el.openTag.includes('blog-detail-hero'));
+  const detailEl = els.find(el => el.openTag.includes('class="section blog-detail"'));
+  const h1Match = heroEl?.outerHTML.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  const title = h1Match ? h1Match[1].trim() : slug;
+  return {
+    slug,
+    title,
+    heroHtml: heroEl ? heroEl.outerHTML : '',
+    detailHtml: detailEl ? detailEl.outerHTML : '',
+  };
+});
+
+fs.writeFileSync(
+  path.join(DATA_DIR, 'blogs.ts'),
+  `export interface BlogItem {\n  slug: string;\n  title: string;\n  heroHtml: string;\n  detailHtml: string;\n}\n\nexport const BLOGS: BlogItem[] = ${JSON.stringify(
+    blogsData,
+    null,
+    2
+  )};\n\nexport const BLOGS_BY_SLUG: Record<string, BlogItem> = Object.fromEntries(\n  BLOGS.map(item => [item.slug, item])\n);\n`,
+  'utf8'
+);
+
+// 7. Save cleanedPages to .cache/snapshot/cleaned-pages.json for build-routes-and-sections.mjs
+fs.writeFileSync(
+  path.resolve('.cache/snapshot/cleaned-pages.json'),
+  JSON.stringify(cleanedPages, null, 2),
+  'utf8'
+);
+
+console.log(
+  `Generated CMS data: ${worksData.length} works, ${blogsData.length} blogs, ${Object.keys(pageMetadata).length} route metadata entries.`
+);
