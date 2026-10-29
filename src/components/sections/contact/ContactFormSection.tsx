@@ -16,49 +16,41 @@ const DETAILS = [
 const FIELDS = [
   { name: 'First-Name', label: 'First name', type: 'text', required: true, autoComplete: 'given-name' },
   { name: 'Last-Name', label: 'Last name', type: 'text', required: true, autoComplete: 'family-name' },
-  // Lowercase "email" lets Formspree set it as the reply-to address.
+  // Lowercase "email" makes FormSubmit use it as the reply-to address.
   { name: 'email', label: 'Email', type: 'email', required: true, autoComplete: 'email' },
   { name: 'Phone', label: 'Phone', type: 'tel', required: false, autoComplete: 'tel' },
 ];
 
-type Status = 'idle' | 'sending' | 'sent' | 'error';
+// FormSubmit (no account): the first submission emails EMAIL a one-time activation link, and
+// later messages are delivered there. After activation FormSubmit offers a random alias that can
+// replace the address via NEXT_PUBLIC_FORMSUBMIT_ENDPOINT.
+const ENDPOINT = process.env.NEXT_PUBLIC_FORMSUBMIT_ENDPOINT || `https://formsubmit.co/ajax/${EMAIL}`;
+
+type Status = 'idle' | 'sending' | 'sent' | 'activation' | 'error';
 
 /**
  * Contact, styled after the home page's roles section and the footer: a tall photo bleeding off
  * the left edge with heavy parallax, an oversized serif heading, the email as a large italic
- * link, numbered details and a quiet underlined form. With NEXT_PUBLIC_FORMSPREE_ENDPOINT set
- * the form posts there; until then it opens the visitor's email app with the message filled in.
+ * link, numbered details and a quiet underlined form that posts to FormSubmit.
  */
 export function ContactFormSection() {
   const [status, setStatus] = useState<Status>('idle');
-  // Ignore the .env.example placeholder so a copied example file never breaks the form.
-  const configured = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
-  const endpoint = configured && !configured.includes('your-form-id') ? configured : undefined;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-
-    if (!endpoint) {
-      const name = `${data.get('First-Name') ?? ''} ${data.get('Last-Name') ?? ''}`.trim();
-      const body = [
-        String(data.get('Message') ?? ''),
-        '',
-        name,
-        String(data.get('email') ?? ''),
-        String(data.get('Phone') ?? ''),
-      ]
-        .filter((line, i) => i < 2 || line)
-        .join('\n');
-      const subject = name ? `Message from ${name}` : 'Message';
-      window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      return;
-    }
+    const data = Object.fromEntries(new FormData(e.currentTarget));
 
     setStatus('sending');
     try {
-      const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-      setStatus(res.ok ? 'sent' : 'error');
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = (await res.json().catch(() => ({}))) as { success?: string | boolean; message?: string };
+      if (res.ok && String(json.success) === 'true') setStatus('sent');
+      else if (/activat/i.test(json.message ?? '')) setStatus('activation');
+      else setStatus('error');
     } catch {
       setStatus('error');
     }
@@ -105,11 +97,17 @@ export function ContactFormSection() {
           <p className="ct-lead">Or leave a message</p>
           {status === 'sent' ? (
             <p className="ct-note">Thank you. Your message has been sent.</p>
+          ) : status === 'activation' ? (
+            // Only seen before the form is activated: FormSubmit has emailed the activation link.
+            <p className="ct-note">
+              This form is waiting for activation. Please confirm the email FormSubmit sent to {EMAIL}.
+            </p>
           ) : (
             <form className="ct-form" onSubmit={handleSubmit}>
               <input type="hidden" name="_subject" value="New message from neuendorfteba.com" />
-              {/* Honeypot: hidden from people, filled in by bots, and Formspree drops those. */}
-              <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="ct-gotcha" aria-hidden="true" />
+              <input type="hidden" name="_template" value="table" />
+              {/* Honeypot: hidden from people, filled in by bots, and FormSubmit drops those. */}
+              <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="ct-gotcha" aria-hidden="true" />
               <div className="ct-row">
                 {FIELDS.map((f) => (
                   <label key={f.name} className="ct-field">
