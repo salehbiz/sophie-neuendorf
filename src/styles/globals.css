@@ -2050,7 +2050,7 @@ textarea.ui-input, textarea.ui-select {
 }
 
 :root {
-  --_color-pallet---white-shade--body-bg: #f4f1ec;
+  --_color-pallet---white-shade--body-bg: #ebe6de;
   --body-font: Inter, sans-serif;
   --_color-pallet---dark-shade--black: #141414;
   --_typography---font-size--body-text: 16px;
@@ -2103,7 +2103,7 @@ textarea.ui-input, textarea.ui-select {
   --_spacing---gap--common: 20px;
   --_spacing---gap--gap-12x: 40px;
   --_spacing---gap--gap-4x: 8px;
-  --_color-pallet---white-shade--white-200: #ebe6de;
+  --_color-pallet---white-shade--white-200: #e2dbd0;
   --_spacing---radius--button: 30px;
   --_color-pallet---theme-color--theme-color: #6b655d;
   --_spacing---gap--gap-2x: 4px;
@@ -2190,7 +2190,7 @@ body {
   line-height: var(--_typography---line-height--body-text);
   font-weight: var(--_typography---font-weight--regular);
   --body-font: Inter, sans-serif;
-  --_color-pallet---white-shade--body-bg: #f4f1ec;
+  --_color-pallet---white-shade--body-bg: #ebe6de;
   --_color-pallet---dark-shade--black: #141414;
   --_color-pallet---white-shade--white: white;
   --_color-pallet---white-shade--transparent: transparent;
@@ -2201,7 +2201,7 @@ body {
   --_color-pallet---dark-shade--black-200: #141414;
   --_color-pallet---dark-shade--black-400: #0000004d;
   --_color-pallet---white-shade--white-100: #fff9;
-  --_color-pallet---white-shade--white-200: #ebe6de;
+  --_color-pallet---white-shade--white-200: #e2dbd0;
   --_color-pallet---theme-color--theme-color: #6b655d;
   --_color-pallet---border-color--border-200: #0000000a;
   --_color-pallet---border-color--border-300: #ffffff1f;
@@ -6121,7 +6121,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .about-wheel-frame {
-  background-color: var(--_color-pallet---white-shade--white-200);
+  background-color: var(--_color-pallet---white-shade--body-bg);
   transform-origin: 50% 55%;
   position: absolute;
   inset: 0%;
@@ -6432,9 +6432,10 @@ h1, h2, h3, h4, h5, h6,
 
 /* Footer: ported from the Fat Bear animated footer, in the hero's palette */
 .animated-footer {
-  --af-bg: #2a221d;
-  --af-ink: #f1e9df;
-  --af-muted: #c4b2a0;
+  --af-bg: #d3c2ae;
+  --af-ink: #2a221d;
+  --af-muted: #5f4e42;
+  --af-light: #ebe6de;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -6484,14 +6485,14 @@ h1, h2, h3, h4, h5, h6,
   gap: 56px;
   padding: 18px 26px;
   background: var(--af-ink);
-  color: var(--af-bg);
+  color: var(--af-light);
   font-size: 16px;
   text-decoration: none;
   transition: background-color .3s ease;
 }
 
 .af-button:hover {
-  background: #fff;
+  background: #3d322b;
 }
 
 .af-content nav {
@@ -6583,7 +6584,7 @@ h1, h2, h3, h4, h5, h6,
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  border-top: 1px solid #f1e9df2b;
+  border-top: 1px solid #2a221d26;
   padding-top: 22px;
   font-size: 13px;
   color: var(--af-muted);
