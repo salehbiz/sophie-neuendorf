@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { srcSet } from '@/lib/responsive';
 
 export interface WheelPhoto {
   src: string;
@@ -132,6 +133,8 @@ export function PhotoWheel({ photos, headHtml, repeat = 2 }: PhotoWheelProps) {
               <div key={i} className="about-wheel-card" aria-hidden={i >= photos.length || undefined}>
                 <img
                   src={photo.src}
+                  srcSet={srcSet(photo.src)}
+                  sizes="(max-width: 767px) 45vw, 20vw"
                   alt={i < photos.length ? photo.alt : ''}
                   loading="lazy"
                   decoding="async"

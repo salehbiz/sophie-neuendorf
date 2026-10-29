@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { RolesMotion } from '@/components/sections/home/RolesMotion';
+import { srcSet } from '@/lib/responsive';
 
 const EMAIL = 'info@neuendorfteba.com';
 
@@ -61,6 +62,8 @@ export function ContactFormSection() {
       <figure className="kz-photo ct-photo" data-drift="">
         <img
           src="/assets/sophie/img/about/web/about-8.jpg"
+          srcSet={srcSet('/assets/sophie/img/about/web/about-8.jpg')}
+          sizes="(max-width: 767px) 125vw, 58vw"
           alt="Sophie Neuendorf in white with her dog against a pink wall"
           decoding="async"
         />

@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import type * as T from 'three';
 import { PRESS } from '@/data/press';
+import { srcSet, variant } from '@/lib/responsive';
 
 // Infinite vertical WebGL slider (after the Codegrid Three.js slider), pinned and driven by the
 // page's own scroll instead of hijacking the wheel. Planes bend toward the viewer while moving,
@@ -39,6 +40,19 @@ export function PressSlider() {
 
   useEffect(() => {
     if (reduced) return;
+    // Three.js is loaded on demand so it never weighs on the page's first load.
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+    import('three').then((THREE) => {
+      if (!cancelled) cleanup = setup(THREE);
+    });
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
+  }, [reduced]);
+
+  const setup = (THREE: typeof T) => {
     const section = sectionRef.current;
     const stage = stageRef.current;
     const canvas = canvasRef.current;
@@ -68,8 +82,25 @@ export function PressSlider() {
     const loopLength = stack + config.gap + heights[0] / 2;
     const halfLoop = loopLength / 2;
 
-    const loader = new THREE.TextureLoader();
-    const meshes: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>[] = [];
+    // Decode photos off the main thread where the browser supports it (ImageBitmap); phones get
+    // 1024px textures, larger screens 1600px.
+    const useBitmaps = typeof createImageBitmap === 'function';
+    const bitmapLoader = useBitmaps ? new THREE.ImageBitmapLoader().setOptions({ imageOrientation: 'flipY' }) : null;
+    const textureLoader = new THREE.TextureLoader();
+    const textureWidth = window.innerWidth < 768 ? 1024 : 1600;
+    const loadTexture = (url: string, done: (texture: T.Texture) => void) => {
+      if (bitmapLoader) {
+        bitmapLoader.load(url, (bitmap) => {
+          const texture = new THREE.Texture(bitmap as unknown as HTMLImageElement);
+          texture.flipY = false; // already flipped while decoding
+          texture.needsUpdate = true;
+          done(texture);
+        });
+      } else {
+        textureLoader.load(url, done);
+      }
+    };
+    const meshes: T.Mesh<T.PlaneGeometry, T.MeshBasicMaterial>[] = [];
     const originals: Float32Array[] = [];
 
     PRESS.forEach((item, i) => {
@@ -81,7 +112,7 @@ export function PressSlider() {
       mesh.userData = { offset: offsets[i], index: i };
       originals.push(Float32Array.from(geometry.attributes.position.array));
 
-      loader.load(item.img, (texture) => {
+      loadTexture(variant(item.img, textureWidth), (texture) => {
         texture.colorSpace = THREE.SRGBColorSpace;
         material.map = texture;
         material.color.set(0xffffff);
@@ -95,7 +126,11 @@ export function PressSlider() {
       meshes.push(mesh);
     });
 
+    // Last strength applied per plane: flat planes that stay flat skip the per-vertex work.
+    const applied = new Array(PRESS.length).fill(NaN);
     const applyDistortion = (i: number, positionY: number, strength: number) => {
+      if (Math.abs(strength) < 1e-4 && Math.abs(applied[i]) < 1e-4) return;
+      applied[i] = strength;
       const positions = meshes[i].geometry.attributes.position;
       const original = originals[i];
       for (let v = 0; v < positions.count; v++) {
@@ -232,12 +267,13 @@ export function PressSlider() {
       canvas.removeEventListener('click', onClick);
       meshes.forEach((mesh) => {
         mesh.geometry.dispose();
+        (mesh.material.map?.image as ImageBitmap | undefined)?.close?.();
         mesh.material.map?.dispose();
         mesh.material.dispose();
       });
       renderer.dispose();
     };
-  }, [reduced]);
+  };
 
   if (reduced) {
     return (
@@ -247,7 +283,14 @@ export function PressSlider() {
           {PRESS.map((item) => (
             <li key={item.url}>
               <a href={item.url} target="_blank" rel="noopener noreferrer">
-                <img src={item.img} alt={item.alt} loading="lazy" decoding="async" />
+                <img
+                  src={item.img}
+                  srcSet={srcSet(item.img)}
+                  sizes="(max-width: 767px) 90vw, 25vw"
+                  alt={item.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <span className="ps-list-title">{item.title}</span>
                 <span className="ps-list-meta">
                   {item.year} · {item.city}

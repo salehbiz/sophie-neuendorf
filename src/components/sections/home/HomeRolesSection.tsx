@@ -1,4 +1,5 @@
 import { RolesMotion } from './RolesMotion';
+import { srcSet } from '@/lib/responsive';
 
 const ROLES = [
   { role: 'Vice President, Investor Relations & Public Relations', org: 'Artnet AG' },
@@ -20,6 +21,8 @@ export function HomeRolesSection() {
         <figure className="kz-photo kz-photo-left" data-drift="">
           <img
             src="/assets/sophie/img/roles/web/role-portrait.jpg"
+            srcSet={srcSet('/assets/sophie/img/roles/web/role-portrait.jpg')}
+            sizes="(max-width: 767px) 125vw, 58vw"
             alt="Sophie Neuendorf in front of a large blue painting at home"
             loading="lazy"
             decoding="async"
@@ -38,6 +41,8 @@ export function HomeRolesSection() {
           <figure className="kz-photo kz-photo-right" data-drift="">
             <img
               src="/assets/sophie/img/roles/web/role-art.jpg"
+              srcSet={srcSet('/assets/sophie/img/roles/web/role-art.jpg')}
+              sizes="(max-width: 767px) 145vw, 58vw"
               alt="Sophie Neuendorf presenting a framed artwork"
               loading="lazy"
               decoding="async"
@@ -68,6 +73,8 @@ export function HomeRolesSection() {
       <figure className="kz-photo kz-photo-wide" data-drift="">
         <img
           src="/assets/sophie/img/about/web/about-13.jpg"
+          srcSet={srcSet('/assets/sophie/img/about/web/about-13.jpg')}
+          sizes="(max-width: 767px) 145vw, 112vw"
           alt="Sophie Neuendorf in a black top in a bright gallery space"
           loading="lazy"
           decoding="async"

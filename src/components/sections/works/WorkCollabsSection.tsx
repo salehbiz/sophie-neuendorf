@@ -1,5 +1,6 @@
 import { RolesMotion } from '@/components/sections/home/RolesMotion';
 import { ProgressiveBlur } from './ProgressiveBlur';
+import { srcSet } from '@/lib/responsive';
 
 /**
  * Brand Collaborations as two editorial spreads on a 12-column grid (after a Swiss grid
@@ -21,6 +22,8 @@ export function WorkCollabsSection() {
             <figure className="wc-photo wc-photo-wide" data-blur="">
               <img
                 src="/assets/sophie/img/collabs/piaget.jpg"
+                srcSet={srcSet('/assets/sophie/img/collabs/piaget.jpg')}
+                sizes="(max-width: 767px) 90vw, 60vw"
                 alt="Sophie Neuendorf with guests at a Piaget evening"
                 loading="lazy"
                 decoding="async"
@@ -67,6 +70,8 @@ export function WorkCollabsSection() {
             <figure className="wc-photo wc-photo-tall" data-blur="">
               <img
                 src="/assets/sophie/img/collabs/kaviar-gauche.jpg"
+                srcSet={srcSet('/assets/sophie/img/collabs/kaviar-gauche.jpg')}
+                sizes="(max-width: 767px) 90vw, 44vw"
                 alt="Sophie Neuendorf in a white lace gown on a pink terrace in Mallorca"
                 loading="lazy"
                 decoding="async"

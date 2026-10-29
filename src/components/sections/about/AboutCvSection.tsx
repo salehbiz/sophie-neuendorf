@@ -1,4 +1,5 @@
 import { RolesMotion } from '@/components/sections/home/RolesMotion';
+import { srcSet } from '@/lib/responsive';
 
 const IMG = '/assets/sophie/img';
 
@@ -39,6 +40,8 @@ export function AboutCvSection() {
             <figure className="wc-photo" style={{ aspectRatio: '1100 / 1490' }} data-drift="">
               <img
                 src={`${IMG}/roles/web/role-portrait.jpg`}
+                srcSet={srcSet(`${IMG}/roles/web/role-portrait.jpg`)}
+                sizes="(max-width: 767px) 145vw, 80vw"
                 alt="Sophie Neuendorf in front of a large blue painting at home"
                 loading="lazy"
                 decoding="async"
@@ -58,6 +61,8 @@ export function AboutCvSection() {
             <figure className="wc-photo" style={{ aspectRatio: '1800 / 778' }} data-drift="">
               <img
                 src={`${IMG}/roles/web/role-art.jpg`}
+                srcSet={srcSet(`${IMG}/roles/web/role-art.jpg`)}
+                sizes="(max-width: 767px) 145vw, 80vw"
                 alt="Sophie Neuendorf presenting a framed artwork"
                 loading="lazy"
                 decoding="async"
@@ -103,6 +108,8 @@ export function AboutCvSection() {
             <figure className="wc-photo" style={{ aspectRatio: '1466 / 1100' }} data-drift="">
               <img
                 src={`${IMG}/about/web/about-9.jpg`}
+                srcSet={srcSet(`${IMG}/about/web/about-9.jpg`)}
+                sizes="(max-width: 767px) 145vw, 80vw"
                 alt="Sophie Neuendorf on a terrace above the sea in Positano"
                 loading="lazy"
                 decoding="async"

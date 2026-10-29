@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import * as THREE from 'three';
+import type * as T from 'three';
 
 // WebGL progressive blur (after Jorge Toloza's "WebGL Progressive Blur", ported from OGL to the
 // Three.js the site already ships for the Press page). Each photo inside `selector` is redrawn on a
@@ -91,7 +91,7 @@ const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t);
 
 type Media = {
   el: HTMLElement;
-  mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
+  mesh: T.Mesh<T.PlaneGeometry, T.ShaderMaterial>;
   blurStrength: number;
   scaleY: number;
 };
@@ -100,13 +100,26 @@ export function ProgressiveBlur({ selector }: { selector: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // Three.js is loaded on demand so it never weighs on the page's first load.
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+    import('three').then((THREE) => {
+      if (!cancelled) cleanup = setup(THREE);
+    });
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
+  }, [selector]);
+
+  const setup = (THREE: typeof T) => {
     const canvas = canvasRef.current;
     const section = document.querySelector<HTMLElement>(selector);
     if (!canvas || !section) return;
     const frames = Array.from(section.querySelectorAll<HTMLElement>('[data-blur]'));
     if (!frames.length) return;
 
-    let renderer: THREE.WebGLRenderer;
+    let renderer: T.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
     } catch {
@@ -120,6 +133,7 @@ export function ProgressiveBlur({ selector }: { selector: string }) {
     const geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
     const loader = new THREE.TextureLoader();
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let disposed = false;
 
     const medias: Media[] = frames.map((el) => {
       const img = el.querySelector('img');
@@ -141,8 +155,10 @@ export function ProgressiveBlur({ selector }: { selector: string }) {
       const mesh = new THREE.Mesh(geometry, material);
       mesh.visible = false;
       scene.add(mesh);
-      if (img) {
-        loader.load(img.currentSrc || img.src, (texture) => {
+      // Use the size the browser picked from the srcset, once the photo has loaded.
+      const start = () =>
+        loader.load(img!.currentSrc || img!.src, (texture) => {
+          if (disposed) return texture.dispose();
           // No colour-space conversion: the raw shader outputs the texture's sRGB values as-is,
           // like the OGL original, so the photo keeps its exact colours.
           texture.generateMipmaps = false;
@@ -153,7 +169,8 @@ export function ProgressiveBlur({ selector }: { selector: string }) {
           // Hand the photo over to WebGL only once its texture is ready.
           el.classList.add('is-gl');
         });
-      }
+      if (img?.complete && img.naturalWidth) start();
+      else img?.addEventListener('load', start, { once: true });
       return { el, mesh, blurStrength: 1, scaleY: 1 };
     });
 
@@ -204,6 +221,7 @@ export function ProgressiveBlur({ selector }: { selector: string }) {
     window.addEventListener('resize', resize);
     window.addEventListener('scroll', heroProgress, { passive: true });
     return () => {
+      disposed = true;
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
       window.removeEventListener('scroll', heroProgress);
@@ -215,7 +233,7 @@ export function ProgressiveBlur({ selector }: { selector: string }) {
       geometry.dispose();
       renderer.dispose();
     };
-  }, [selector]);
+  };
 
   return <canvas ref={canvasRef} className="pb-canvas" aria-hidden="true" />;
 }

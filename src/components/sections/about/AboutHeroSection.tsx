@@ -1,3 +1,5 @@
+import { srcSet } from '@/lib/responsive';
+
 // Template hero layout (label, title, paragraph, a looping photo strip and a centre photo that
 // grows on scroll), with Sophie's text from the old About / CV page and her own photos.
 const IMG = '/assets/sophie/img';
@@ -11,7 +13,8 @@ const LOOP = [
 ];
 
 const loopImages = LOOP.map(
-  (img) => `<img src="${img.src}" loading="lazy" alt="${img.alt}" class="about-loop-img"/>`,
+  (img) =>
+    `<img src="${img.src}" srcset="${srcSet(img.src)}" sizes="(max-width: 767px) 60vw, 25vw" loading="lazy" alt="${img.alt}" class="about-loop-img"/>`,
 ).join('');
 
 const SECTION_INNER_HTML =
@@ -23,7 +26,7 @@ const SECTION_INNER_HTML =
   '<div class="about-img-flex"><div class="about-img-loop-wrap">' +
   `<div class="about-img-loop">${loopImages}</div>`.repeat(4) +
   '</div><div class="img-wrap about">' +
-  `<img class="about-img-middle" src="${IMG}/about/web/about-1.jpg" alt="Sophie Neuendorf in front of a red, orange and blue colour field painting" img-anim="" loading="lazy"/>` +
+  `<img class="about-img-middle" src="${IMG}/about/web/about-1.jpg" srcset="${srcSet(`${IMG}/about/web/about-1.jpg`)}" sizes="100vw" alt="Sophie Neuendorf in front of a red, orange and blue colour field painting" img-anim="" loading="lazy"/>` +
   '</div></div>';
 
 export function AboutHeroSection() {

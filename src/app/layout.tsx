@@ -20,6 +20,7 @@ const cormorant = Cormorant_Garamond({
 const rootMeta = PAGE_METADATA['/'];
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.neuendorfteba.com'),
   title: rootMeta.title,
   description: rootMeta.description,
   openGraph: {

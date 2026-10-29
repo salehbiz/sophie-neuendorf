@@ -6,3 +6,5 @@ out/
 .env.local
 .DS_Store
 verification/
+.next-prod/
+tsconfig.tsbuildinfo
