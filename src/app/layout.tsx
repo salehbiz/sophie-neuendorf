@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
+import { SiteFlow } from '@/components/layout/SiteFlow';
 import { PAGE_METADATA } from '@/data/metadata';
 
 const inter = Inter({
@@ -69,6 +70,7 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className} suppressHydrationWarning>
+        <SiteFlow />
         <AnimationProvider>{children}</AnimationProvider>
       </body>
     </html>

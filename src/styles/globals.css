@@ -6888,3 +6888,52 @@ h1, h2, h3, h4, h5, h6,
   .press-list .work-card-img._04 { height: 488px; }
   .press-list .work-card-img._05 { height: 491px; }
 }
+
+/* Floating paths (src/components/ui/floating-paths.tsx) */
+.floating-paths {
+  position: relative;
+  width: 100%;
+}
+
+.floating-paths-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.floating-paths-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Site-wide flowing background: fixed behind all content, very faint */
+.site-flow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  color: #6b5848;
+  opacity: .22;
+}
+
+.site-flow-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Let the flow show through the photo wheel's window */
+.about-wheel-frame {
+  background-color: transparent;
+}
+
+@media screen and (max-width: 767px) {
+  .site-flow {
+    opacity: .18;
+  }
+}
