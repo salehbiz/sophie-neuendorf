@@ -65,6 +65,11 @@ export const PAGE_METADATA: Record<string, RouteMetadata> = {
     "description": "Sophie Neuendorf is an internationally recognized leader at the crossroads of fine art, finance, and technology.",
     "ogImage": "/assets/images/317995e6281f706bfde0e5122c75b7de-frame-2147239763-3-1-969ca4.webp"
   },
+  "/privacy": {
+    "title": "Privacy Policy | Sophie Neuendorf",
+    "description": "How personal data is processed on neuendorfteba.com under the EU General Data Protection Regulation.",
+    "ogImage": "/assets/images/317995e6281f706bfde0e5122c75b7de-frame-2147239763-3-1-969ca4.webp"
+  },
   "/contact": {
     "title": "Contact | Sophie Neuendorf",
     "description": "Sophie Neuendorf is an internationally recognized leader at the crossroads of fine art, finance, and technology.",
