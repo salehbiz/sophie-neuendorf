@@ -7744,3 +7744,24 @@ h1, h2, h3, h4, h5, h6,
     font-size: 15px;
   }
 }
+
+/* ---------- Work: WebGL progressive blur (see ProgressiveBlur.tsx) ---------- */
+/* Fixed behind the page content (inside .main's stacking context), above the body background. */
+.pb-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  display: block;
+}
+
+/* Once a photo's texture is on the GPU, the frame lets the canvas show through. */
+.wc-photo.is-gl {
+  background: transparent;
+}
+
+.wc-photo.is-gl img {
+  visibility: hidden;
+}

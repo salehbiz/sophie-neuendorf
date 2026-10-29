@@ -1,10 +1,11 @@
 import { RolesMotion } from '@/components/sections/home/RolesMotion';
+import { ProgressiveBlur } from './ProgressiveBlur';
 
 /**
  * Brand Collaborations as two editorial spreads on a 12-column grid (after a Swiss grid
  * layout reference): a running meta row on top of each spread, a large photo, a small caption,
  * and the title or intro set apart in its own column. Text is from the old site's
- * Brand Collaboration page. Photos drift inside their frames via RolesMotion.
+ * Brand Collaboration page. Photos are redrawn with the WebGL progressive blur (ProgressiveBlur).
  */
 export function WorkCollabsSection() {
   return (
@@ -17,7 +18,7 @@ export function WorkCollabsSection() {
 
         <div className="wc-grid">
           <div className="wc-item wc-item-piaget">
-            <figure className="wc-photo wc-photo-wide" data-drift="">
+            <figure className="wc-photo wc-photo-wide" data-blur="">
               <img
                 src="/assets/sophie/img/collabs/piaget.jpg"
                 alt="Sophie Neuendorf with guests at a Piaget evening"
@@ -63,7 +64,7 @@ export function WorkCollabsSection() {
           </div>
 
           <div className="wc-item wc-item-kaviar">
-            <figure className="wc-photo wc-photo-tall" data-drift="">
+            <figure className="wc-photo wc-photo-tall" data-blur="">
               <img
                 src="/assets/sophie/img/collabs/kaviar-gauche.jpg"
                 alt="Sophie Neuendorf in a white lace gown on a pink terrace in Mallorca"
@@ -79,8 +80,9 @@ export function WorkCollabsSection() {
         </div>
       </article>
 
-      {/* Gentle drift: the frames match each photo's own shape, so only a small overscan is spare. */}
-      <RolesMotion selector=".wc" drift={0.05} />
+      {/* Text reveals only: the photos are drawn by the progressive blur below. */}
+      <RolesMotion selector=".wc" drift={0} />
+      <ProgressiveBlur selector=".wc" />
     </section>
   );
 }
