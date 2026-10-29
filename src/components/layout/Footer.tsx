@@ -14,7 +14,7 @@ const LIT_GLYPH = '#2a221d';
 
 const LINKS = [
   { numeral: 'I', label: 'Work', href: '/work' },
-  { numeral: 'II', label: 'Press', href: '/blogs' },
+  { numeral: 'II', label: 'Press', href: '/press' },
   { numeral: 'III', label: 'About', href: '/about' },
   { numeral: 'IV', label: 'Contact', href: '/contact' },
   { numeral: 'V', label: 'Instagram', href: 'https://www.instagram.com/sophieneuendorf/', external: true },

@@ -17,7 +17,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const meta = PAGE_METADATA[`/blogs/${slug}`] || PAGE_METADATA['/blogs'];
+  const meta = PAGE_METADATA[`/blogs/${slug}`] || PAGE_METADATA['/press'];
   return {
     title: meta.title,
     description: meta.description,

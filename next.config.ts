@@ -6,7 +6,10 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   async redirects() {
-    return [{ source: '/works', destination: '/work', permanent: true }];
+    return [
+      { source: '/works', destination: '/work', permanent: true },
+      { source: '/blogs', destination: '/press', permanent: true },
+    ];
   },
 };
 

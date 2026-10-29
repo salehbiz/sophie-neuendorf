@@ -14,13 +14,15 @@
     "next": "^15.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "split-type": "^0.3.4"
+    "split-type": "^0.3.4",
+    "three": "^0.175.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.175.0",
     "pixelmatch": "^6.0.0",
     "pngjs": "^7.0.0",
     "typescript": "^5.8.0"
