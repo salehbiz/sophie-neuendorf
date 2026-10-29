@@ -13,7 +13,7 @@ export function RolesMotion({ selector }: { selector: string }) {
     const section = document.querySelector<HTMLElement>(selector);
     if (!section) return;
 
-    const rows = Array.from(section.querySelectorAll<HTMLElement>('.roles-row'));
+    const rows = Array.from(section.querySelectorAll<HTMLElement>('[data-reveal]'));
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       rows.forEach((row) => row.classList.add('is-in'));
       return;
@@ -31,7 +31,7 @@ export function RolesMotion({ selector }: { selector: string }) {
     );
     rows.forEach((row) => rowObserver.observe(row));
 
-    const frames = Array.from(section.querySelectorAll<HTMLElement>('.roles-photo'));
+    const frames = Array.from(section.querySelectorAll<HTMLElement>('[data-drift]'));
     let raf = 0;
     let visible = false;
 

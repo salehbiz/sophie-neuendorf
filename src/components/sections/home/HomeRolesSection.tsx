@@ -8,63 +8,73 @@ const ROLES = [
   { role: 'Advisory Board', org: 'Artdeal AG, Vivents' },
 ];
 
-/** Editorial two-column "Current Professional Experience" section (replaces the template's services slider). */
+/**
+ * "Current Professional Experience", laid out like the Kaze concept section: a tall photo
+ * bleeding off the left edge, label and statement on the right with a wide photo bleeding off
+ * the right edge, then the role list and link, then one large photo across the width.
+ */
 export function HomeRolesSection() {
   return (
-    <section className="section roles-concept">
-      <div className="ui-blockcontainer container ui-container">
-        <div className="roles-grid">
-          <div className="roles-left">
-            <div className="roles-photo roles-photo-tall">
-              <img
-                src="/assets/sophie/img/roles/web/role-portrait.jpg"
-                alt="Sophie Neuendorf in front of a large blue painting at home"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <ol className="roles-list">
-              {ROLES.map((item, i) => (
-                <li key={item.org} className="roles-row" style={{ transitionDelay: `${i * 90}ms` }}>
-                  <span className="roles-index">{String(i + 1).padStart(2, '0')}</span>
-                  <span className="roles-role">{item.role}</span>
-                  <span className="roles-org">{item.org}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
+    <section className="section kz-roles">
+      <div className="kz-top">
+        <figure className="kz-photo kz-photo-left" data-drift="">
+          <img
+            src="/assets/sophie/img/roles/web/role-portrait.jpg"
+            alt="Sophie Neuendorf in front of a large blue painting at home"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
 
-          <div className="roles-right">
-            <h2 tag-text="" className="tag-text roles-label">
-              Current Professional Experience
-            </h2>
-            <p className="sub-title roles-heading">Fine Art | Finance | Technology</p>
-            <div className="roles-photo roles-photo-wide">
-              <img
-                src="/assets/sophie/img/roles/web/role-art.jpg"
-                alt="Sophie Neuendorf presenting a framed artwork"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <p className="roles-summary">
-              Education as well as professional experience in New York, London, Berlin, Paris, and Madrid.
-            </p>
-            <a href="/about" className="roles-link">
-              About / CV <span aria-hidden="true">→</span>
-            </a>
-            <div className="roles-photo roles-photo-accent">
-              <img
-                src="/assets/sophie/img/about/web/about-1.jpg"
-                alt="Sophie Neuendorf in a white blouse in front of a colour-block painting"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
+        <div className="kz-right">
+          <div className="kz-label">
+            <span>Current Professional Experience</span>
+            <span>05</span>
           </div>
+          <h2 className="kz-statement">
+            Over twelve years of professional experience in the art industry require analytical and
+            innovative thinking, astute strategies, and leadership.
+          </h2>
+          <figure className="kz-photo kz-photo-right" data-drift="">
+            <img
+              src="/assets/sophie/img/roles/web/role-art.jpg"
+              alt="Sophie Neuendorf presenting a framed artwork"
+              loading="lazy"
+              decoding="async"
+            />
+          </figure>
+          <p className="kz-note">
+            Education as well as professional experience in New York, London, Berlin, Paris, and Madrid.
+          </p>
         </div>
       </div>
-      <RolesMotion selector=".roles-concept" />
+
+      <div className="kz-middle">
+        <div className="kz-list-wrap">
+          <p className="kz-lead">Fine Art | Finance | Technology :</p>
+          <ul className="kz-list">
+            {ROLES.map((item, i) => (
+              <li key={item.org} data-reveal="" style={{ transitionDelay: `${i * 90}ms` }}>
+                {item.role}, <span>{item.org}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <a href="/about" className="roles-link kz-link">
+          About / CV <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <figure className="kz-photo kz-photo-wide" data-drift="">
+        <img
+          src="/assets/sophie/img/about/web/about-13.jpg"
+          alt="Sophie Neuendorf in a black top in a bright gallery space"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+
+      <RolesMotion selector=".kz-roles" />
     </section>
   );
 }

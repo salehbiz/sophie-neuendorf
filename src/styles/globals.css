@@ -6650,3 +6650,197 @@ h1, h2, h3, h4, h5, h6,
     opacity: 1 !important;
   }
 }
+
+/* Current Professional Experience: Kaze concept layout (edge-bleeding photos) */
+.section.kz-roles {
+  padding: clamp(200px, 30vh, 340px) 0 clamp(140px, 22vh, 260px);
+}
+
+.kz-top,
+.kz-middle {
+  grid-template-columns: 40vw 1fr;
+  column-gap: 20vw;
+  align-items: start;
+  display: grid;
+}
+
+.kz-photo {
+  background-color: var(--_color-pallet---white-shade--white-200);
+  margin: 0;
+  overflow: hidden;
+}
+
+.kz-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scale: 1.18;
+  display: block;
+}
+
+.kz-photo-left {
+  aspect-ratio: 69 / 100;
+}
+
+.kz-photo-left img {
+  object-position: 52% 45%;
+}
+
+.kz-right {
+  padding-top: clamp(80px, 14vh, 170px);
+}
+
+.kz-label {
+  justify-content: flex-end;
+  gap: 5vw;
+  padding-right: 2.5vw;
+  font-size: 15px;
+  display: flex;
+}
+
+.kz-statement {
+  font-family: var(--heading-font);
+  font-size: clamp(26px, 2.5vw, 40px);
+  font-weight: 400;
+  line-height: 1.22;
+  letter-spacing: 0;
+  text-indent: 4.6vw;
+  max-width: 31vw;
+  margin: clamp(110px, 20vh, 220px) 0 0;
+}
+
+.kz-photo-right {
+  aspect-ratio: 154 / 100;
+  margin-top: 44px;
+}
+
+.kz-photo-right img {
+  object-position: 62% 40%;
+}
+
+.kz-note {
+  color: var(--_color-pallet---dark-shade--grey);
+  max-width: 300px;
+  margin: 24px 0 0 35%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.kz-middle {
+  margin-top: clamp(80px, 12vh, 140px);
+}
+
+.kz-list-wrap {
+  padding-left: 8vw;
+}
+
+.kz-lead {
+  margin: 0 0 22px;
+  font-size: 16px;
+}
+
+.kz-list {
+  margin: 0;
+  padding-left: 4vw;
+  list-style: disc;
+}
+
+.kz-list li {
+  margin-bottom: 14px;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0;
+  translate: 0 14px;
+  transition: opacity .8s ease, translate .8s cubic-bezier(.2, .7, .2, 1);
+}
+
+.kz-list li.is-in {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.kz-list li span {
+  color: var(--_color-pallet---dark-shade--grey);
+}
+
+.roles-link.kz-link {
+  width: 22vw;
+  margin-top: -8px;
+}
+
+.kz-photo-wide {
+  aspect-ratio: 2 / 1;
+  margin: clamp(120px, 18vh, 220px) 0 0 23.5vw;
+}
+
+.kz-photo-wide img {
+  object-position: 60% 35%;
+}
+
+@media screen and (max-width: 767px) {
+  .kz-top,
+  .kz-middle {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+
+  .kz-photo-left {
+    width: 86vw;
+    aspect-ratio: 4 / 5;
+  }
+
+  .kz-right {
+    padding: 8px 6vw 0;
+  }
+
+  .kz-label {
+    justify-content: space-between;
+    padding-right: 0;
+  }
+
+  .kz-statement {
+    max-width: none;
+    margin-top: 40px;
+    text-indent: 12vw;
+    font-size: 26px;
+  }
+
+  .kz-photo-right {
+    margin-right: -6vw;
+  }
+
+  .kz-note {
+    margin-left: 0;
+  }
+
+  .kz-middle {
+    padding: 0 6vw;
+  }
+
+  .kz-list-wrap {
+    padding-left: 0;
+  }
+
+  .kz-list {
+    padding-left: 18px;
+  }
+
+  .roles-link.kz-link {
+    width: auto;
+    justify-self: start;
+    margin-top: 0;
+  }
+
+  .kz-photo-wide {
+    aspect-ratio: 4 / 3;
+    margin-left: 12vw;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kz-list li {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+}
