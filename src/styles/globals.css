@@ -6146,7 +6146,7 @@ h1, h2, h3, h4, h5, h6,
 
 /* Home: Current Professional Experience (editorial two-column) */
 .section.roles-concept {
-  padding-top: clamp(120px, 16vh, 200px);
+  padding-top: clamp(200px, 30vh, 340px);
   padding-bottom: clamp(140px, 22vh, 260px);
 }
 
@@ -6397,4 +6397,24 @@ h1, h2, h3, h4, h5, h6,
 /* No accent colour: role numbers sit in the quiet grey */
 .roles-index {
   color: var(--_color-pallet---dark-shade--grey);
+}
+
+/* Third roles photo, filling the space beside the role list */
+.roles-photo-accent {
+  aspect-ratio: 4 / 5;
+  width: 62%;
+  margin-top: clamp(56px, 9vh, 104px);
+  margin-left: auto;
+}
+
+.roles-photo-accent img {
+  object-position: 50% 30%;
+}
+
+@media screen and (max-width: 767px) {
+  .roles-photo-accent {
+    order: 8;
+    width: 72%;
+    margin-top: 0;
+  }
 }

@@ -53,6 +53,14 @@ export function HomeRolesSection() {
             <a href="/about" className="roles-link">
               About / CV <span aria-hidden="true">→</span>
             </a>
+            <div className="roles-photo roles-photo-accent">
+              <img
+                src="/assets/sophie/img/about/web/about-1.jpg"
+                alt="Sophie Neuendorf in a white blouse in front of a colour-block painting"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </div>
         </div>
       </div>
