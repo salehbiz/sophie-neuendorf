@@ -6912,9 +6912,10 @@ h1, h2, h3, h4, h5, h6,
   position: fixed;
   inset: 0;
   z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
   pointer-events: none;
-  color: #6b5848;
-  opacity: .22;
 }
 
 .site-flow-layer {
@@ -6932,8 +6933,4 @@ h1, h2, h3, h4, h5, h6,
   background-color: transparent;
 }
 
-@media screen and (max-width: 767px) {
-  .site-flow {
-    opacity: .18;
-  }
-}
+
