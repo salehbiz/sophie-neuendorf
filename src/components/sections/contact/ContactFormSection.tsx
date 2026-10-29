@@ -16,7 +16,8 @@ const DETAILS = [
 const FIELDS = [
   { name: 'First-Name', label: 'First name', type: 'text', required: true, autoComplete: 'given-name' },
   { name: 'Last-Name', label: 'Last name', type: 'text', required: true, autoComplete: 'family-name' },
-  { name: 'Email', label: 'Email', type: 'email', required: true, autoComplete: 'email' },
+  // Lowercase "email" lets Formspree set it as the reply-to address.
+  { name: 'email', label: 'Email', type: 'email', required: true, autoComplete: 'email' },
   { name: 'Phone', label: 'Phone', type: 'tel', required: false, autoComplete: 'tel' },
 ];
 
@@ -30,7 +31,9 @@ type Status = 'idle' | 'sending' | 'sent' | 'error';
  */
 export function ContactFormSection() {
   const [status, setStatus] = useState<Status>('idle');
-  const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
+  // Ignore the .env.example placeholder so a copied example file never breaks the form.
+  const configured = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
+  const endpoint = configured && !configured.includes('your-form-id') ? configured : undefined;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,7 +45,7 @@ export function ContactFormSection() {
         String(data.get('Message') ?? ''),
         '',
         name,
-        String(data.get('Email') ?? ''),
+        String(data.get('email') ?? ''),
         String(data.get('Phone') ?? ''),
       ]
         .filter((line, i) => i < 2 || line)
@@ -104,6 +107,9 @@ export function ContactFormSection() {
             <p className="ct-note">Thank you. Your message has been sent.</p>
           ) : (
             <form className="ct-form" onSubmit={handleSubmit}>
+              <input type="hidden" name="_subject" value="New message from neuendorfteba.com" />
+              {/* Honeypot: hidden from people, filled in by bots, and Formspree drops those. */}
+              <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" className="ct-gotcha" aria-hidden="true" />
               <div className="ct-row">
                 {FIELDS.map((f) => (
                   <label key={f.name} className="ct-field">

@@ -7551,6 +7551,14 @@ h1, h2, h3, h4, h5, h6,
   padding-right: 0;
 }
 
+.ct-gotcha {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
 .ct-submit:disabled {
   opacity: .5;
   cursor: default;
