@@ -6,7 +6,6 @@ import { HomeHeroSection } from '@/components/sections/home/HomeHeroSection';
 import { HomeAboutUsSection } from '@/components/sections/home/HomeAboutUsSection';
 import { HomeWorkSection } from '@/components/sections/home/HomeWorkSection';
 import { HomeRolesSection } from '@/components/sections/home/HomeRolesSection';
-import { HomeTickerSection } from '@/components/sections/home/HomeTickerSection';
 
 const meta = PAGE_METADATA['/'];
 
@@ -28,7 +27,6 @@ export default function HomePage() {
       <HomeAboutUsSection />
       <HomeWorkSection />
       <HomeRolesSection />
-      <HomeTickerSection />
       <Footer />
     </div>
   );

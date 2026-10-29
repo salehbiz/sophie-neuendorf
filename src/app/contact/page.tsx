@@ -3,7 +3,6 @@ import { PAGE_METADATA } from '@/data/metadata';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { ContactFormSection } from '@/components/sections/contact/ContactFormSection';
-import { ContactTickerSection } from '@/components/sections/contact/ContactTickerSection';
 
 const meta = PAGE_METADATA['/contact'];
 
@@ -22,7 +21,6 @@ export default function ContactPage() {
     <div className="main">
       <Navbar variant="v2" />
       <ContactFormSection />
-      <ContactTickerSection />
       <Footer />
     </div>
   );
