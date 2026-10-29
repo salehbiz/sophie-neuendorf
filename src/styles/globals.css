@@ -7299,3 +7299,79 @@ h1, h2, h3, h4, h5, h6,
     font-size: 14px;
   }
 }
+
+/* ---------- About / CV spreads (built on the Work page's .wc grid) ---------- */
+.section.wc.ac {
+  padding-top: clamp(120px, 18vh, 200px);
+}
+
+.ac-photo-left {
+  grid-column: 1 / 8;
+}
+
+.ac-photo-right {
+  grid-column: 7 / 13;
+}
+
+.ac-side {
+  gap: 32px;
+}
+
+.ac-side.wc-side-left {
+  grid-column: 1 / 6;
+}
+
+.ac-body {
+  max-width: 460px;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+  transition: opacity .8s ease, translate .8s cubic-bezier(.2, .7, .2, 1);
+}
+
+.ac-body + .ac-body {
+  margin-top: -12px;
+}
+
+.ac-roles {
+  max-width: 460px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ac-roles li {
+  border-top: 1px solid #14141422;
+  padding: 16px 0;
+  font-size: 17px;
+  line-height: 1.45;
+  transition: opacity .8s ease, translate .8s cubic-bezier(.2, .7, .2, 1);
+}
+
+.ac-roles li:last-child {
+  border-bottom: 1px solid #14141422;
+}
+
+.ac-roles li span {
+  color: var(--_color-pallet---dark-shade--grey);
+  margin-top: 4px;
+  font-size: 15px;
+  display: block;
+}
+
+@media screen and (max-width: 767px) {
+  .section.wc.ac {
+    padding-top: 96px;
+  }
+
+  .ac-photo-left,
+  .ac-photo-right,
+  .ac-side.wc-side-left {
+    grid-column: 1;
+  }
+
+  .ac-body,
+  .ac-roles li {
+    font-size: 16px;
+  }
+}

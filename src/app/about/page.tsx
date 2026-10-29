@@ -3,9 +3,7 @@ import { PAGE_METADATA } from '@/data/metadata';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { AboutHeroSection } from '@/components/sections/about/AboutHeroSection';
-import { AboutStorySection } from '@/components/sections/about/AboutStorySection';
-import { AboutPassionSection } from '@/components/sections/about/AboutPassionSection';
-import { AboutTestimonialSection } from '@/components/sections/about/AboutTestimonialSection';
+import { AboutCvSection } from '@/components/sections/about/AboutCvSection';
 
 const meta = PAGE_METADATA['/about'];
 
@@ -24,9 +22,7 @@ export default function AboutPage() {
     <div className="main">
       <Navbar variant="v2" />
       <AboutHeroSection />
-      <AboutStorySection />
-      <AboutPassionSection />
-      <AboutTestimonialSection />
+      <AboutCvSection />
       <Footer />
     </div>
   );
