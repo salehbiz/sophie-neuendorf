@@ -88,9 +88,13 @@ export function PageTransition() {
         router.push(url.pathname + url.search + url.hash, { scroll: false });
       });
 
-    // "out": from the covered state back to the page, as in the original's close timeline.
-    const out = () =>
-      gsap
+    // "out": from the covered state back to the page, as in the original's close timeline. It starts
+    // the moment "in" ends; if the new page is not ready by the reveal point, the timeline holds there
+    // with the type on screen (never an empty cover) and resumes as soon as the page is in.
+    const out = (ready: Promise<void>) => {
+      const reveal = 2.3 * T * 0.7; // the original shows its items at 70% of the type's return
+      let isReady = false;
+      const t = gsap
         .timeline({
           onComplete: () => {
             setHidden();
@@ -105,8 +109,16 @@ export function PageTransition() {
             { opacity: 0, duration: 1.5 * T, ease: 'power1.in' },
           ],
         }, 0)
-        // Reveal the page as the type settles back (the original shows its items at 70%).
-        .to(root, { duration: 0.8 * T * 1.6, ease: 'power2.inOut', autoAlpha: 0 }, 2.3 * T * 0.7);
+        .addPause(reveal, () => {
+          if (isReady) t.play();
+        })
+        .to(root, { duration: 0.8 * T * 1.6, ease: 'power2.inOut', autoAlpha: 0 }, reveal);
+      ready.then(() => {
+        isReady = true;
+        if (t.paused()) t.play();
+      });
+      return t;
+    };
 
     const transition = (url: URL) => {
       busy = true;
@@ -114,15 +126,8 @@ export function PageTransition() {
       let routeReady: Promise<void> | null = null;
 
       gsap.set(lines, { x: '0%', opacity: 0.06 });
-      tl = gsap
-        .timeline({
-          // Hand straight over to "out" once the new page is in place (no pause when it already is).
-          onComplete: () => {
-            (routeReady ?? Promise.resolve()).then(() => {
-              tl = out();
-            });
-          },
-        })
+      const inTl = gsap
+        .timeline()
         .to(root, { duration: 0.8 * T * 1.4, ease: 'power2.inOut', autoAlpha: 1 }, 0)
         // Swap the page as soon as the screen is fully covered; the type keeps sweeping meanwhile.
         .call(() => {
@@ -142,6 +147,15 @@ export function PageTransition() {
             { opacity: 0, duration: 1.5 * T, ease: 'power1.in' },
           ],
         }, 0);
+      // Played back to back, the end of "in" (lines swept off and faded) and the start of "out"
+      // (lines returning from off screen) would leave an empty cover. So "out" takes over at 70% of
+      // "in", while the type is still on screen: the lines reverse mid-sweep and come straight back.
+      // It waits for the new page only at its reveal point.
+      inTl.call(() => {
+        inTl.kill();
+        tl = out(routeReady ?? Promise.resolve());
+      }, undefined, inTl.duration() * 0.7);
+      tl = inTl;
     };
 
     const fade = (url: URL) => {
@@ -175,9 +189,25 @@ export function PageTransition() {
       else transition(url);
     };
 
+    // Start loading a page as soon as its link is hovered or touched, so it is usually ready by the click.
+    const prefetched = new Set<string>();
+    const onIntent = (e: Event) => {
+      const a = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (!a || (a.target && a.target !== '_self')) return;
+      const url = new URL(a.href, window.location.href);
+      if (url.origin !== window.location.origin || url.pathname === window.location.pathname) return;
+      if (prefetched.has(url.pathname)) return;
+      prefetched.add(url.pathname);
+      router.prefetch(url.pathname + url.search);
+    };
+
     document.addEventListener('click', onClick, true);
+    document.addEventListener('pointerover', onIntent, { passive: true });
+    document.addEventListener('touchstart', onIntent, { passive: true });
     return () => {
       document.removeEventListener('click', onClick, true);
+      document.removeEventListener('pointerover', onIntent);
+      document.removeEventListener('touchstart', onIntent);
       tl?.kill();
     };
   }, [router]);
