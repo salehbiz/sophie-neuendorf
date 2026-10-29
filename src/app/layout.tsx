@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
+import { PageTransition } from '@/components/layout/PageTransition';
+import { PT_FLAG } from '@/lib/page-transition';
 import { PAGE_METADATA } from '@/data/metadata';
 
 const inter = Inter({
@@ -61,6 +63,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Arriving through the page transition: start covered so there is no flash before it reveals. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(sessionStorage.getItem('${PT_FLAG}')){document.documentElement.classList.add('${PT_FLAG}')}}catch(e){}`,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -70,6 +78,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <AnimationProvider>{children}</AnimationProvider>
+        <PageTransition />
       </body>
     </html>
   );

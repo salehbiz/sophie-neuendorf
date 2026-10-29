@@ -7612,3 +7612,56 @@ h1, h2, h3, h4, h5, h6,
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- Page transition: kinetic type (see PageTransition.tsx) ---------- */
+.pt {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--_color-pallet---white-shade--body-bg, #ebe6de);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.pt-type {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vmax;
+  height: 100vmax;
+  margin: -50vmax 0 0 -50vmax;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  display: grid;
+  will-change: transform;
+}
+
+.pt-line {
+  color: #2a221d;
+  font-family: var(--heading-font);
+  font-size: clamp(7rem, 18.75vh, 15rem);
+  font-weight: 500;
+  line-height: .78;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  user-select: none;
+  will-change: transform, opacity;
+}
+
+/* First paint of a page reached through the transition: already covered, matching the end of "in". */
+.pt-cover .pt {
+  opacity: 1;
+  visibility: visible;
+}
+
+.pt-cover .pt-type {
+  transform: rotate(-90deg) scale(2.7);
+}
+
+.pt-cover .pt-line {
+  transform: translateX(-200%);
+}
