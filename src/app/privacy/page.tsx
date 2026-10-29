@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { PAGE_METADATA } from '@/data/metadata';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
+import { OWNER } from '@/data/legal';
 
 const meta = PAGE_METADATA['/privacy'];
 
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-const EMAIL = 'info@neuendorfteba.com';
+const EMAIL = OWNER.email;
 const UPDATED = 'October 2026';
 
 // Privacy policy under the EU GDPR and German law (BDSG, TDDDG), written for what this site
@@ -29,11 +30,17 @@ const SECTIONS: { title: string; body: ReactNode }[] = [
       <>
         <p>The controller responsible for data processing on this website within the meaning of the EU General Data Protection Regulation (GDPR) is:</p>
         <p>
-          Sophie Neuendorf
+          {OWNER.name}
+          {OWNER.address.map((line) => (
+            <span key={line}>
+              <br />
+              {line}
+            </span>
+          ))}
           <br />
           Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           <br />
-          Phone: <a href="tel:+491723176317">+49 172 3176317</a>
+          Phone: <a href={OWNER.phoneHref}>{OWNER.phone}</a>
         </p>
       </>
     ),

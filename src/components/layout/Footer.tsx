@@ -230,7 +230,7 @@ export function Footer() {
           Sophie Neuendorf · Condesa de Teba · <a href="tel:+491723176317">+49 172 3176317</a>
         </span>
         <small>
-          <a href="/privacy">Privacy</a> · © {new Date().getFullYear()} Sophie Neuendorf
+          <a href="/impressum">Impressum</a> · <a href="/privacy">Privacy</a> · © {new Date().getFullYear()} Sophie Neuendorf
         </small>
       </div>
     </footer>
