@@ -1,10 +1,39 @@
-const SECTION_INNER_HTML = "<div class=\"ui-blockcontainer container ui-container\"><div class=\"about-sub-content\"><div tag-text=\"\" class=\"tag-text\">About Me</div><div summary-text=\"\" class=\"h4\">Capturing authentic moments, honest emotions, and the beauty found in between creating photographs that feel as timeless as the memories they hold.</div></div><div class=\"about-slider-wrapper\"><div class=\"until-wrap _01\"><div class=\"h6\">Until now</div></div><div class=\"about-slider-block\"><div data-delay=\"4000\" data-animation=\"over\" class=\"about-slider ui-slider\" data-autoplay=\"true\" data-easing=\"ease-in-out-quad\" data-hide-arrows=\"false\" data-disable-swipe=\"false\" data-autoplay-limit=\"0\" data-nav-spacing=\"3\" data-duration=\"800\" data-infinite=\"true\"><div class=\"about-slider-mask ui-slider-mask\"><div class=\"about-slide ui-slide\"><img src=\"/assets/images/rectangle-4-2-fd5a7d.webp\" loading=\"lazy\" sizes=\"(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px\" srcset=\"/assets/images/rectangle-4-2--p-500-184814.webp 500w, /assets/images/rectangle-4-2--p-800-ee16c4.webp 800w, /assets/images/rectangle-4-2-fd5a7d.webp 960w\" alt=\"Woman with red hair looking up in red light\" class=\"about-slide-img\"/></div><div class=\"about-slide ui-slide\"><img src=\"/assets/images/rectangle-5-1-1-91acc4.webp\" loading=\"lazy\" sizes=\"(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px\" srcset=\"/assets/images/rectangle-5-1-1--p-500-2cc746.webp 500w, /assets/images/rectangle-5-1-1--p-800-5e07e6.webp 800w, /assets/images/rectangle-5-1-1-91acc4.webp 962w\" alt=\"Woman in an orange outfit taking a photo\" class=\"about-slide-img\"/></div><div class=\"about-slide ui-slide\"><img src=\"/assets/images/frame-47-2-b79f74.webp\" loading=\"lazy\" sizes=\"(max-width: 531px) 100vw, 531px\" srcset=\"/assets/images/frame-47-2--p-500-414fae.webp 500w, /assets/images/frame-47-2-b79f74.webp 531w\" alt=\"Silhouette of a woman with raised arms at sunset\" class=\"about-slide-img\"/></div><div class=\"about-slide ui-slide\"><img src=\"/assets/images/frame-2147239763-1-065dd2.webp\" loading=\"lazy\" sizes=\"(max-width: 528px) 100vw, 528px\" srcset=\"/assets/images/frame-2147239763-1--p-500-16e27e.webp 500w, /assets/images/frame-2147239763-1-065dd2.webp 528w\" alt=\"Smiling bride and groom in a close pose\" class=\"about-slide-img\"/></div><div class=\"about-slide ui-slide\"><img src=\"/assets/images/frame-2147239764-44a895.webp\" loading=\"lazy\" sizes=\"100vw\" srcset=\"/assets/images/frame-2147239764-p-500-00f289.webp 500w, /assets/images/frame-2147239764-44a895.webp 714w\" alt=\"Woman photographer with a camera and colorful strap\" class=\"about-slide-img\"/></div><div class=\"about-slide ui-slide\"><img src=\"/assets/images/frame-2147239765-679976.webp\" loading=\"lazy\" sizes=\"100vw\" srcset=\"/assets/images/frame-2147239765-p-500-40b40f.webp 500w, /assets/images/frame-2147239765-679976.webp 714w\" alt=\"Close-up of a dog’s face, wide-angle lens\" class=\"about-slide-img\"/></div><div class=\"about-slide ui-slide\"><img src=\"/assets/images/frame-2147239766-94018a.webp\" loading=\"lazy\" sizes=\"(max-width: 531px) 100vw, 531px\" srcset=\"/assets/images/frame-2147239766-p-500-3676e8.webp 500w, /assets/images/frame-2147239766-94018a.webp 531w\" alt=\"Person editing photos on a laptop beside a camera\" class=\"about-slide-img\"/></div></div><div class=\"slide-arrow left ui-slider-arrow-left\"></div><div class=\"slide-arrow right ui-slider-arrow-right\"></div><div class=\"about-slide-nav ui-slider-nav ui-slider-nav-invert\"></div></div></div><div class=\"until-wrap\"><div class=\"h4\">EST. 2022</div></div></div></div>";
+import { PhotoWheel, type WheelPhoto } from './PhotoWheel';
+
+const HEAD_HTML = "<div class=\"ui-blockcontainer container ui-container\"><div class=\"about-wheel-head\"><div class=\"about-sub-content\"><div tag-text=\"\" class=\"tag-text\">About</div><div summary-text=\"\" class=\"h4\">Sophie Neuendorf is an internationally recognized leader at the crossroads of fine art, finance, and technology.</div></div><div class=\"h4 about-wheel-label\">Condesa de Teba</div></div></div>";
+
+const PHOTOS: WheelPhoto[] = [
+  {
+    src: '/assets/sophie/img/about/web/about-1.jpg',
+    alt: 'Sophie Neuendorf in a white blouse in front of a colour-block painting',
+    position: '50% 35%',
+  },
+  {
+    src: '/assets/sophie/img/about/web/about-8.jpg',
+    alt: 'Sophie Neuendorf in a white dress with her dog against a pink wall',
+    position: '50% 55%',
+  },
+  {
+    src: '/assets/sophie/img/about/web/about-9.jpg',
+    alt: 'Sophie Neuendorf in an evening gown on a terrace set for dinner',
+    position: '45% 50%',
+  },
+  {
+    src: '/assets/sophie/img/about/web/about-13.jpg',
+    alt: 'Sophie Neuendorf in a black top in a bright gallery space',
+    position: '62% 45%',
+  },
+  {
+    src: '/assets/sophie/img/about/web/about-16.jpg',
+    alt: 'Sophie Neuendorf in a white gown on a sunlit terrace',
+    position: '50% 40%',
+  },
+];
 
 export function HomeAboutUsSection() {
   return (
-    <section
-      className="section about-us"
-      dangerouslySetInnerHTML={{ __html: SECTION_INNER_HTML }}
-    />
+    <section className="section about-us about-wheel-section">
+      <PhotoWheel photos={PHOTOS} headHtml={HEAD_HTML} />
+    </section>
   );
 }

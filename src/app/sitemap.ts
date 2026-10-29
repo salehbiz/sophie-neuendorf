@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { PAGE_METADATA } from '@/data/metadata';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://voyra.studio';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.neuendorfteba.com';
   return Object.keys(PAGE_METADATA)
     .filter(route => route !== '/404')
     .map(route => ({

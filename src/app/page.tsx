@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { HomeHeroSection } from '@/components/sections/home/HomeHeroSection';
 import { HomeAboutUsSection } from '@/components/sections/home/HomeAboutUsSection';
 import { HomeWorkSection } from '@/components/sections/home/HomeWorkSection';
-import { HomeServiceSection } from '@/components/sections/home/HomeServiceSection';
+import { HomeRolesSection } from '@/components/sections/home/HomeRolesSection';
 import { HomeChooseSection } from '@/components/sections/home/HomeChooseSection';
 import { HomeFaqSection } from '@/components/sections/home/HomeFaqSection';
 import { HomeTestimonialSection } from '@/components/sections/home/HomeTestimonialSection';
@@ -30,7 +30,7 @@ export default function HomePage() {
       <HomeHeroSection />
       <HomeAboutUsSection />
       <HomeWorkSection />
-      <HomeServiceSection />
+      <HomeRolesSection />
       <HomeChooseSection />
       <HomeFaqSection />
       <HomeTestimonialSection />

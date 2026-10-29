@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Cormorant_Garamond, Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
 import { PAGE_METADATA } from '@/data/metadata';
@@ -7,6 +7,13 @@ import { PAGE_METADATA } from '@/data/metadata';
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
   display: 'swap',
 });
 
@@ -29,23 +36,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      {
-        url: '/assets/images/group-184-850a7e.png',
-        sizes: '32x32',
-        type: 'image/png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/assets/images/group-183-1158ad.png',
-        sizes: '32x32',
-        type: 'image/png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      { url: '/assets/images/group-184-290738.png', sizes: '48x48', type: 'image/png' },
-      { url: '/assets/images/group-184-638cea.png', sizes: '192x192', type: 'image/png' },
-      { url: '/assets/images/group-184-55eca1.png', sizes: '512x512', type: 'image/png' },
+      { url: '/assets/sophie/icons/favicon-32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/assets/sophie/icons/favicon-48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/assets/sophie/icons/favicon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/assets/sophie/icons/favicon-512.png', sizes: '512x512', type: 'image/png' },
     ],
-    apple: [{ url: '/assets/images/group-184-78c01c.png', sizes: '180x180' }],
+    apple: [{ url: '/assets/sophie/icons/favicon-180.png', sizes: '180x180' }],
   },
 };
 
@@ -58,7 +54,10 @@ export default function RootLayout({
     <html
       lang="en"
       className="ui-mod-js ui-mod-ix3"
-      style={{ ['--body-font' as string]: `${inter.style.fontFamily}, Inter, sans-serif` }}
+      style={{
+        ['--body-font' as string]: `${inter.style.fontFamily}, Inter, sans-serif`,
+        ['--heading-font' as string]: `${cormorant.style.fontFamily}, 'Cormorant Garamond', Georgia, serif`,
+      }}
       suppressHydrationWarning
     >
       <head>
