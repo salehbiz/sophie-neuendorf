@@ -366,9 +366,9 @@ export const INTERACTIONS_DATA = {
             "controlType": "scroll",
             "scrollTriggerConfig": {
               "clamp": true,
-              "start": "top 50%",
-              "end": "top 50%",
-              "scrub": 2,
+              "start": "top 95%",
+              "end": "top 45%",
+              "scrub": 1,
               "enter": "play",
               "leave": "none",
               "enterBack": "none",
