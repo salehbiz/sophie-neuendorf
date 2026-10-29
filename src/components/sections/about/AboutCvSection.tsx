@@ -25,7 +25,7 @@ export function AboutCvSection() {
         </div>
         <div className="wc-grid">
           <div className="wc-side wc-side-left ac-side">
-            <h2 className="wc-name">Meet Our Founder</h2>
+            <h2 className="wc-name">Sophie Neuendorf</h2>
             <p className="ac-body" data-reveal="">
               Sophie Neuendorf is an internationally recognized leader at the crossroads of fine art,
               finance, and technology. With over twelve years of experience and a career spanning New

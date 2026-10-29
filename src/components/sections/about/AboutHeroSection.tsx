@@ -16,7 +16,7 @@ const loopImages = LOOP.map(
 
 const SECTION_INNER_HTML =
   '<div class="ui-blockcontainer container ui-container"><div class="about-hero-content">' +
-  '<div class="body-text-s">Sophie Neuendorf</div>' +
+  '<div class="body-text-s">About / CV</div>' +
   '<div class="about-title-wrap"><h1 class="hero-title">Fine Art | Finance | Technology</h1></div>' +
   '<div class="about-para-wrap"><div class="body-text">Education as well as professional experience in New York, London, Berlin, Paris, and Madrid.</div></div>' +
   '</div></div>' +
