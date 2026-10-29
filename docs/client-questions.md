@@ -19,6 +19,8 @@ Open items to ask before launch. Tick them off as answers come in.
 - [ ] **Brand collaborations text.** Approve or replace the two short descriptions written for Piaget and Kaviar Gauche (the old site only had the names). What was each collaboration, when, and where?
 - [ ] **Kaviar Gauche photo.** Is the white gown in the photo by Kaviar Gauche?
 - [ ] **More photos.** 8 to 10 more photos she owns the rights to (shoots, events, portraits, residency) would remove the repeated images across pages.
+- [ ] **Partner logo #07.** The Partners strip has an arc symbol (seven concentric black arcs) with no name. Which partner is it? It's labelled just "Partner" for screen readers until then.
+- [ ] **Partner logos.** Are we allowed to show all ten partner logos (artnet, Vogue, Tatler, Bonhams, ZEITmagazin, ICON, the arc symbol, Deloitte, La Biennale di Venezia, Belmond), as on the old site?
 - [ ] **Press image rights.** Are we allowed to show the photos from the press features (Vogue, Tatler, ICON, Harper's Bazaar, L'Officiel, Friends of Friends, Schlossseiten)?
 - [ ] **CV PDF.** The old About / CV page had a "Download CV" button. Send the PDF to add it back.
 - [ ] **Media Library.** The old site had an empty Media Library page. Does she want one?

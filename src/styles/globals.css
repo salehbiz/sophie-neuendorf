@@ -7744,3 +7744,122 @@ h1, h2, h3, h4, h5, h6,
     font-size: 15px;
   }
 }
+
+/* ---------- Home: Partners (logo grid after the hero) ---------- */
+.section.pa {
+  padding: clamp(110px, 16vh, 180px) 2.5vw clamp(40px, 8vh, 100px);
+}
+
+.pa-title {
+  font-family: var(--heading-font);
+  font-size: clamp(56px, 7vw, 120px);
+  font-weight: 400;
+  line-height: .95;
+  letter-spacing: -0.015em;
+  margin: 0 0 clamp(48px, 8vh, 96px) -0.04em;
+}
+
+.pa-grid {
+  border-top: 1px solid #14141426;
+  border-left: 1px solid #14141426;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+}
+
+.pa-cell {
+  aspect-ratio: 16 / 10;
+  border-right: 1px solid #14141426;
+  border-bottom: 1px solid #14141426;
+  color: #2a221d;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  transition: background-color .6s ease, opacity .9s ease, translate .9s cubic-bezier(.2, .7, .2, 1);
+}
+
+.pa.is-motion-ready .pa-cell:not(.is-in) {
+  opacity: 0;
+  translate: 0 18px;
+}
+
+.pa-num {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  color: var(--_color-pallet---dark-shade--grey);
+  font-family: var(--heading-font);
+  font-size: 15px;
+  transition: color .6s ease;
+}
+
+/* The logo (transparent WebP) is used as a mask so it takes the text colour (espresso) whatever its source colour. */
+.pa-logo {
+  width: 62%;
+  height: 34%;
+  background-color: currentColor;
+  opacity: .62;
+  -webkit-mask: var(--logo) center / contain no-repeat;
+  mask: var(--logo) center / contain no-repeat;
+  transition: opacity .6s ease, scale .8s cubic-bezier(.2, .7, .2, 1);
+}
+
+/* Optical sizing: wide wordmarks get more width, tall marks less, so they read at an even weight. */
+.pa-logo-zeit-magazin {
+  width: 78%;
+}
+
+.pa-logo-artnet,
+.pa-logo-icon,
+.pa-logo-deloitte {
+  height: 24%;
+}
+
+.pa-logo-partner-arc {
+  height: 38%;
+}
+
+.pa-logo-la-biennale-di-venezia,
+.pa-logo-belmond {
+  height: 46%;
+}
+
+.pa-cell:hover {
+  background-color: var(--_color-pallet---white-shade--white-200, #e2dbd0);
+}
+
+.pa-cell:hover .pa-logo {
+  opacity: 1;
+  scale: 1.04;
+}
+
+.pa-cell:hover .pa-num {
+  color: #2a221d;
+}
+
+@media screen and (max-width: 767px) {
+  .section.pa {
+    padding: 90px 6vw 40px;
+  }
+
+  .pa-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pa-num {
+    top: 10px;
+    left: 12px;
+    font-size: 13px;
+  }
+
+  .pa-logo {
+    width: 70%;
+  }
+
+  .pa-logo-zeit-magazin {
+    width: 84%;
+  }
+}
