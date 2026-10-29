@@ -72,7 +72,8 @@ export function WorkCollabsSection() {
         </div>
       </article>
 
-      <RolesMotion selector=".wc" />
+      {/* Gentle drift: the frames match each photo's own shape, so only a small overscan is spare. */}
+      <RolesMotion selector=".wc" drift={0.05} />
     </section>
   );
 }

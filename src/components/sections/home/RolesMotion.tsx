@@ -11,7 +11,7 @@ const REVEAL_AT = 0.88; // a row fades in once its top passes this share of the 
  * (no IntersectionObserver), and rows are only hidden once this script is running, so the
  * content can never get stuck invisible.
  */
-export function RolesMotion({ selector }: { selector: string }) {
+export function RolesMotion({ selector, drift = DRIFT }: { selector: string; drift?: number }) {
   useEffect(() => {
     const section = document.querySelector<HTMLElement>(selector);
     if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -39,7 +39,7 @@ export function RolesMotion({ selector }: { selector: string }) {
         if (r.bottom < 0 || r.top > vh) return;
         const p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - mid) / (mid + r.height / 2)));
         const img = frame.querySelector<HTMLElement>('img');
-        if (img) img.style.translate = `0 ${(-p * DRIFT * r.height).toFixed(1)}px`;
+        if (img) img.style.translate = `0 ${(-p * drift * r.height).toFixed(1)}px`;
       });
     };
 
@@ -56,7 +56,7 @@ export function RolesMotion({ selector }: { selector: string }) {
       cancelAnimationFrame(raf);
       section.classList.remove('is-motion-ready');
     };
-  }, [selector]);
+  }, [selector, drift]);
 
   return null;
 }
