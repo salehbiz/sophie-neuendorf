@@ -8,3 +8,6 @@ out/
 verification/
 .next-prod/
 tsconfig.tsbuildinfo
+.vercel
+.env*
+!.env.example
