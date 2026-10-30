@@ -3,7 +3,6 @@ import { PAGE_METADATA } from '@/data/metadata';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { HomeHeroSection } from '@/components/sections/home/HomeHeroSection';
-import { HomePartnersSection } from '@/components/sections/home/HomePartnersSection';
 import { HomeAboutUsSection } from '@/components/sections/home/HomeAboutUsSection';
 import { HomeWorkSection } from '@/components/sections/home/HomeWorkSection';
 import { HomeRolesSection } from '@/components/sections/home/HomeRolesSection';
@@ -25,7 +24,6 @@ export default function HomePage() {
     <div className="main">
       <Navbar variant="default" />
       <HomeHeroSection />
-      <HomePartnersSection />
       <HomeAboutUsSection />
       <HomeWorkSection />
       <HomeRolesSection />
