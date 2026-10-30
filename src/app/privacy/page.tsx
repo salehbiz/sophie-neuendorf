@@ -90,7 +90,7 @@ const SECTIONS: { title: string; body: ReactNode }[] = [
   {
     title: 'Fonts',
     body: (
-      <p>The fonts used on this website (Cormorant Garamond and Inter) are hosted on our own server together with the website. No connection is made to Google or any other font provider when you visit the website.</p>
+      <p>The fonts used on this website (Avenir Next and Cormorant Garamond) are hosted on our own server together with the website. No connection is made to Google, Monotype or any other font provider when you visit the website.</p>
     ),
   },
   {

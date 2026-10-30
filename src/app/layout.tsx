@@ -1,13 +1,20 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Inter } from 'next/font/google';
+import { Cormorant_Garamond } from 'next/font/google';
+import localFont from 'next/font/local';
 import '@/styles/globals.css';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
-import { PageTransition } from '@/components/layout/PageTransition';import { PAGE_METADATA } from '@/data/metadata';
+import { PageTransition } from '@/components/layout/PageTransition';
+import { PAGE_METADATA } from '@/data/metadata';
 
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+// Avenir Next (Monotype), self-hosted: body text, labels and navigation. Cormorant stays for display.
+const avenir = localFont({
+  src: [
+    { path: '../fonts/avenir-next-light.woff2', weight: '300', style: 'normal' },
+    { path: '../fonts/avenir-next-regular.woff2', weight: '400', style: 'normal' },
+    { path: '../fonts/avenir-next-medium.woff2', weight: '500', style: 'normal' },
+  ],
   display: 'swap',
+  fallback: ['Helvetica Neue', 'Arial', 'sans-serif'],
 });
 
 const cormorant = Cormorant_Garamond({
@@ -56,13 +63,13 @@ export default function RootLayout({
       lang="en"
       className="ui-mod-js ui-mod-ix3"
       style={{
-        ['--body-font' as string]: `${inter.style.fontFamily}, Inter, sans-serif`,
+        ['--body-font' as string]: `${avenir.style.fontFamily}, 'Avenir Next', 'Helvetica Neue', Arial, sans-serif`,
         ['--heading-font' as string]: `${cormorant.style.fontFamily}, 'Cormorant Garamond', Georgia, serif`,
       }}
       suppressHydrationWarning
     >
       {/* Fonts are self-hosted by next/font: no requests to Google, so no visitor IPs go to Google (GDPR). */}
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={avenir.className} suppressHydrationWarning>
         <AnimationProvider>{children}</AnimationProvider>
         <PageTransition />
       </body>

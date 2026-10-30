@@ -104,7 +104,7 @@ export function Footer() {
             canvas.width = 800;
             canvas.height = sampler.height * 10;
             const ctx = canvas.getContext('2d')!;
-            // Draw the ASCII cells in the site body font (Inter), not a monospace.
+            // Draw the ASCII cells in the site body font (Avenir Next), not a monospace.
             ctx.font = `10px ${getComputedStyle(el).fontFamily}`;
             scenes.push({ canvas, ctx, cells, height: canvas.height });
             start();
