@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
     return [
       { source: '/works', destination: '/work', permanent: true },
       { source: '/blogs', destination: '/press', permanent: true },
+      // The old Wix site's home page address.
+      { source: '/home-1', destination: '/', permanent: true },
     ];
   },
 };
