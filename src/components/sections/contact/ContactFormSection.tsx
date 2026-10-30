@@ -1,25 +1,16 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { RolesMotion } from '@/components/sections/home/RolesMotion';
 import { srcSet } from '@/lib/responsive';
 
 const EMAIL = 'info@neuendorfteba.com';
+const PHOTO = '/assets/sophie/img/press/web/friends-of-friends.jpg';
 
-// Roman numerals echo the footer's link list.
 const DETAILS = [
-  { numeral: 'I', label: 'Phone', value: '+49 172 3176317', href: 'tel:+491723176317' },
-  { numeral: 'II', label: 'Instagram', value: '@sophieneuendorf', href: 'https://www.instagram.com/sophieneuendorf/' },
-  { numeral: 'III', label: 'LinkedIn', value: 'Sophie Neuendorf', href: 'https://www.linkedin.com/in/sophie-neuendorf-4a15461a' },
-];
-
-// Fields as on the old site's contact form.
-const FIELDS = [
-  { name: 'First-Name', label: 'First name', type: 'text', required: true, autoComplete: 'given-name' },
-  { name: 'Last-Name', label: 'Last name', type: 'text', required: true, autoComplete: 'family-name' },
-  // Lowercase "email" makes FormSubmit use it as the reply-to address.
-  { name: 'email', label: 'Email', type: 'email', required: true, autoComplete: 'email' },
-  { name: 'Phone', label: 'Phone', type: 'tel', required: false, autoComplete: 'tel' },
+  { label: 'Email', value: EMAIL, href: `mailto:${EMAIL}` },
+  { label: 'Phone', value: '+49 172 3176317', href: 'tel:+491723176317' },
+  { label: 'Instagram', value: '@sophieneuendorf', href: 'https://www.instagram.com/sophieneuendorf/' },
+  { label: 'LinkedIn', value: 'Sophie Neuendorf', href: 'https://www.linkedin.com/in/sophie-neuendorf-4a15461a' },
 ];
 
 // FormSubmit (no account): the first submission emails EMAIL a one-time activation link, and
@@ -30,9 +21,10 @@ const ENDPOINT = process.env.NEXT_PUBLIC_FORMSUBMIT_ENDPOINT || `https://formsub
 type Status = 'idle' | 'sending' | 'sent' | 'activation' | 'error';
 
 /**
- * Contact, styled after the home page's roles section and the footer: a tall photo bleeding off
- * the left edge with heavy parallax, an oversized serif heading, the email as a large italic
- * link, numbered details and a quiet underlined form that posts to FormSubmit.
+ * Contact, after the client's Neuendorf House "Bookings" reference: a full-width photo banner with
+ * a spaced-capital kicker, a large Light title and an "Enquire" link down to the form; then a
+ * single-column "Enquiries" form (name, email, message) with underlined fields and an outlined
+ * Send button; then the contact details. The form posts to FormSubmit.
  */
 export function ContactFormSection() {
   const [status, setStatus] = useState<Status>('idle');
@@ -58,88 +50,81 @@ export function ContactFormSection() {
   };
 
   return (
-    <section className="section ct">
-      <figure className="kz-photo ct-photo" data-drift="">
+    <>
+      <section className="cb-hero">
         <img
-          src="/assets/sophie/img/about/web/about-8.jpg"
-          srcSet={srcSet('/assets/sophie/img/about/web/about-8.jpg')}
-          sizes="(max-width: 767px) 125vw, 58vw"
-          alt="Sophie Neuendorf in white with her dog against a pink wall"
-          decoding="async"
+          className="cb-hero-img"
+          src={PHOTO}
+          srcSet={srcSet(PHOTO)}
+          sizes="100vw"
+          alt="Pink house and pool in Mallorca"
+          fetchPriority="high"
         />
-      </figure>
-
-      <div className="ct-content">
-        <div className="wc-meta">
-          <span>Contact</span>
-          <span>Sophie Neuendorf · Condesa de Teba</span>
+        <div className="cb-hero-inner">
+          <p className="cb-kicker">Sophie Neuendorf · Condesa de Teba</p>
+          <div className="cb-hero-row">
+            <h1 className="cb-title">Contact</h1>
+            <a className="cb-enquire" href="#enquiries">
+              Enquire <span aria-hidden="true" />
+            </a>
+          </div>
         </div>
+      </section>
 
-        <h1 className="ct-title">Contact</h1>
+      <section className="section cb" id="enquiries">
+        <p className="cb-label">Enquiries</p>
 
-        <a className="ct-email" href={`mailto:${EMAIL}`}>
-          {EMAIL}
-        </a>
+        {status === 'sent' ? (
+          <p className="cb-note">Thank you. Your message has been sent.</p>
+        ) : status === 'activation' ? (
+          // Only seen before the form is activated: FormSubmit has emailed the activation link.
+          <p className="cb-note">
+            This form is waiting for activation. Please confirm the email FormSubmit sent to {EMAIL}.
+          </p>
+        ) : (
+          <form className="cb-form" onSubmit={handleSubmit}>
+            <input type="hidden" name="_subject" value="New message from neuendorfteba.com" />
+            <input type="hidden" name="_template" value="table" />
+            {/* Honeypot: hidden from people, filled in by bots, and FormSubmit drops those. */}
+            <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="cb-gotcha" aria-hidden="true" />
+            <label className="cb-field">
+              <span>Name</span>
+              <input name="Name" type="text" required autoComplete="name" maxLength={256} />
+            </label>
+            <label className="cb-field">
+              <span>Email</span>
+              {/* Lowercase "email" makes FormSubmit use it as the reply-to address. */}
+              <input name="email" type="email" required autoComplete="email" maxLength={256} />
+            </label>
+            <label className="cb-field">
+              <span>Message</span>
+              <textarea name="Message" rows={5} maxLength={5000} required />
+            </label>
+            {status === 'error' && (
+              <p className="cb-note cb-error">
+                The message could not be sent. Please write to <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+              </p>
+            )}
+            <button type="submit" className="cb-send" disabled={status === 'sending'}>
+              {status === 'sending' ? 'Sending' : 'Send'}
+            </button>
+          </form>
+        )}
 
-        <ul className="ct-details">
-          {DETAILS.map((d, i) => (
-            <li key={d.label} data-reveal="" style={{ transitionDelay: `${i * 90}ms` }}>
-              <span className="ct-numeral">{d.numeral}</span>
-              <span className="ct-label">{d.label}</span>
-              <a
-                href={d.href}
-                {...(d.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              >
-                {d.value}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="ct-form-wrap">
-          <p className="ct-lead">Or leave a message</p>
-          {status === 'sent' ? (
-            <p className="ct-note">Thank you. Your message has been sent.</p>
-          ) : status === 'activation' ? (
-            // Only seen before the form is activated: FormSubmit has emailed the activation link.
-            <p className="ct-note">
-              This form is waiting for activation. Please confirm the email FormSubmit sent to {EMAIL}.
-            </p>
-          ) : (
-            <form className="ct-form" onSubmit={handleSubmit}>
-              <input type="hidden" name="_subject" value="New message from neuendorfteba.com" />
-              <input type="hidden" name="_template" value="table" />
-              {/* Honeypot: hidden from people, filled in by bots, and FormSubmit drops those. */}
-              <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="ct-gotcha" aria-hidden="true" />
-              <div className="ct-row">
-                {FIELDS.map((f) => (
-                  <label key={f.name} className="ct-field">
-                    <span>
-                      {f.label}
-                      {f.required ? ' *' : ''}
-                    </span>
-                    <input name={f.name} type={f.type} required={f.required} autoComplete={f.autoComplete} maxLength={256} />
-                  </label>
-                ))}
-              </div>
-              <label className="ct-field">
-                <span>Message</span>
-                <textarea name="Message" rows={4} maxLength={5000} />
-              </label>
-              {status === 'error' && (
-                <p className="ct-note ct-error">
-                  The message could not be sent. Please write to <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
-                </p>
-              )}
-              <button type="submit" className="roles-link ct-submit" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Sending…' : 'Submit'} <span aria-hidden="true">→</span>
-              </button>
-            </form>
-          )}
+        <div className="cb-details">
+          <p className="cb-label">Details</p>
+          <ul>
+            {DETAILS.map((d) => (
+              <li key={d.label}>
+                <span>{d.label}</span>
+                <a href={d.href} {...(d.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                  {d.value}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
-
-      <RolesMotion selector=".ct" />
-    </section>
+      </section>
+    </>
   );
 }

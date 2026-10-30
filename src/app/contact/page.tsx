@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <div className="main">
-      <Navbar variant="v2" />
+      <Navbar variant="default" />
       <ContactFormSection />
       <Footer />
     </div>
