@@ -5976,7 +5976,8 @@ label {
 
 /* Sophie Neuendorf brand layer */
 :root {
-  --heading-font: 'Cormorant Garamond', Georgia, serif;
+  /* Fallback only: layout.tsx sets --heading-font to the self-hosted Avenir Next. */
+  --heading-font: 'Avenir Next', 'Helvetica Neue', Arial, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -7901,5 +7902,180 @@ h1, h2, h3, h4, h5, h6,
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
+  }
+}
+
+/* =====================================================================
+   Avenir Next only (after Neuendorf House). The display styles above were
+   tuned for Cormorant; Avenir is wider with a taller x-height, so large text
+   is set in Light, about 20% smaller and with looser line spacing. Small
+   labels are spaced capitals; the serif italics become upright Light.
+   ===================================================================== */
+h1, h2, h3, h4, h5, h6,
+.h3, .h4, .h5, .h6,
+.text-h3, .sub-title, .hero-title, .style-top-title {
+  font-weight: 300;
+  letter-spacing: -.01em;
+}
+
+.brand-wordmark {
+  font-weight: 300;
+  letter-spacing: -.015em;
+}
+
+.hero-bottom-img.brand-wordmark {
+  font-size: min(8.6vw, 128px);
+}
+
+/* Navbar name and links as spaced capitals, like "NEUENDORF HOUSE". */
+.brand-logo.brand-wordmark {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+}
+
+.nav-menu-row .nav-text,
+.drop-menu-list .nav-text {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+/* Spaced-capital labels: header rows, eyebrows and small kickers. */
+.wc-meta,
+.kz-label,
+.af-eyebrow,
+.ps-label,
+.since-wrap .body-text,
+.about-hero-content .body-text-s,
+.ac-chapter-list {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+/* Display sizes, re-set for Avenir Next Light. */
+.af-wordmark {
+  font-size: clamp(44px, 9cqw, 176px);
+  font-weight: 300;
+  letter-spacing: -.02em;
+}
+
+.ac-chapter-title {
+  font-size: clamp(64px, 9vw, 156px);
+  font-weight: 300;
+  line-height: .98;
+  letter-spacing: -.02em;
+}
+
+.ct-title {
+  font-size: clamp(64px, 8vw, 140px);
+  font-weight: 300;
+  line-height: .98;
+  letter-spacing: -.02em;
+}
+
+.pa-title {
+  font-size: clamp(44px, 5.4vw, 96px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -.015em;
+}
+
+.wc-title,
+.wc-name {
+  font-size: clamp(34px, 3.5vw, 62px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -.01em;
+}
+
+.hero-title {
+  letter-spacing: -.015em;
+}
+
+.kz-statement {
+  font-size: clamp(22px, 2vw, 32px);
+  font-weight: 300;
+  line-height: 1.32;
+}
+
+.ps-title {
+  font-size: clamp(30px, 2.9vw, 48px);
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.pp-heading {
+  font-size: clamp(20px, 1.6vw, 26px);
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.tag-text {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.roles-role {
+  font-size: 18px;
+}
+
+.wc-caption,
+.ps-list-title {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Former serif italics: upright Light (no Avenir italic is loaded). */
+.af-invitation em,
+.ct-email,
+.ct-lead {
+  font-style: normal;
+  font-weight: 300;
+}
+
+.ct-email {
+  font-size: clamp(22px, 2vw, 34px);
+}
+
+.ct-lead {
+  font-size: clamp(22px, 1.9vw, 30px);
+}
+
+/* Numerals and indices: small and quiet. */
+.af-content nav small,
+.ct-numeral,
+.pp-num,
+.pa-num,
+.ac-chapter-num {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .12em;
+}
+
+@media screen and (max-width: 767px) {
+  .ac-chapter-title {
+    font-size: 64px;
+  }
+
+  .ct-title {
+    font-size: 64px;
+  }
+
+  .ct-email {
+    font-size: 22px;
+  }
+
+  .af-wordmark {
+    font-size: 11cqw;
+  }
+
+  .brand-logo.brand-wordmark {
+    font-size: 13px;
+    letter-spacing: .28em;
   }
 }

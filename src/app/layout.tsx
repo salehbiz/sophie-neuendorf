@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond } from 'next/font/google';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
 import { PAGE_METADATA } from '@/data/metadata';
 
-// Avenir Next (Monotype), self-hosted: body text, labels and navigation. Cormorant stays for display.
+// Avenir Next (Monotype), self-hosted: the only typeface on the site (Light for display, Regular for
+// text, Medium for emphasis), as on Neuendorf House.
 const avenir = localFont({
   src: [
     { path: '../fonts/avenir-next-light.woff2', weight: '300', style: 'normal' },
@@ -14,13 +14,6 @@ const avenir = localFont({
   ],
   display: 'swap',
   fallback: ['Helvetica Neue', 'Arial', 'sans-serif'],
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
-  display: 'swap',
 });
 
 const rootMeta = PAGE_METADATA['/'];
@@ -63,7 +56,7 @@ export default function RootLayout({
       className="ui-mod-js ui-mod-ix3"
       style={{
         ['--body-font' as string]: `${avenir.style.fontFamily}, 'Avenir Next', 'Helvetica Neue', Arial, sans-serif`,
-        ['--heading-font' as string]: `${cormorant.style.fontFamily}, 'Cormorant Garamond', Georgia, serif`,
+        ['--heading-font' as string]: `${avenir.style.fontFamily}, 'Avenir Next', 'Helvetica Neue', Arial, sans-serif`,
       }}
       suppressHydrationWarning
     >
