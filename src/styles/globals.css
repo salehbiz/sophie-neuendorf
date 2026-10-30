@@ -8128,3 +8128,184 @@ h1, h2, h3, h4, h5, h6,
     font-size: 11px;
   }
 }
+
+/* ---------- Menu: three-line button at every size, full-screen link panel ---------- */
+.navbar .nav-menu-button-wrapper {
+  display: none;
+}
+
+/* Brand row as tall as the menu button, so the two share a centre line. */
+.navbar .navbar-content-flex {
+  min-height: 44px;
+}
+
+.sm-toggle {
+  z-index: 1001;
+  width: 44px;
+  height: 44px;
+  color: var(--_color-pallet---dark-shade--black, #141414);
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+  position: absolute;
+  top: 33px;
+  right: calc(2.5vw - 10px);
+  display: grid;
+  place-content: center;
+  row-gap: 6px;
+}
+
+.sm-toggle.is-light {
+  color: #fff;
+}
+
+.sm-toggle span {
+  width: 26px;
+  height: 1px;
+  background-color: currentColor;
+  transition: translate .45s cubic-bezier(.7, 0, .2, 1), rotate .45s cubic-bezier(.7, 0, .2, 1), opacity .3s ease, width .3s ease;
+  display: block;
+}
+
+.sm-toggle span:nth-child(3) {
+  width: 18px;
+  justify-self: end;
+}
+
+.sm-toggle:hover span:nth-child(3) {
+  width: 26px;
+}
+
+.sm-toggle.is-open {
+  color: #141414;
+  position: fixed;
+}
+
+.sm-toggle.is-open span:nth-child(1) {
+  translate: 0 7px;
+  rotate: 45deg;
+}
+
+.sm-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.sm-toggle.is-open span:nth-child(3) {
+  width: 26px;
+  translate: 0 -7px;
+  rotate: -45deg;
+}
+
+.sm-panel {
+  z-index: 1000;
+  color: #141414;
+  visibility: hidden;
+  opacity: 0;
+  background: #f5f2ec;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 2.5vw 36px;
+  transition: opacity .5s ease, visibility 0s linear .5s;
+  display: flex;
+  position: fixed;
+  inset: 0;
+}
+
+.sm-panel.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity .5s ease;
+}
+
+.sm-panel ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sm-panel li {
+  opacity: 0;
+  translate: 0 18px;
+  transition: opacity .6s ease, translate .7s cubic-bezier(.2, .7, .2, 1);
+}
+
+.sm-panel.is-open li {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.sm-panel li a {
+  color: inherit;
+  align-items: baseline;
+  gap: clamp(20px, 3vw, 48px);
+  padding: clamp(6px, 1.2vh, 14px) 0;
+  font-family: var(--heading-font);
+  font-size: clamp(44px, 7vw, 104px);
+  font-weight: 300;
+  line-height: 1.05;
+  text-decoration: none;
+  transition: opacity .3s ease;
+  display: flex;
+}
+
+.sm-panel ul:hover a {
+  opacity: .35;
+}
+
+.sm-panel ul a:hover,
+.sm-panel ul a:focus-visible {
+  opacity: 1;
+}
+
+.sm-panel a[aria-current="page"] {
+  font-style: normal;
+}
+
+.sm-num {
+  color: #8a7262;
+  width: 2.5em;
+  letter-spacing: .2em;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sm-panel a[aria-current="page"] .sm-num::after {
+  content: " ·";
+}
+
+.sm-foot {
+  color: #8a7262;
+  text-transform: uppercase;
+  letter-spacing: .28em;
+  margin: auto 0 0;
+  font-size: 11px;
+}
+
+html.sm-locked {
+  overflow: hidden;
+}
+
+@media screen and (max-width: 991px) {
+  .sm-toggle {
+    top: 10px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .sm-toggle {
+    right: calc(6vw - 10px);
+  }
+
+  .sm-panel {
+    padding: 100px 6vw 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sm-panel,
+  .sm-panel li,
+  .sm-toggle span {
+    transition: none;
+  }
+}

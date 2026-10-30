@@ -1218,7 +1218,8 @@ export const INTERACTIONS_DATA = {
     },
     {
       "id": "t-1d28f8da",
-      "deleted": false,
+      // Hero photo zoom loop, switched off per client: the hero image stays still.
+      "deleted": true,
       "actions": [
         {
           "id": "ta-6041f6ab",
