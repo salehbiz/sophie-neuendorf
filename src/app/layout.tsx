@@ -3,7 +3,6 @@ import { Cormorant_Garamond } from 'next/font/google';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
 import { AnimationProvider } from '@/components/animations/AnimationProvider';
-import { PageTransition } from '@/components/layout/PageTransition';
 import { PAGE_METADATA } from '@/data/metadata';
 
 // Avenir Next (Monotype), self-hosted: body text, labels and navigation. Cormorant stays for display.
@@ -71,7 +70,6 @@ export default function RootLayout({
       {/* Fonts are self-hosted by next/font: no requests to Google, so no visitor IPs go to Google (GDPR). */}
       <body className={avenir.className} suppressHydrationWarning>
         <AnimationProvider>{children}</AnimationProvider>
-        <PageTransition />
       </body>
     </html>
   );

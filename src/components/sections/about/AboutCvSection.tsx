@@ -12,17 +12,23 @@ const ROLES = [
 ];
 
 /**
- * About / CV after the hero: three editorial spreads in the Work page's grid (meta row, photo
+ * About / CV after the hero, as two clearly separate chapters (I About, II CV), each opened by a
+ * large chapter title: three editorial spreads in the Work page's grid (meta row, photo
  * drifting in its frame, a column of text), led by text this time. All copy is from the old
  * site's About / CV page.
  */
 export function AboutCvSection() {
   return (
     <section className="section wc ac">
+      <header className="ac-chapter">
+        <span className="ac-chapter-num">I</span>
+        <h2 className="ac-chapter-title">About</h2>
+      </header>
+
       <article className="wc-spread">
         <div className="wc-meta">
-          <span>About / CV</span>
-          <span>01 / 03</span>
+          <span>About</span>
+          <span>Biography</span>
         </div>
         <div className="wc-grid">
           <div className="wc-side wc-side-left ac-side">
@@ -51,10 +57,16 @@ export function AboutCvSection() {
         </div>
       </article>
 
+      <header className="ac-chapter">
+        <span className="ac-chapter-num">II</span>
+        <h2 className="ac-chapter-title">CV</h2>
+        <p className="ac-chapter-list">Summary · Current Professional Experience</p>
+      </header>
+
       <article className="wc-spread">
         <div className="wc-meta">
-          <span>About / CV</span>
-          <span>02 / 03</span>
+          <span>CV</span>
+          <span>01 / 02</span>
         </div>
         <div className="wc-grid">
           <div className="wc-item ac-photo-left">
@@ -89,8 +101,8 @@ export function AboutCvSection() {
 
       <article className="wc-spread">
         <div className="wc-meta">
-          <span>About / CV</span>
-          <span>03 / 03</span>
+          <span>CV</span>
+          <span>02 / 02</span>
         </div>
         <div className="wc-grid">
           <div className="wc-side wc-side-left ac-side">
