@@ -7860,3 +7860,46 @@ h1, h2, h3, h4, h5, h6,
     margin-top: 140px;
   }
 }
+
+/* ---------- Page transition (after "Page Transition 07") ----------
+   Cross-document view transitions: on every same-site page load the outgoing page drifts up 35%
+   and dims while the incoming page wipes up from the bottom, 1.5s on a sharp in-out curve.
+   Pure CSS; browsers without support simply navigate normally. */
+@view-transition {
+  navigation: auto;
+}
+
+@keyframes pt-move-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: .4;
+    transform: translateY(-35%);
+  }
+}
+
+@keyframes pt-move-in {
+  from {
+    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+  }
+  to {
+    clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 0% 0%);
+  }
+}
+
+::view-transition-old(root) {
+  animation: 1.5s cubic-bezier(.87, 0, .13, 1) both pt-move-out;
+}
+
+::view-transition-new(root) {
+  animation: 1.5s cubic-bezier(.87, 0, .13, 1) both pt-move-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
