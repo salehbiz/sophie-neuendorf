@@ -6,13 +6,6 @@ import { srcSet } from '@/lib/responsive';
 const EMAIL = 'info@neuendorfteba.com';
 const PHOTO = '/assets/sophie/img/press/web/friends-of-friends.jpg';
 
-const DETAILS = [
-  { label: 'Email', value: EMAIL, href: `mailto:${EMAIL}` },
-  { label: 'Phone', value: '+49 172 3176317', href: 'tel:+491723176317' },
-  { label: 'Instagram', value: '@sophieneuendorf', href: 'https://www.instagram.com/sophieneuendorf/' },
-  { label: 'LinkedIn', value: 'Sophie Neuendorf', href: 'https://www.linkedin.com/in/sophie-neuendorf-4a15461a' },
-];
-
 // FormSubmit (no account): the first submission emails EMAIL a one-time activation link, and
 // later messages are delivered there. After activation FormSubmit offers a random alias that can
 // replace the address via NEXT_PUBLIC_FORMSUBMIT_ENDPOINT.
@@ -24,7 +17,7 @@ type Status = 'idle' | 'sending' | 'sent' | 'activation' | 'error';
  * Contact, after the client's Neuendorf House "Bookings" reference: a full-width photo banner with
  * a spaced-capital kicker, a large Light title and an "Enquire" link down to the form; then a
  * single-column "Enquiries" form (name, email, message) with underlined fields and an outlined
- * Send button; then the contact details. The form posts to FormSubmit.
+ * Send button. The contact details live in the footer. The form posts to FormSubmit.
  */
 export function ContactFormSection() {
   const [status, setStatus] = useState<Status>('idle');
@@ -110,20 +103,6 @@ export function ContactFormSection() {
             </button>
           </form>
         )}
-
-        <div className="cb-details">
-          <p className="cb-label">Details</p>
-          <ul>
-            {DETAILS.map((d) => (
-              <li key={d.label}>
-                <span>{d.label}</span>
-                <a href={d.href} {...(d.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-                  {d.value}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
       </section>
     </>
   );
