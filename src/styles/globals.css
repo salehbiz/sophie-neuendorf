@@ -8079,3 +8079,16 @@ h1, h2, h3, h4, h5, h6,
     letter-spacing: .28em;
   }
 }
+
+/* Home press heading "Selected Features" as a spaced-capital label, like the other section labels. */
+.press-head .tag-text {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+.press-head .press-all-link {
+  white-space: nowrap;
+  flex: none;
+}
