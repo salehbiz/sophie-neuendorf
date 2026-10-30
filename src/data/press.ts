@@ -6,11 +6,25 @@ export interface PressItem {
   url: string;
   img: string;
   alt: string;
+  /** Crop focus for the photo in cropped cards (CSS object-position); centred if left out. */
+  pos?: string;
 }
+
+/** Internal features open on this site; the rest link out to the publication. */
+export const isExternal = (item: PressItem) => /^https?:/.test(item.url);
 
 const IMG = '/assets/sophie/img/press/web';
 
 export const PRESS: PressItem[] = [
+  {
+    title: 'Neuendorf House',
+    year: '2026',
+    city: 'Santanyi',
+    url: '/press/neuendorf-house-2026',
+    img: '/assets/sophie/img/house-2026/rooftop-cover.jpg',
+    alt: 'Guests on the roof terrace of Neuendorf House at sunset',
+    pos: '40% 100%',
+  },
   {
     title: 'Harper’s Bazaar',
     year: '2025',
@@ -18,6 +32,7 @@ export const PRESS: PressItem[] = [
     url: 'https://www.harpersbazaar.com/es/arte/a63283351/sophie-neuendorf-vicepresidenta-arnet-arte-negocios-mujeres-entrevista/',
     img: `${IMG}/harpers-bazaar.jpg`,
     alt: 'Harper’s Bazaar feature on Sophie Neuendorf at home',
+    pos: '42% 50%',
   },
   {
     title: 'Giving Back Is Dead',
@@ -26,6 +41,7 @@ export const PRESS: PressItem[] = [
     url: 'https://www.scottstoverinc.com/giving-back-is-dead/giving-back-is-dead-sophie-neuendorf',
     img: `${IMG}/giving-back-is-dead.jpg`,
     alt: 'Sophie Neuendorf seated in front of a red, orange and blue colour field painting',
+    pos: '50% 35%',
   },
   {
     title: 'Schlossseiten',
@@ -34,6 +50,7 @@ export const PRESS: PressItem[] = [
     url: 'https://issuu.com/schlossseiten/docs/schlossseiten012025_springedition',
     img: `${IMG}/schlossseiten.jpg`,
     alt: 'Sophie Neuendorf seated on a wooden chair, from the Schlossseiten feature',
+    pos: '28% 40%',
   },
   {
     title: 'Neuendorf Artist Residency',
@@ -66,6 +83,7 @@ export const PRESS: PressItem[] = [
     url: 'https://www.vogue.com/slideshow/sophie-neuendorf-wore-a-tiara-to-wed-the-count-of-teba-at-her-minimalist-home-in-mallorca',
     img: `${IMG}/vogue.jpg`,
     alt: 'Sophie Neuendorf in a white dress with her dog against a pink wall, from Vogue',
+    pos: '50% 55%',
   },
   {
     title: 'ICON',
@@ -74,6 +92,7 @@ export const PRESS: PressItem[] = [
     url: 'https://icondigizine.de/story/sophie-neuendorf/',
     img: `${IMG}/icon.jpg`,
     alt: 'Sophie Neuendorf in an evening gown on a terrace set for dinner, from ICON',
+    pos: '45% 50%',
   },
   {
     title: 'Tatler',
@@ -82,6 +101,7 @@ export const PRESS: PressItem[] = [
     url: 'https://www.tatler.com/article/artnet-hans-neuendorf-family',
     img: `${IMG}/tatler.jpg`,
     alt: 'Sophie Neuendorf at a long dining table in a minimalist room, from Tatler',
+    pos: '55% 50%',
   },
   {
     title: 'Friends of Friends',

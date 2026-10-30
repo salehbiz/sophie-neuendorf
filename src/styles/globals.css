@@ -6654,6 +6654,14 @@ h1, h2, h3, h4, h5, h6,
   padding-bottom: var(--_spacing---section-spacing--m);
 }
 
+/* Phones: more air around the About statement, above and below. */
+@media screen and (max-width: 767px) {
+  .section.about-us.ab-text {
+    padding-top: 112px;
+    padding-bottom: 168px;
+  }
+}
+
 /* Press list: wider, larger cards, more air between rows (desktop) */
 @media screen and (min-width: 992px) {
   .press-list > .ui-blockcontainer {
@@ -6796,8 +6804,19 @@ h1, h2, h3, h4, h5, h6,
   display: grid;
 }
 
-.wc-item-piaget {
+.wc-item-piaget,
+.wc-item-house {
   grid-column: 1 / 8;
+}
+
+.wc-photo-link {
+  color: inherit;
+  display: block;
+}
+
+.wc-feature-link {
+  gap: 32px;
+  margin-top: 0;
 }
 
 .wc-item-kaviar {
@@ -6900,6 +6919,7 @@ h1, h2, h3, h4, h5, h6,
 
   .wc-item-piaget,
   .wc-item-kaviar,
+  .wc-item-house,
   .wc-side,
   .wc-side-left {
     grid-column: 1;
@@ -7020,6 +7040,53 @@ h1, h2, h3, h4, h5, h6,
 
   .pg-card:nth-child(3n) {
     grid-column: 1 / 6 !important;
+  }
+}
+
+/* Neuendorf House 2026 feature page (HouseFeature), on the Press gallery's grid */
+.hf-head {
+  margin-bottom: clamp(40px, 6vh, 72px);
+}
+
+/* Start nearer the top than the Press page, so the opening photo shows on arrival. */
+.section.pg.hf {
+  padding-top: clamp(130px, 18vh, 190px);
+}
+
+.hf-kicker {
+  color: #8a7262;
+  margin: 0 0 clamp(18px, 3vh, 28px);
+  font-size: 12px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+.hf-title {
+  margin: 0;
+}
+
+.hf-meta {
+  color: var(--_color-pallet---dark-shade--grey);
+  margin: clamp(14px, 2vh, 20px) 0 0;
+  font-size: 13px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+.hf-back {
+  gap: 16px;
+  width: max-content;
+  margin-top: clamp(120px, 18vh, 200px);
+  display: inline-flex;
+}
+
+@media screen and (max-width: 767px) {
+  .hf-head {
+    margin-bottom: 56px;
+  }
+
+  .hf-back {
+    margin-top: 80px;
   }
 }
 
@@ -7595,27 +7662,11 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .cb-kicker {
-  margin: 0 0 clamp(14px, 2vh, 22px);
+  color: #fff;
+  margin: 0;
   font-size: 12px;
   letter-spacing: .32em;
   text-transform: uppercase;
-}
-
-.cb-hero-row {
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
-  display: flex;
-}
-
-.cb-title {
-  color: #fff;
-  font-family: var(--heading-font);
-  font-size: clamp(52px, 6.4vw, 104px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -.015em;
-  margin: 0;
 }
 
 .section.cb {
@@ -7631,6 +7682,7 @@ h1, h2, h3, h4, h5, h6,
   grid-column: 1 / 4;
   color: #8a7262;
   margin: 6px 0 0;
+  line-height: 1.4;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: .32em;
@@ -7752,14 +7804,10 @@ h1, h2, h3, h4, h5, h6,
     letter-spacing: .2em;
   }
 
-  .cb-title {
-    font-size: 52px;
-  }
-
   .section.cb {
     grid-template-columns: 1fr;
-    row-gap: 20px;
-    padding: 72px 6vw 110px;
+    row-gap: 40px;
+    padding: 48px 6vw 110px;
   }
 
   .cb-label,
@@ -7990,24 +8038,30 @@ h1, h2, h3, h4, h5, h6,
     row-gap: 32px;
   }
 
-  .sf-side,
   .sf-form {
     grid-column: 1;
   }
 
+  /* Label, then the form, then the social icons well below Send. */
   .sf-side {
-    gap: 22px;
+    display: contents;
   }
 
   .sf-form {
+    order: 1;
     grid-template-columns: 1fr;
     gap: 28px;
+  }
+
+  .sf-social {
+    order: 2;
+    margin-top: 40px;
   }
 
   .sf-bottom {
     flex-direction: column;
     gap: 8px;
-    margin-top: 64px;
+    margin-top: 88px;
     font-size: 11px;
   }
 }

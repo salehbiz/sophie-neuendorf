@@ -28,6 +28,17 @@ SOURCES=(
   assets/sophie/img/press/web/schlossseiten.jpg
   assets/sophie/img/press/web/tatler.jpg
   assets/sophie/img/press/web/vogue.jpg
+  assets/sophie/img/house-2026/rooftop-cover.jpg
+  assets/sophie/img/house-2026/sophie-portrait.jpg
+  assets/sophie/img/house-2026/sophie-terrace.jpg
+  assets/sophie/img/house-2026/house-pool.jpg
+  assets/sophie/img/house-2026/house-aerial.jpg
+  assets/sophie/img/house-2026/house-aerial-close.jpg
+  assets/sophie/img/house-2026/pink-wall.jpg
+  assets/sophie/img/house-2026/terrace-sunset.jpg
+  assets/sophie/img/house-2026/courtyard-candles.jpg
+  assets/sophie/img/house-2026/columns-table.jpg
+  assets/sophie/img/house-2026/dinner.jpg
   # The hero is encoded from its 4K master; its key is the path the markup uses.
   assets/sophie/img/hero-portrait.jpg:assets/sophie/img/hero-portrait-4k.png
 )

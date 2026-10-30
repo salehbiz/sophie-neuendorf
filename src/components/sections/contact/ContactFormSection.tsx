@@ -8,9 +8,9 @@ const PHOTO = '/assets/sophie/img/press/web/friends-of-friends.jpg';
 
 /**
  * Contact, after the client's Neuendorf House "Bookings" reference: a full-width photo banner with
- * a spaced-capital kicker and a large Light title; then a
- * single-column "Enquiries" form (name, email, message) with underlined fields and an outlined
- * Send button. The contact details live in the footer. The form posts to FormSubmit.
+ * a white spaced-capital line at its foot; then a single-column form (name, email, message)
+ * under a "Contact" label, with underlined fields and an outlined Send button. The social links
+ * live in the footer. The form posts to FormSubmit.
  */
 export function ContactFormSection() {
   const [status, setStatus] = useState<EnquiryStatus>('idle');
@@ -34,14 +34,11 @@ export function ContactFormSection() {
         />
         <div className="cb-hero-inner">
           <p className="cb-kicker">Sophie Neuendorf · Condesa de Teba</p>
-          <div className="cb-hero-row">
-            <h1 className="cb-title">Contact</h1>
-          </div>
         </div>
       </section>
 
       <section className="section cb" id="enquiries">
-        <p className="cb-label">Enquiries</p>
+        <h1 className="cb-label">Contact</h1>
 
         {status === 'sent' ? (
           <p className="cb-note">Thank you. Your message has been sent.</p>
