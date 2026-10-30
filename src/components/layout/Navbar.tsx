@@ -9,11 +9,14 @@ export interface NavbarProps {
 }
 
 const LINKS = [
+  { href: '/', label: 'Home' },
   { href: '/work', label: 'Work' },
   { href: '/press', label: 'Press' },
   { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
 ];
+
+// Below the hairline, as "Enquiries" sits in the Neuendorf House menu.
+const CONTACT = { href: '/contact', label: 'Contact' };
 
 // The template markup supplies the brand; its inline links and menu button are dropped because
 // every screen size now uses the menu button below.
@@ -27,7 +30,9 @@ function brandOnly(outerHtml: string): string {
 
 /**
  * Navbar: the wordmark on the left and a three-line menu button on the right at every screen
- * size. The button opens a full-screen panel with the page links; Escape, a link or the button
+ * size. The button opens a minimal menu after the client's Neuendorf House reference: the page
+ * stays visible under a soft dark veil, with the links in small spaced capitals down the right,
+ * a hairline, Contact beneath it, and the name along the bottom. Escape, a link or the button
  * closes it. "default" sits over a photo (light), "v2" over the page background (dark).
  */
 export function Navbar({ variant = 'default' }: NavbarProps) {
@@ -66,22 +71,31 @@ export function Navbar({ variant = 'default' }: NavbarProps) {
         <span />
       </button>
       <nav id="site-menu" className={`sm-panel${open ? ' is-open' : ''}`} aria-label="Main" aria-hidden={!open}>
-        <ul>
-          {LINKS.map((link, i) => (
-            <li key={link.href} style={{ transitionDelay: open ? `${120 + i * 60}ms` : '0ms' }}>
+        {/* Same container and wordmark classes as the navbar, so the name sits exactly on it. */}
+        <div className="container ui-container sm-brand-row">
+          <a className="sm-brand" href="/" tabIndex={open ? 0 : -1} onClick={() => setOpen(false)}>
+            <span className="brand-logo brand-wordmark">Sophie Neuendorf</span>
+          </a>
+        </div>
+        <ul className="sm-links">
+          {[...LINKS, CONTACT].map((link, i) => (
+            <li
+              key={link.href}
+              className={link === CONTACT ? 'sm-after-rule' : undefined}
+              style={{ transitionDelay: open ? `${100 + i * 55}ms` : '0ms' }}
+            >
               <a
                 href={link.href}
                 tabIndex={open ? 0 : -1}
                 aria-current={link.href === pathname ? 'page' : undefined}
                 onClick={() => setOpen(false)}
               >
-                <span className="sm-num">{['I', 'II', 'III', 'IV'][i]}</span>
                 {link.label}
               </a>
             </li>
           ))}
         </ul>
-        <p className="sm-foot">Sophie Neuendorf · Condesa de Teba</p>
+        <p className="sm-foot">Condesa de Teba</p>
       </nav>
     </>
   );
