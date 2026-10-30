@@ -13,11 +13,11 @@ const GROUPS = [...SLOTS, ...SLOTS];
 
 function card(item: PressItem, slot: { wrap: string; img: string }) {
   const link = isExternal(item) ? ' target="_blank" rel="noopener noreferrer"' : '';
-  const img = (hover: boolean) =>
-    `<img src="${item.img}" loading="lazy"${hover ? ' hover-img=""' : ''} alt="${item.alt}" class="work-card-img ${slot.img} press-card-img" style="object-position:${item.pos ?? '50% 50%'}"/>`;
+  // A single image per card: no hover overlay, so the photo stays still under the cursor.
+  const img = `<img src="${item.img}" loading="lazy" alt="${item.alt}" class="work-card-img ${slot.img} press-card-img" style="object-position:${item.pos ?? '50% 50%'}"/>`;
   return (
     `<div card-rotate="" class="work-card-wrap ${slot.wrap}"><div class="ui-dyn-list"><div role="list" class="ui-dyn-items"><div role="listitem" class="ui-dyn-item">` +
-    `<a href="${item.url}"${link} class="work-card ui-inline-block"><div class="img-wrap">${img(false)}<div class="work-img-hover">${img(true)}</div></div>` +
+    `<a href="${item.url}"${link} class="work-card ui-inline-block"><div class="img-wrap">${img}</div>` +
     `<div class="work-card-content"><div class="h6 medium">${item.title}</div><div class="h6 medium">${item.year}</div><div class="text-hide">1</div></div></a>` +
     '</div></div></div></div>'
   );
