@@ -1,4 +1,5 @@
 import { srcSet } from '@/lib/responsive';
+import { AboutTrioParallax } from './AboutTrioParallax';
 
 // Template hero layout (label, title, paragraph) followed by a still row of three photos,
 // with Sophie's text from the old About / CV page and her own photos.
@@ -11,8 +12,10 @@ const TRIO = [
 ];
 
 const trioImages = TRIO.map(
-  (img) =>
-    `<img src="${img.src}" srcset="${srcSet(img.src)}" sizes="(max-width: 767px) 100vw, 33vw" loading="lazy" alt="${img.alt}" class="about-trio-img"/>`,
+  (img, i) =>
+    `<div class="about-trio-frame${i === 1 ? ' is-centre' : ''}">` +
+    `<img src="${img.src}" srcset="${srcSet(img.src)}" sizes="(max-width: 767px) 50vw, 40vw" loading="lazy" alt="${img.alt}" class="about-trio-img"/>` +
+    '</div>',
 ).join('');
 
 const SECTION_INNER_HTML =
@@ -26,9 +29,12 @@ const SECTION_INNER_HTML =
 
 export function AboutHeroSection() {
   return (
-    <section
-      className="section about"
-      dangerouslySetInnerHTML={{ __html: SECTION_INNER_HTML }}
-    />
+    <>
+      <section
+        className="section about"
+        dangerouslySetInnerHTML={{ __html: SECTION_INNER_HTML }}
+      />
+      <AboutTrioParallax />
+    </>
   );
 }
