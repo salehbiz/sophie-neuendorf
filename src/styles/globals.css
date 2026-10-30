@@ -7039,20 +7039,48 @@ h1, h2, h3, h4, h5, h6,
 
 .hf-kicker {
   color: #8a7262;
-  margin: 0 0 clamp(18px, 3vh, 28px);
-  font-size: 12px;
+  margin: 0 0 clamp(14px, 2.4vh, 22px);
+  font-size: 11px;
   letter-spacing: .3em;
   text-transform: uppercase;
 }
 
-.hf-title {
+.hf-title.wc-title {
   margin: 0;
+  font-size: clamp(28px, 2.6vw, 44px);
 }
 
 .hf-meta {
   color: var(--_color-pallet---dark-shade--grey);
-  margin: clamp(14px, 2vh, 20px) 0 0;
-  font-size: 13px;
+  margin: clamp(10px, 1.6vh, 16px) 0 0;
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+
+.hf-intro,
+.hf-note-text {
+  color: var(--_color-pallet---dark-shade--grey);
+  max-width: 420px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.hf-intro {
+  margin-top: clamp(24px, 4vh, 36px);
+}
+
+/* Short notes set into the photo grid beside the pictures they describe. */
+.hf-note {
+  align-self: center;
+}
+
+.hf-note-label {
+  color: #8a7262;
+  margin: 0 0 14px;
+  font-size: 11px;
   letter-spacing: .3em;
   text-transform: uppercase;
 }
@@ -7067,6 +7095,11 @@ h1, h2, h3, h4, h5, h6,
 @media screen and (max-width: 767px) {
   .hf-head {
     margin-bottom: 56px;
+  }
+
+  .hf-note {
+    grid-row: auto !important;
+    grid-column: 1 / -1 !important;
   }
 
   .hf-back {

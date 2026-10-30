@@ -39,6 +39,10 @@ SOURCES=(
   assets/sophie/img/house-2026/courtyard-candles.jpg
   assets/sophie/img/house-2026/columns-table.jpg
   assets/sophie/img/house-2026/dinner.jpg
+  assets/sophie/img/house-2026/eclipse.jpg
+  assets/sophie/img/house-2026/chef.jpg
+  assets/sophie/img/house-2026/chef-2.jpg
+  assets/sophie/img/house-2026/menu.jpg
   # The hero is encoded from its 4K master; its key is the path the markup uses.
   assets/sophie/img/hero-portrait.jpg:assets/sophie/img/hero-portrait-4k.png
 )
