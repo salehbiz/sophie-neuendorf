@@ -2051,7 +2051,8 @@ textarea.ui-input, textarea.ui-select {
 
 :root {
   --_color-pallet---white-shade--body-bg: #ebe6de;
-  --body-font: Inter, sans-serif;
+  /* Fallback only: layout.tsx sets --body-font (self-hosted Avenir Next) on <html>. */
+  --body-font: 'Avenir Next', 'Helvetica Neue', Arial, sans-serif;
   --_color-pallet---dark-shade--black: #141414;
   --_typography---font-size--body-text: 16px;
   --_typography---line-height--body-text: 140%;
@@ -2189,7 +2190,6 @@ body {
   font-size: var(--_typography---font-size--body-text);
   line-height: var(--_typography---line-height--body-text);
   font-weight: var(--_typography---font-weight--regular);
-  --body-font: Inter, sans-serif;
   --_color-pallet---white-shade--body-bg: #ebe6de;
   --_color-pallet---dark-shade--black: #141414;
   --_color-pallet---white-shade--white: white;
