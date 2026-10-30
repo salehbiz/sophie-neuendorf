@@ -7980,6 +7980,109 @@ h1, h2, h3, h4, h5, h6,
 
 }
 
+/* ---------- Partners strip: slow logo drift above the footer ---------- */
+.pt {
+  color: #141414;
+  padding: clamp(56px, 9vh, 96px) 0 clamp(48px, 8vh, 84px);
+  position: relative;
+  z-index: 1;
+}
+
+.pt-label {
+  color: #8a7262;
+  text-transform: uppercase;
+  letter-spacing: .28em;
+  margin: 0 2.5vw clamp(28px, 4vh, 44px);
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.pt-viewport {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.pt-track {
+  width: max-content;
+  display: flex;
+  animation: pt-drift 70s linear infinite;
+}
+
+.pt-viewport:hover .pt-track {
+  animation-play-state: paused;
+}
+
+.pt-row {
+  align-items: center;
+  gap: clamp(56px, 6vw, 104px);
+  margin: 0;
+  padding: 0 clamp(28px, 3vw, 52px);
+  list-style: none;
+  display: flex;
+}
+
+.pt-row li {
+  display: flex;
+}
+
+.pt-logo {
+  width: var(--w);
+  height: var(--h);
+  background-color: currentColor;
+  opacity: .5;
+  -webkit-mask: var(--logo) center / contain no-repeat;
+  mask: var(--logo) center / contain no-repeat;
+  transition: opacity .5s ease;
+}
+
+.pt-logo:hover {
+  opacity: .9;
+}
+
+@keyframes pt-drift {
+  to {
+    translate: -50% 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .pt-label {
+    margin-left: 6vw;
+  }
+
+  .pt-logo {
+    width: calc(var(--w) * .8);
+    height: calc(var(--h) * .8);
+  }
+
+  .pt-track {
+    animation-duration: 55s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pt-track {
+    width: auto;
+    animation: none;
+  }
+
+  .pt-viewport {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .pt-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 32px;
+  }
+
+  .pt-row[aria-hidden] {
+    display: none;
+  }
+}
+
 /* ---------- Footer: light off-white, clean contact section ---------- */
 .sf {
   background: #f5f2ec;

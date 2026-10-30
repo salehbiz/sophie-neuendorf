@@ -1,5 +1,6 @@
 // Footer: light off-white with a clean contact section (email, phone, Instagram, LinkedIn) and the
-// legal line, per client feedback; no large type, buttons or menu.
+// legal line, per client feedback; no large type, buttons or menu. The partners strip sits above it.
+import { PartnersStrip } from './PartnersStrip';
 
 const CONTACT = [
   { label: 'Email', value: 'info@neuendorfteba.com', href: 'mailto:info@neuendorfteba.com' },
@@ -10,26 +11,29 @@ const CONTACT = [
 
 export function Footer() {
   return (
-    <footer className="sf">
-      <div className="sf-top">
-        <p className="sf-label">Contact</p>
-        <ul className="sf-list">
-          {CONTACT.map((item) => (
-            <li key={item.label}>
-              <span>{item.label}</span>
-              <a href={item.href} {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
-                {item.value}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="sf-bottom">
-        <span>Sophie Neuendorf · Condesa de Teba</span>
-        <span>
-          <a href="/impressum">Impressum</a> · <a href="/privacy">Privacy</a> · © {new Date().getFullYear()} Sophie Neuendorf
-        </span>
-      </div>
-    </footer>
+    <>
+      <PartnersStrip />
+      <footer className="sf">
+        <div className="sf-top">
+          <p className="sf-label">Contact</p>
+          <ul className="sf-list">
+            {CONTACT.map((item) => (
+              <li key={item.label}>
+                <span>{item.label}</span>
+                <a href={item.href} {...(item.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+                  {item.value}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="sf-bottom">
+          <span>Sophie Neuendorf · Condesa de Teba</span>
+          <span>
+            <a href="/impressum">Impressum</a> · <a href="/privacy">Privacy</a> · © {new Date().getFullYear()} Sophie Neuendorf
+          </span>
+        </div>
+      </footer>
+    </>
   );
 }

@@ -32,25 +32,28 @@ export function PressSlider() {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [active, setActive] = useState(0);
-  const [reduced, setReduced] = useState(false);
+  // The still list replaces the slider for reduced motion, and whenever WebGL can't start.
+  const [still, setStill] = useState(false);
 
   useEffect(() => {
-    setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    setStill(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }, []);
 
   useEffect(() => {
-    if (reduced) return;
+    if (still) return;
     // Three.js is loaded on demand so it never weighs on the page's first load.
     let cancelled = false;
     let cleanup: (() => void) | undefined;
-    import('three').then((THREE) => {
-      if (!cancelled) cleanup = setup(THREE);
-    });
+    import('three')
+      .then((THREE) => {
+        if (!cancelled) cleanup = setup(THREE);
+      })
+      .catch(() => setStill(true));
     return () => {
       cancelled = true;
       cleanup?.();
     };
-  }, [reduced]);
+  }, [still]);
 
   const setup = (THREE: typeof T) => {
     const section = sectionRef.current;
@@ -59,7 +62,13 @@ export function PressSlider() {
     if (!section || !stage || !canvas) return;
 
     const total = PRESS.length;
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    let renderer: T.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    } catch {
+      setStill(true);
+      return;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     const scene = new THREE.Scene();
@@ -83,8 +92,11 @@ export function PressSlider() {
     const halfLoop = loopLength / 2;
 
     // Decode photos off the main thread where the browser supports it (ImageBitmap); phones get
-    // 1024px textures, larger screens 1600px.
-    const useBitmaps = typeof createImageBitmap === 'function';
+    // 1024px textures, larger screens 1600px. Safari (every iOS browser) and Firefox don't honour
+    // the decode options three.js needs, so they use the plain image loader, as three's own loaders do.
+    const ua = navigator.userAgent;
+    const plainImages = /^((?!chrome|android).)*safari/i.test(ua) || /firefox/i.test(ua);
+    const useBitmaps = typeof createImageBitmap === 'function' && !plainImages;
     const bitmapLoader = useBitmaps ? new THREE.ImageBitmapLoader().setOptions({ imageOrientation: 'flipY' }) : null;
     const textureLoader = new THREE.TextureLoader();
     const textureWidth = window.innerWidth < 768 ? 1024 : 1600;
@@ -275,7 +287,7 @@ export function PressSlider() {
     };
   };
 
-  if (reduced) {
+  if (still) {
     return (
       <section className="section ps-still">
         <h1 className="wc-title ps-still-title">Press &amp; Features</h1>
