@@ -32,7 +32,6 @@ export function HomeRolesSection() {
         <div className="kz-right">
           <div className="kz-label">
             <span>Current Professional Experience</span>
-            <span>05</span>
           </div>
           <h2 className="kz-statement">
             Over twelve years of professional experience in the art industry require analytical and
