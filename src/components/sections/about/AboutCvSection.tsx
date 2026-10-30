@@ -26,10 +26,6 @@ export function AboutCvSection() {
       </header>
 
       <article className="wc-spread">
-        <div className="wc-meta">
-          <span>About</span>
-          <span>Biography</span>
-        </div>
         <div className="wc-grid">
           <div className="wc-side wc-side-left ac-side">
             <h2 className="wc-name">Sophie Neuendorf</h2>
@@ -65,7 +61,7 @@ export function AboutCvSection() {
 
       <article className="wc-spread">
         <div className="wc-meta">
-          <span>CV</span>
+          <span />
           <span>01 / 02</span>
         </div>
         <div className="wc-grid">
@@ -101,7 +97,7 @@ export function AboutCvSection() {
 
       <article className="wc-spread">
         <div className="wc-meta">
-          <span>CV</span>
+          <span />
           <span>02 / 02</span>
         </div>
         <div className="wc-grid">
