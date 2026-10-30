@@ -30,6 +30,6 @@ Open items to ask before launch. Tick them off as answers come in.
 
 - [x] **Avenir Next licence.** (Confirmed licensed.) The site now uses Avenir Next (Monotype). Is there a web licence for it (MyFonts / Monotype order confirmation)? The font files we received came without one, and an unlicensed commercial font must not go live. If there isn't one: buy Avenir Next Pro Light, Regular and Medium (web licence) on MyFonts.
 
-- [ ] **Domain.** Who manages neuendorfteba.com (the registrar or Wix login)? We need to change its DNS records to point it at the new site, currently live at https://neuendorfteba.vercel.app.
+- [x] **Domain.** Connected: www.neuendorfteba.com now serves the new site from Vercel (neuendorfteba.com redirects to it).
 - [ ] **Hosting account.** The site runs on a free Vercel Hobby project (non-commercial use only). Should it move to Sophie's own Vercel account, or a Pro plan, before launch?
 - [ ] **Wix.** When the domain switches over, should the old Wix site and subscription be cancelled?
