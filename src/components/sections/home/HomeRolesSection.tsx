@@ -12,7 +12,7 @@ const ROLES = [
 /**
  * "Current Professional Experience", laid out like the Kaze concept section: a tall photo
  * bleeding off the left edge, label and statement on the right with a wide photo bleeding off
- * the right edge, then the role list and link, then one large photo across the width.
+ * the right edge, then the role list and link.
  */
 export function HomeRolesSection() {
   return (
@@ -68,17 +68,6 @@ export function HomeRolesSection() {
           About / CV <span aria-hidden="true">→</span>
         </a>
       </div>
-
-      <figure className="kz-photo kz-photo-wide" data-drift="">
-        <img
-          src="/assets/sophie/img/about/web/about-13.jpg"
-          srcSet={srcSet('/assets/sophie/img/about/web/about-13.jpg')}
-          sizes="(max-width: 767px) 145vw, 112vw"
-          alt="Sophie Neuendorf in a black top in a bright gallery space"
-          loading="lazy"
-          decoding="async"
-        />
-      </figure>
 
       <RolesMotion selector=".kz-roles" />
     </section>

@@ -6508,9 +6508,8 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 400;
   line-height: 1.22;
   letter-spacing: 0;
-  text-indent: 4.6vw;
   max-width: 31vw;
-  margin: clamp(110px, 20vh, 220px) 0 0;
+  margin: clamp(48px, 8vh, 96px) 0 0;
 }
 
 .kz-photo-right {
@@ -6571,15 +6570,6 @@ h1, h2, h3, h4, h5, h6,
   margin-top: -8px;
 }
 
-.kz-photo-wide {
-  aspect-ratio: 2 / 1;
-  margin: clamp(88px, 13vh, 160px) 0 0 23.5vw;
-}
-
-.kz-photo-wide img {
-  object-position: 60% 35%;
-}
-
 @media screen and (max-width: 767px) {
   .kz-top,
   .kz-middle {
@@ -6603,8 +6593,7 @@ h1, h2, h3, h4, h5, h6,
 
   .kz-statement {
     max-width: none;
-    margin-top: 40px;
-    text-indent: 12vw;
+    margin-top: 24px;
     font-size: 26px;
   }
 
@@ -6632,11 +6621,6 @@ h1, h2, h3, h4, h5, h6,
     width: auto;
     justify-self: start;
     margin-top: 0;
-  }
-
-  .kz-photo-wide {
-    aspect-ratio: 4 / 3;
-    margin-left: 12vw;
   }
 }
 
