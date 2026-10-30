@@ -63,9 +63,10 @@ export function HouseFeature() {
         <h1 className="wc-title hf-title">Neuendorf House</h1>
         <p className="hf-meta">Santanyi, Mallorca</p>
         <p className="hf-intro">
-          Sophie marked her birthday at Neuendorf House on 12 August 2026, the evening of the total
-          solar eclipse. Guests gathered on the roof to watch the moon cover the sun, then sat down to
-          dinner in the courtyard.
+          Sophie marked her birthday in collaboration with V-ZUG at Neuendorf House in Santanyi,
+          Mallorca, the house John Pawson and Claudio Silvestrin designed for her family in 1989. The
+          party fell on 12 August 2026, the evening of the total solar eclipse: guests gathered on the
+          roof to watch the moon cover the sun, then sat down to dinner in the courtyard.
         </p>
       </header>
       <ol className="pg-grid hf-grid">
