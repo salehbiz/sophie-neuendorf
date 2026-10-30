@@ -25,6 +25,7 @@ SOURCES=(
   assets/sophie/img/press/web/lofficiel.jpg
   assets/sophie/img/press/web/residency-2023.jpg
   assets/sophie/img/press/web/residency-2025.jpg
+  assets/sophie/img/press/web/residency-2024.jpg
   assets/sophie/img/press/web/schlossseiten.jpg
   assets/sophie/img/press/web/tatler.jpg
   assets/sophie/img/press/web/vogue.jpg
