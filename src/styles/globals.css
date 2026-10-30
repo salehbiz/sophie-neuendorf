@@ -7939,9 +7939,9 @@ h1, h2, h3, h4, h5, h6,
 
 .pt-row {
   align-items: center;
-  gap: clamp(56px, 6vw, 104px);
+  gap: clamp(48px, 5vw, 88px);
   margin: 0;
-  padding: 0 clamp(28px, 3vw, 52px);
+  padding: 0 clamp(24px, 2.5vw, 44px);
   list-style: none;
   display: flex;
 }
@@ -7951,17 +7951,17 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .pt-logo {
-  width: var(--w);
-  height: var(--h);
+  width: calc(var(--w) * .72);
+  height: calc(var(--h) * .72);
   background-color: currentColor;
-  opacity: .5;
+  opacity: .34;
   -webkit-mask: var(--logo) center / contain no-repeat;
   mask: var(--logo) center / contain no-repeat;
   transition: opacity .5s ease;
 }
 
 .pt-logo:hover {
-  opacity: .9;
+  opacity: .7;
 }
 
 @keyframes pt-drift {
@@ -7976,8 +7976,8 @@ h1, h2, h3, h4, h5, h6,
   }
 
   .pt-logo {
-    width: calc(var(--w) * .8);
-    height: calc(var(--h) * .8);
+    width: calc(var(--w) * .6);
+    height: calc(var(--h) * .6);
   }
 
   .pt-track {
