@@ -21,8 +21,14 @@ const nextConfig: NextConfig = {
     return [
       { source: '/works', destination: '/work', permanent: true },
       { source: '/blogs', destination: '/press', permanent: true },
-      // The old Wix site's home page address.
+      // The old Wix site's page addresses, each sent to the page that replaced it.
       { source: '/home-1', destination: '/', permanent: true },
+      { source: '/about-cv', destination: '/about', permanent: true },
+      { source: '/brand-collaboration', destination: '/work', permanent: true },
+      { source: '/media-library', destination: '/press', permanent: true },
+      { source: '/privacy-policy', destination: '/privacy', permanent: true },
+      // Wix-hosted files: the only one linked was the "Download CV" PDF.
+      { source: '/_files/:path*', destination: '/about', permanent: true },
     ];
   },
 };
