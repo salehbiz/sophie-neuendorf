@@ -8309,3 +8309,8 @@ html.sm-locked {
     transition: none;
   }
 }
+
+/* Home "Selected Features" captions: Avenir Light, per client. */
+.work-card-content .h6.medium {
+  font-weight: 300;
+}
