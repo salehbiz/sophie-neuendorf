@@ -15,6 +15,7 @@ const PARTNERS = [
   { name: 'Deloitte', file: 'deloitte', ratio: 5.33, h: 21 },
   { name: 'La Biennale di Venezia', file: 'la-biennale-di-venezia', ratio: 1.49, h: 46 },
   { name: 'Belmond', file: 'belmond', ratio: 2.53, h: 38 },
+  { name: 'V-ZUG', file: 'v-zug', ratio: 1, h: 44 },
 ];
 
 function Logos({ hidden }: { hidden?: boolean }) {
