@@ -2,44 +2,23 @@
 
 import { useState, type FormEvent } from 'react';
 import { srcSet } from '@/lib/responsive';
+import { EMAIL, sendEnquiry, type EnquiryStatus } from '@/lib/enquiry';
 
-const EMAIL = 'info@neuendorfteba.com';
 const PHOTO = '/assets/sophie/img/press/web/friends-of-friends.jpg';
-
-// FormSubmit (no account): the first submission emails EMAIL a one-time activation link, and
-// later messages are delivered there. After activation FormSubmit offers a random alias that can
-// replace the address via NEXT_PUBLIC_FORMSUBMIT_ENDPOINT.
-const ENDPOINT = process.env.NEXT_PUBLIC_FORMSUBMIT_ENDPOINT || `https://formsubmit.co/ajax/${EMAIL}`;
-
-type Status = 'idle' | 'sending' | 'sent' | 'activation' | 'error';
 
 /**
  * Contact, after the client's Neuendorf House "Bookings" reference: a full-width photo banner with
- * a spaced-capital kicker, a large Light title and an "Enquire" link down to the form; then a
+ * a spaced-capital kicker and a large Light title; then a
  * single-column "Enquiries" form (name, email, message) with underlined fields and an outlined
  * Send button. The contact details live in the footer. The form posts to FormSubmit.
  */
 export function ContactFormSection() {
-  const [status, setStatus] = useState<Status>('idle');
+  const [status, setStatus] = useState<EnquiryStatus>('idle');
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-
     setStatus('sending');
-    try {
-      const res = await fetch(ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const json = (await res.json().catch(() => ({}))) as { success?: string | boolean; message?: string };
-      if (res.ok && String(json.success) === 'true') setStatus('sent');
-      else if (/activat/i.test(json.message ?? '')) setStatus('activation');
-      else setStatus('error');
-    } catch {
-      setStatus('error');
-    }
+    setStatus(await sendEnquiry(e.currentTarget));
   };
 
   return (
@@ -57,9 +36,6 @@ export function ContactFormSection() {
           <p className="cb-kicker">Sophie Neuendorf · Condesa de Teba</p>
           <div className="cb-hero-row">
             <h1 className="cb-title">Contact</h1>
-            <a className="cb-enquire" href="#enquiries">
-              Enquire <span aria-hidden="true" />
-            </a>
           </div>
         </div>
       </section>

@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { PAGE_METADATA } from '@/data/metadata';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { AboutHeroSection } from '@/components/sections/about/AboutHeroSection';
 import { AboutCvSection } from '@/components/sections/about/AboutCvSection';
 
 const meta = PAGE_METADATA['/about'];
@@ -21,7 +20,6 @@ export default function AboutPage() {
   return (
     <div className="main">
       <Navbar variant="v2" />
-      <AboutHeroSection />
       <AboutCvSection />
       <Footer />
     </div>

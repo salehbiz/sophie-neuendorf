@@ -22,13 +22,13 @@ export function AboutCvSection() {
     <section className="section wc ac">
       <header className="ac-chapter">
         <span className="ac-chapter-num">I</span>
-        <h2 className="ac-chapter-title">About</h2>
+        {/* The page opens on this chapter, so it carries the page's main heading. */}
+        <h1 className="ac-chapter-title">About</h1>
       </header>
 
       <article className="wc-spread">
         <div className="wc-grid">
           <div className="wc-side wc-side-left ac-side">
-            <h2 className="wc-name">Sophie Neuendorf</h2>
             <p className="ac-body" data-reveal="">
               Sophie Neuendorf is an internationally recognized leader at the crossroads of fine art,
               finance, and technology. With over twelve years of experience and a career spanning New
@@ -39,9 +39,10 @@ export function AboutCvSection() {
             </p>
           </div>
           <div className="wc-item ac-photo-right">
-            <figure className="wc-photo" style={{ aspectRatio: '1100 / 1490' }} data-drift="">
+            <figure className="wc-photo" style={{ aspectRatio: '1 / 1' }} data-drift="">
               <img
                 src={`${IMG}/roles/web/role-portrait.jpg`}
+                style={{ objectPosition: '50% 30%' }}
                 srcSet={srcSet(`${IMG}/roles/web/role-portrait.jpg`)}
                 sizes="(max-width: 767px) 145vw, 80vw"
                 alt="Sophie Neuendorf in front of a large blue painting at home"
@@ -113,12 +114,13 @@ export function AboutCvSection() {
             </ul>
           </div>
           <div className="wc-item ac-photo-right">
-            <figure className="wc-photo" style={{ aspectRatio: '1466 / 1100' }} data-drift="">
+            <figure className="wc-photo" style={{ aspectRatio: '4 / 3' }} data-drift="">
               <img
-                src={`${IMG}/about/web/about-9.jpg`}
-                srcSet={srcSet(`${IMG}/about/web/about-9.jpg`)}
+                src={`${IMG}/about/web/about-1.jpg`}
+                srcSet={srcSet(`${IMG}/about/web/about-1.jpg`)}
                 sizes="(max-width: 767px) 145vw, 80vw"
-                alt="Sophie Neuendorf on a terrace above the sea in Positano"
+                alt="Sophie Neuendorf in a white shirt in front of a red, orange and blue colour field painting"
+                style={{ objectPosition: '50% 35%' }}
                 loading="lazy"
                 decoding="async"
               />

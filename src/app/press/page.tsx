@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { PAGE_METADATA } from '@/data/metadata';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
-import { PressSlider } from '@/components/sections/press/PressSlider';
+import { PressGallery } from '@/components/sections/press/PressGallery';
 
 const meta = PAGE_METADATA['/press'];
 
@@ -20,7 +20,7 @@ export default function PressPage() {
   return (
     <div className="main">
       <Navbar variant="v2" />
-      <PressSlider />
+      <PressGallery />
       <Footer />
     </div>
   );

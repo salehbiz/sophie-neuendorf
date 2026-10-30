@@ -21,7 +21,7 @@ export default function ContactPage() {
     <div className="main">
       <Navbar variant="default" />
       <ContactFormSection />
-      <Footer />
+      <Footer form={false} />
     </div>
   );
 }
