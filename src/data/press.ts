@@ -26,6 +26,15 @@ export const PRESS: PressItem[] = [
     pos: '40% 100%',
   },
   {
+    title: 'Maison Ë',
+    year: '2026',
+    city: 'Mallorca',
+    url: 'https://maison-e.com/read/caroline-sophie-neuendorf-house-video-part-1',
+    img: `${IMG}/maison-e-terrace.jpg`,
+    alt: 'Caroline and Sophie Neuendorf in cream with their pug on the terracotta terrace of Neuendorf House, from Maison Ë',
+    pos: '66% 50%',
+  },
+  {
     title: 'Harper’s Bazaar',
     year: '2025',
     city: 'Madrid',

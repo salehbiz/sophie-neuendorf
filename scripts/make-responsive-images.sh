@@ -22,6 +22,7 @@ SOURCES=(
   assets/sophie/img/press/web/giving-back-is-dead.jpg
   assets/sophie/img/press/web/harpers-bazaar.jpg
   assets/sophie/img/press/web/icon.jpg
+  assets/sophie/img/press/web/maison-e-terrace.jpg
   assets/sophie/img/press/web/lofficiel.jpg
   assets/sophie/img/press/web/residency-2023.jpg
   assets/sophie/img/press/web/residency-2025.jpg
